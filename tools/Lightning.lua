@@ -16,13 +16,30 @@ end
 
 function thunder() 
 	
-	local startPoint 	= vector2D:new(100, 400)
-	local endPoint 	= vector2D:new(math.random(700, 900), math.random(100, 600))
 	
-	local midPoint = vector2D:Average(startPoint, endPoint)
+	local planetCenterPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2)
+	local planetTopPoint 	= vector2D:new(display.contentWidth/2, display.contentHeight/2 + 30)
+	local planetLeftPoint 	= vector2D:new(display.contentWidth/2 - 30, display.contentHeight/2)
+	local planetBottomPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2 - 30)
+	local planetRightPoint 	= vector2D:new(display.contentWidth/2 + 30, display.contentHeight/2)
 	
-	local segments1 = buildBolt(startPoint, midPoint)
-	local segments2 = buildBolt(midPoint, endPoint)
+	local segmentsB = buildBolt(planetTopPoint, planetLeftPoint,3)
+	local segmentsC = buildBolt(planetLeftPoint, planetBottomPoint,3)
+	local segmentsD = buildBolt(planetBottomPoint, planetRightPoint,3)
+	local segmentsA = buildBolt(planetRightPoint, planetCenterPoint,3)
+	
+	local endPoint = vector2D:new(math.random(display.contentWidth/2-400, display.contentWidth/2+400), math.random(display.contentHeight/2-300, display.contentHeight/2+300))
+	
+	local midPoint = vector2D:Average(planetCenterPoint, endPoint)
+	
+	local segments1 = buildBolt(planetCenterPoint, midPoint,5)
+	local segments2 = buildBolt(planetCenterPoint, endPoint,5)
+
+	lightBolt(segmentsA)
+	lightBolt(segmentsB)
+	lightBolt(segmentsC)
+	lightBolt(segmentsD)
+
 	lightBolt(segments1)
 	lightBolt(segments2)
 	
@@ -46,12 +63,12 @@ function lightBolt(segments)
    end
 end
 
-function buildBolt(startPoint, endPoint)
+function buildBolt(startPoint, endPoint, generations)
 
 	local segments = {}
 	segments[1] = {startPoint = startPoint, endPoint = endPoint, brightness = 1}
 	
-   for generation = 1, 5 do
+   for generation = 1, generations do
    	local newSegments = {}
 
 		for i in pairs(segments) do
