@@ -20,7 +20,7 @@ function scene:createScene( event )
 	
 	local image = display.newImage( 
 		self.view,
-		"images/hud/laser.png",
+		"images/hud/button.png",
 		0, display.contentHeight - 100
 	)
 	

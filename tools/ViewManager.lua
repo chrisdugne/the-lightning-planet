@@ -11,9 +11,9 @@ end
 ------------------------------------------------------------------------------------------
 
 function reset(view)
-	local bg = display.newRect( display.screenOriginX, display.screenOriginY, display.contentWidth, display.contentHeight )
-	bg:setFillColor( 0 )
-	view:insert( bg )
+	local back = display.newImage( view, "images/stars2.png")  
+	back.x = display.contentWidth/2  
+	back.y = display.contentHeight/2  
 end
 
 ------------------------------------------------------------------------------------------

@@ -87,16 +87,3 @@ function buildBolt(startPoint, endPoint)
    
    return segments
 end 
---  for each segment that was in segmentList when this generation started
---
---    midPoint = Average(startpoint, endPoint);
---    // Offset the midpoint by a random amount along the normal.
---    midPoint += Perpendicular(Normalize(endPoint-startPoint))*RandomFloat(-offsetAmount,offsetAmount);
---
---    // Create two new segments that span from the start point to the end point,
---    // but with the new (randomly-offset) midpoint.
---    segmentList.Add(new Segment(startPoint, midPoint));
---    segmentList.Add(new Segment(midPoint, endPoint));
---  end for
---  offsetAmount /= 2; // Each subsequent generation offsets at max half as much as the generation before.
---end for

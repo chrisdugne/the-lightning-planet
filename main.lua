@@ -4,7 +4,7 @@
 --
 -----------------------------------------------------------------------------------------
 
-APP_NAME 	= "Asteroids"
+APP_NAME 	= "TheLightningPlanet"
 APP_VERSION = "0.1"
 
 -----------------------------------------------------------------------------------------
@@ -38,19 +38,6 @@ GLOBALS = {
 
 }
 
------------------------------------------------------------------------------------------
-
---localData = utils.loadTable("localData.json")
---	
---if(not localData) then
---	localData = {user = {}, linkedin = {}}
---   utils.saveTable(localData, "localData.json")
---end
---
---if(not localData.user.pictureUrl) then
---	localData.user.pictureUrl = "http://static.licdn.com/scds/common/u/img/icon/icon_no_photo_60x60.png"
---end
-	
 -----------------------------------------------------------------------------------------
 
 display.setStatusBar( display.HiddenStatusBar ) 
