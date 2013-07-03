@@ -16,32 +16,29 @@ end
 
 function thunder() 
 	
+	local asteroidPosition = game.findClosestAsteroid()
 	
-	local planetCenterPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2)
-	local planetTopPoint 	= vector2D:new(display.contentWidth/2, display.contentHeight/2 + 15)
-	local planetLeftPoint 	= vector2D:new(display.contentWidth/2 - 15, display.contentHeight/2)
-	local planetBottomPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2 - 15)
-	local planetRightPoint 	= vector2D:new(display.contentWidth/2 + 15, display.contentHeight/2)
-	
-	local segmentsB = buildBolt(planetTopPoint, planetLeftPoint,4)
-	local segmentsC = buildBolt(planetLeftPoint, planetBottomPoint,3)
-	local segmentsD = buildBolt(planetBottomPoint, planetRightPoint,4)
-	local segmentsA = buildBolt(planetRightPoint, planetCenterPoint,3)
-	
-	local endPoint = vector2D:new(math.random(display.contentWidth/2-400, display.contentWidth/2+400), math.random(display.contentHeight/2-300, display.contentHeight/2+300))
-	
-	local midPoint = vector2D:Average(planetCenterPoint, endPoint)
-	
-	local segments1 = buildBolt(planetCenterPoint, midPoint,5)
-	local segments2 = buildBolt(planetCenterPoint, endPoint,5)
+	local planetPosition = vector2D:new(display.contentWidth/2, display.contentHeight/2)
+--	local planetTopPoint 	= vector2D:new(display.contentWidth/2, display.contentHeight/2 + 6)
+--	local planetLeftPoint 	= vector2D:new(display.contentWidth/2 - 6, display.contentHeight/2)
+--	local planetBottomPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2 - 6)
+--	local planetRightPoint 	= vector2D:new(display.contentWidth/2 + 6, display.contentHeight/2)
+--	
+--	local segmentsB = buildBolt(planetTopPoint, planetLeftPoint,4)
+--	local segmentsC = buildBolt(planetLeftPoint, planetBottomPoint,3)
+--	local segmentsD = buildBolt(planetBottomPoint, planetRightPoint,4)
+--	local segmentsA = buildBolt(planetRightPoint, planetPosition,3)
+--	
+--
+--	lightBolt(segmentsA)
+--	lightBolt(segmentsB)
+--	lightBolt(segmentsC)
+--	lightBolt(segmentsD)
 
-	lightBolt(segmentsA)
-	lightBolt(segmentsB)
-	lightBolt(segmentsC)
-	lightBolt(segmentsD)
-
-	lightBolt(segments1)
-	lightBolt(segments2)
+	if(asteroidPosition) then
+   	local segments = buildBolt(planetPosition, asteroidPosition, 4)
+   	lightBolt(segments)
+   end
 	
 end
 
@@ -49,8 +46,6 @@ function lightBolt(segments)
 	for i in pairs(segments) do
 		local brightness = segments[i].brightness
 		
---	   for k = 1, 3*brightness do
---		end
 		local line = display.newLine(segments[i].startPoint.x, segments[i].startPoint.y, segments[i].endPoint.x, segments[i].endPoint.y)
 	
 		line:setColor(255, 255 - 225*(1-brightness), 255 - 225*(1-brightness))
@@ -77,11 +72,11 @@ function buildBolt(startPoint, endPoint, generations)
 			local endPoint 	= segments[i].endPoint
 			local brightness 	= segments[i].brightness
 
-   		local midPoint = vector2D:Average(startPoint, endPoint)
+   		local midPoint 	= vector2D:Average(startPoint, endPoint)
    		
-   		local direction = vector2D:Sub(endPoint, startPoint)
-   		local normalized = vector2D:Normalize(direction)
-   		local offset = vector2D:Perpendicular(normalized)
+   		local direction 	= vector2D:Sub(endPoint, startPoint)
+   		local normalized 	= vector2D:Normalize(direction)
+   		local offset 		= vector2D:Perpendicular(normalized)
    		
    		local param = segments[i].brightness*35
    		offset:mult(math.random(-param, param)/generation)
@@ -89,8 +84,8 @@ function buildBolt(startPoint, endPoint, generations)
    		midPoint:add(offset)
    		
    		local direction2 = vector2D:Sub(midPoint, startPoint)
-   		direction2:rotate(math.random(-1, 1) * segments[i].brightness)
-   		direction2:mult(1.3)
+   		direction2:rotate(math.random(-0.8, 0.8) * segments[i].brightness)
+   		direction2:mult(0.6)
    		
          local splitPoint =  vector2D:Add(midPoint, direction2) 
    		

@@ -25,6 +25,11 @@ settings = {
                         "coronasdkapp", -- example second scheme
                     }
                 }
+            },
+	        
+	        UIAppFonts = 
+            {
+                "Papyrus.ttc"
             }
             --]]
 		}

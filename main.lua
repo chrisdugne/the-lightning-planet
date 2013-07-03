@@ -39,7 +39,8 @@ game				= require "tools.Game"
 GLOBALS = {
 
 }
-
+--local sysFonts = native.getFontNames()
+--for k,v in pairs(sysFonts) do print(v) end
 -----------------------------------------------------------------------------------------
 
 physics = require("physics") ; physics.start() ; physics.setGravity( 0,0 ) ; physics.setDrawMode( "normal" )

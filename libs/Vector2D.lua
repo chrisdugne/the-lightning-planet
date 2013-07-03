@@ -149,7 +149,7 @@ function Vector2D:Perpendicular(vec)
 end
 
 function Vector2D:Dist(vec1, vec2)
-	return math.sqrt( (vec2.x - vec1.x) + (vec2.y - vec1.y) )
+	return math.sqrt( math.abs(vec2.x - vec1.x) + math.abs(vec2.y - vec1.y) )
 end
 
 return Vector2D
