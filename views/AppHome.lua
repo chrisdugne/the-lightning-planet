@@ -17,14 +17,9 @@ local scene = storyboard.newScene()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	viewManager.setupView(self.view);
+	hud.setupButtons(self.view)
 	
-	local image = display.newImage( 
-		self.view,
-		"images/hud/button.png",
-		0, display.contentHeight - 100
-	)
-	
-	image:addEventListener("tap", function () lightning.thunder() end)
+	game.prepare(self.view)
 end
 
 ------------------------------------------

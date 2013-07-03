@@ -12,8 +12,8 @@ end
 
 function reset(view)
 	local back = display.newImage( view, "images/stars2.png")  
-	back.x = display.contentWidth/2  
-	back.y = display.contentHeight/2  
+	back.x = display.viewableContentWidth/2  
+	back.y = display.viewableContentHeight/2  
 end
 
 ------------------------------------------------------------------------------------------

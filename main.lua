@@ -31,6 +31,8 @@ imagesManager 	= require "tools.ImagesManager"
 viewManager		= require "tools.ViewManager"
 
 lightning		= require "tools.Lightning"
+hud				= require "tools.HUD"
+game				= require "tools.Game"
 
 ---- App globals
 
@@ -40,6 +42,8 @@ GLOBALS = {
 
 -----------------------------------------------------------------------------------------
 
+physics = require("physics") ; physics.start() ; physics.setGravity( 0,0 ) ; physics.setDrawMode( "normal" )
+math.randomseed( os.time() )
 display.setStatusBar( display.HiddenStatusBar ) 
 
 ------------------------------------------
