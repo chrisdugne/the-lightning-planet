@@ -1,0 +1,280 @@
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+CBEffects CBInfo Document
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+General Info
+
+Your Version of CBEffects: Two and Four-Ninths
+Date Created/Edited from previous version: Apr. 16, 2013
+What It Is: CBEffects is a particle system package for Corona SDK.
+
+
+
+--------------------------------------------------------------------------------------
+Included in this Folder:
+
+LUA FILES -
+-Library.lua (The main CBEffects file, I wrote it)
+-ParticleHelper.lua (The helper library, I wrote some of it and compiled some of it)
+
+[ParticlePresets.lua] - Removed as of CBEffects Two and One-Fourth
+[ParticlePhysics.lua] - Removed as of CBEffects Two and One-Fourth
+[ParticleCollisions.lua] - Removed as of CBEffects Two
+
+PNG FILES -
+-Basic Texture Set (folder containing .png textures for particle presets)
+
+[Two Logo Images] - Removed as of CBEffects Two, now they are in the CBResources
+
+OTHERS -
+CBInfo.txt (This file)
+
+[CBReadme.pdf] - Removed as of CBEffects Two, replaced by various files in CBResources
+
+
+--------------------------------------------------------------------------------------
+Copyright Information:
+
+The Free-To-Do information
+CBEffects is free to get.
+CBEffects is free to edit.
+CBEffects is free to use in a game.
+CBEffects is free to use in an app.
+CBEffects is free to use without crediting me. *
+CBEffects is free to use without crediting CBEffects. **
+
+The Not-Free-To-Do information
+CBEffects is NOT free to sell for any amount of money.
+CBEffects is NOT free to sell for anything.
+CBEffects is NOT free to credit yourself with.
+
+*Although crediting me would be appreciated. I’m Caleb Place, and if you’d mention me, that would be nice.
+**And crediting CBEffects might make it feel good about itself. The CBResources folder has several logos in it - you can just display one somewhere and it will be happy.
+
+--------------------------------------------------------------------------------------
+
+
+Changelog
+
+----------
+CBEffects One
+Date Released: November 30, 2012
+(major release)
+
+CHANGES/UPDATES
+-Initial Release
+
+ANNOUNCEMENTS
+(none)
+
+----------
+----------
+CBEffects One and One-Fourth
+Date released: December 12, 2012
+(minor release)
+
+CHANGES/UPDATES
+-Added optional "scale" parameter
+-Added this document
+
+ANNOUNCEMENTS
+(none)
+
+----------
+----------
+CBEffects One and One-Half
+Date Released: December 15, 2012
+(major release)
+
+CHANGES/UPDATES
+-Added the ".FieldGroup" function
+	-Point collision detection
+	-Added collision fields
+	-Added the ParticleCollisions file
+	-Added the collision field presets "default", "out", and "colorChange"
+-Added a color changing function to each particle
+-Added the vent preset "confetti"
+-Added the vent preset "snow"
+-Added the "atPoint" position type
+-Added the color change ability for particles
+
+-Changed the ".new" function to ".VentGroup"
+-Re-wrote the CBReadme
+
+-Fixed a bug where it would throw an error with the velFunction
+-Fixed a problem where the "alongLine" position type's path was not getting changed by the scale parameter
+
+ANNOUNCEMENTS
+(none)
+
+----------
+----------
+CBEffects One and Three-Fourths
+Date Released: December 20, 2012
+(minor release)
+
+CHANGES/UPDATES
+-Added the vent preset "beams"
+-Added the "kill" function for particles
+-Added the "Light and Confetti" sample
+
+ANNOUNCEMENTS
+(none)
+
+----------
+----------
+CBEffects One and Four-Fifths
+Date Released: December 21, 2012
+(minor release)
+
+CHANGES/UPDATES
+-Added the vent preset "burn"
+-Added the "parentGroup" parameter
+-Added the "Burn to Touch" sample
+-Added the "Swapping Colors" sample
+-Added the "xDamping" and "yDamping" parameters
+-Fixed a problem with positioning fields
+-Moved the textures to their own folder
+-Edited the "sparks" preset
+
+ANNOUNCEMENTS
+(none)
+
+----------
+----------
+CBEffects Two
+Date Released: January 29, 2013
+(major release)
+
+CHANGES/UPDATES
+-Added the passing of the vent's "content" group in the onCreation, onUpdate, and onDeath functions
+-Added the vent's "content" group
+-Added the "parentGroup" parameter
+-Added the "preCalculate" parameter
+-Added the "relativeToSize" parameter
+-Added the "onUpdate" parameter
+-Added the "contentX" and "contentY" parameters
+-Added the "iterateColor" parameter
+-Added the "curColor" parameter
+-Added the "iteratePoint" parameter
+-Added the "curPoint" parameter
+-Added the "lineDensity" parameter
+-Added the "pointList" parameter
+
+-Added the "lasergun" vent preset
+-Added the "wisps" vent preset
+-Added the "fluid" vent preset
+-Added the "water" vent preset
+-Added the "rotate" field preset
+-Added the "stop" field preset
+
+-Added the "DemoPreset" function
+
+-Various core updates
+-Memory usage cut down some
+-Edited some particle textures
+-Edited the "pixelwheel" preset
+
+-Fixed a bug where the "towardVel" parameter sometimes generated an error
+
+-Removed the file "ParticleHelper.lua"
+-Removed the file "ParticleCollisions".lua
+-Removed textures 6-8
+-Removed the horrifically long line to transfer all of the values to the vent
+
+ANNOUNCEMENTS
+
+You'll have to just deal without a manual for now - CBResources should be out in a bit.
+
+CBCondensed -
+CBCondensed will be published, perhaps two or three updates later. It is a single-file version of CBEffects. It is very slim - only one CBCondensed.lua file, but you don't get any presets with it. So if you're the kind of person who likes to nest files, and doesn't mind if you have no presets, then CBCondensed is for you.
+
+
+CBText - 
+Coming up!
+
+
+----------
+----------
+CBEffects Two and One-Fourth
+Date Released: February 25, 2013
+(minor release)
+
+CHANGES/UPDATES
+-Added the "aurora" preset
+-Added the "hasColor" parameter
+-Added the "iterateAngle" parameter
+-Added the "curAngle" parameter
+-Added the "divisionDamping" parameter
+-Upgraded ParticleHelper's physics class to use less computing power
+
+-Fixed a bug with the fromPointList iteratePoint value
+
+-Removed the file "ParticlePhysics.lua", replaced by "ParticleHelper.lua"
+-Removed the file "ParticlePresets.lua", replaced by "ParticleHelper.lua"
+
+ANNOUNCEMENTS
+CBResources is still coming - it's not dead! Apologies for the references in this file to it.
+
+
+
+----------
+----------
+CBEffects Two and Two-Fifths
+Date Released: March 7, 2013
+(minor release)
+
+CHANGES/UPDATES
+-Added the "Render" CBEffects method
+-Added the "DeleteAll" CBEffects method
+
+-Fixed multiple memory leaks
+	-Major memory leak with destroying VentGroups: Entire EnterFrame listener not removed and 0.2 Mb of not-freed system memory!
+	-Minor memory leak with the ParticlePhysics class
+	-Minor memory leak with cleaning particles from a VentGroup
+
+
+ANNOUNCEMENTS
+
+
+
+----------
+----------
+CBEffects Two and Four-Ninths
+Date Released: April 16, 2013
+(minor release)
+
+CHANGES/UPDATES
+-Fixed problem with sizeX and sizeY
+
+
+ANNOUNCEMENTS
+
+
+
+--------------------------------------------------------------------------------------
+Miscellaneous:
+
+A "bug" is something that generates an error. When a bug occurs, you can't just overlook it. When I write of a "problem", I mean something that goes wrong and fails but you can work around if desired. And an "issue" is just something not so desirable.
+
+
+CBEffects Facebook Page - facebook.com/CBEffects
+
+
+Download the latest version - developer.coronalabs.com/forum/2012/11/30/cbeffects
+OR
+http://developer.coronalabs.com/code/cbeffects
+
+
+Need more particle textures? Free CBTextures particle texture collection at http://www.gymbyl.com/assets/cbtextures
+
+
+You can find the CBReadme, samples, logos, etc. in CBResources (not yet out).
+
+
+
+Made by Caleb Place, Gymbyl Coding
+www.gymbyl.com

@@ -14,46 +14,38 @@ end
 
 ------------------------------------------------------------------------------------------
 
-function thunder() 
-	
-	local asteroidPosition = game.findClosestAsteroid()
-	
-	local planetPosition = vector2D:new(display.contentWidth/2, display.contentHeight/2)
---	local planetTopPoint 	= vector2D:new(display.contentWidth/2, display.contentHeight/2 + 6)
---	local planetLeftPoint 	= vector2D:new(display.contentWidth/2 - 6, display.contentHeight/2)
---	local planetBottomPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2 - 6)
---	local planetRightPoint 	= vector2D:new(display.contentWidth/2 + 6, display.contentHeight/2)
---	
---	local segmentsB = buildBolt(planetTopPoint, planetLeftPoint,4)
---	local segmentsC = buildBolt(planetLeftPoint, planetBottomPoint,3)
---	local segmentsD = buildBolt(planetBottomPoint, planetRightPoint,4)
---	local segmentsA = buildBolt(planetRightPoint, planetPosition,3)
---	
---
---	lightBolt(segmentsA)
---	lightBolt(segmentsB)
---	lightBolt(segmentsC)
---	lightBolt(segmentsD)
-
-	if(asteroidPosition) then
-   	local segments = buildBolt(planetPosition, asteroidPosition, 4)
-   	lightBolt(segments)
-   end
-	
+function thunder(planetPosition, asteroidPosition, onComplete) 
+	lightBolt(buildBolt(planetPosition, asteroidPosition, 4), onComplete)
 end
 
-function lightBolt(segments)
+function lightBolt(segments, onComplete)
+--   local g = graphics.newGradient(
+--     { 255, 255, 255 },
+--     { 0, 0, 0 },
+--     "down" )
+     
 	for i in pairs(segments) do
 		local brightness = segments[i].brightness
 		
 		local line = display.newLine(segments[i].startPoint.x, segments[i].startPoint.y, segments[i].endPoint.x, segments[i].endPoint.y)
-	
 		line:setColor(255, 255 - 225*(1-brightness), 255 - 225*(1-brightness))
+       
+      -- sets gradient 'g' on rect
+--      local line = display.newRect( segments[i].startPoint.x, segments[i].startPoint.y, 20, 5 )
+--      line:setFillColor( g )
+	
    	line.alpha = 0
-   	line.width = 2.2*brightness
-
-		timer.performWithDelay( 120*brightness, function ()
-			lightning.light(line, brightness, function()  lightning.hide(line, brightness) end)
+   	line.width = 1.7*brightness
+	
+		local next
+		if(i == #segments) then
+			next = function() lightning.hide(line, brightness) onComplete() end
+		else
+			next = function() lightning.hide(line, brightness) end
+		end
+		
+		timer.performWithDelay( 90/brightness, function ()
+			lightning.light(line, brightness, next)
 		end)
    end
 end

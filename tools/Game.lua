@@ -77,7 +77,9 @@ function crashAsteroid( self, event )
 	hud.score.x = display.contentWidth - hud.score.contentWidth/2 - 10
 
 	--------------------------
-	--
+	-- destroy
+	
+	self.beingDestroyed = true
 	destroyAsteroid(self)
 end
 
@@ -96,11 +98,32 @@ function destroyAsteroid(asteroid)
 
 	--------------------------
 	-- destroy
-
-	asteroid.beingDestroyed = true
 	
 	transition.to( asteroid, { time=150, alpha=0, onComplete=function() asteroid:removeSelf() asteroid=nil end } )
+end
 
+------------------------------------------------------------------------------------------
+
+function shootOnClosestAsteroid() 
+	
+	local asteroid = findClosestAsteroid()
+	if(asteroid and not asteroid.beingDestroyed) then
+	
+		asteroid.beingDestroyed = true
+		
+		local asteroidPosition 	= vector2D:new(asteroid.x, asteroid.y)
+   	local center 				= vector2D:new(display.contentWidth/2, display.contentHeight/2)
+   	local direction 			= vector2D:Sub(asteroidPosition, center)
+
+   	direction:normalize()
+   	direction:mult(20)
+   	
+   	local planetPosition = vector2D:Add(center, direction)
+   	
+   	local thunderDone = function() explodeAsteroid(asteroid) end
+   	lightning.thunder(planetPosition, asteroidPosition, thunderDone)
+   end
+	
 end
 
 ------------------------------------------------------------------------------------------
@@ -125,10 +148,51 @@ function findClosestAsteroid()
 	if(closestAsteroid == nil) then
 		return nil
 	else
-   	destroyAsteroid(closestAsteroid)	
-   	return vector2D:new(closestAsteroid.x, closestAsteroid.y)
+   	return closestAsteroid
    end
 
+end
+
+------------------------------------------------------------------------------------------
+
+function explodeAsteroid(asteroid)
+
+local light=CBE.VentGroup{
+		{
+			title="explosion",
+			preset="burn",
+			color={{255, 111, 0}, {255, 70, 0}}, -- Reddish-orange colors
+			build=function()
+				local size=math.random(30, 35) -- Particles are a bit bigger than ice comet particles
+				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
+			end,
+			onCreation=function()end, -- See the note for the ice comet
+			perEmit=4,
+			emissionNum=math.random(3,5),
+			x=asteroid.x,
+			y=asteroid.y,
+			positionType="inRadius",
+			posRadius=20,
+			emitDelay=50,
+			fadeInTime=50,
+			lifeSpan=250, -- Particles are removed sooner than the ice comet
+			lifeStart=250,
+			endAlpha=0,
+			physics={
+				relativeToSize=false,
+				sizeX=-0.01,
+				sizeY=-0.01,
+				relativeToSize=false,
+				velocity=1.5,
+				xDamping=1,
+				gravityY=0,
+				gravityX=0
+			}
+		}
+	}
+	light:start("explosion")
+
+ 	destroyAsteroid(asteroid)
 end
 
 ------------------------------------------------------------------------------------------

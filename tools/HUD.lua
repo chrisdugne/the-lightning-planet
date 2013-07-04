@@ -66,14 +66,15 @@ function screenTouch( event )
    	greenButton.alpha	 	= 1
    	blueButton.alpha 		= 1
    	lightButton.alpha 	= 1
-		game.planet.alpha 	= 0.8
+   	
+		transition.to( game.planet, { time=140, alpha=0.8 })
    end
 end
 
 function light( event )
 	if(event.phase == "began") then
-		game.planet.alpha = 1
-   	lightning.thunder()
+		transition.to( game.planet, { time=40, alpha=1 })
+		game.shootOnClosestAsteroid()
    end
 end
 

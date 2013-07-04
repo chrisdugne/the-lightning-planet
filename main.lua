@@ -49,6 +49,10 @@ display.setStatusBar( display.HiddenStatusBar )
 
 ------------------------------------------
 
+CBE	=	require("CBEffects.Library")
+
+------------------------------------------
+
 router.openAppHome()
 
 ------------------------------------------
