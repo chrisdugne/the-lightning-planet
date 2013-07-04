@@ -4,6 +4,12 @@ module(..., package.seeall)
 
 -----------------------------------------------------------------------------------------
 
+MISSION 	= 1
+SURVIVAL = 2
+CLASSIC 	= 3
+
+-----------------------------------------------------------------------------------------
+
 planet = {}
 colors = {}
 colors[1] = "blue"
@@ -12,6 +18,7 @@ colors[3] = "yellow"
 colors[4] = "red"
 
 points = 0
+mode = CLASSIC
 
 asteroids = {}
 
@@ -29,7 +36,7 @@ function prepare(view)
 end
 
 function asteroidBuilder()
-	timer.performWithDelay( 450, function() --delay :  level params
+	timer.performWithDelay( 1450, function() --delay :  level params
 		createAsteroid()
 		asteroidBuilder()
 	end)
