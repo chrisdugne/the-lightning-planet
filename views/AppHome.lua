@@ -34,9 +34,9 @@ function scene:refreshScene()
 	titleButton:setReferencePoint( display.CenterReferencePoint )
 	menu:insert(titleButton)
 	
-	self:buildButton("Combo", "blue", 25, display.contentWidth/5, display.contentHeight*0.6, missions)
-	self:buildButton("Kamikaze", "red", 20, display.contentWidth/2, display.contentHeight*0.8, missions)
-	self:buildButton("Time attack", "yellow", 17, 4*display.contentWidth/5, display.contentHeight*0.45, missions)
+	self:buildButton("Combo", "blue", 25, display.contentWidth/5, display.contentHeight*0.6, combo)
+	self:buildButton("Kamikaze", "red", 20, display.contentWidth/2, display.contentHeight*0.8, kamikaze)
+	self:buildButton("Time attack", "yellow", 17, 4*display.contentWidth/5, display.contentHeight*0.45, timeAttack)
 
 	fires[1]:start("fire")
 	fires[2]:start("fire")
@@ -45,7 +45,20 @@ function scene:refreshScene()
 	self.view:insert(menu)
 end
 
-function missions()
+------------------------------------------
+
+function combo()	
+	game.mode = game.COMBO 
+	router.openPlayground()
+end
+
+function kamikaze()
+	game.mode = game.KAMIKAZE 
+	router.openPlayground()
+end
+
+function timeAttack()
+	game.mode = game.TIMEATTACK
 	router.openPlayground()
 end
 
@@ -59,7 +72,7 @@ function scene:buildButton( title, color, titleSize, x, y, action )
 	elseif(color == "green") then
 		colors={{181, 255, 111}, {120, 255, 70}}
 	elseif(color == "yellow") then
-		colors={{255, 255, 111}, {255, 255, 70}}
+		colors={{255, 131, 111}, {255, 211, 70}}
 	elseif(color == "red") then
 		colors={{255, 111, 0}, {255, 70, 0}}
 	else
@@ -68,7 +81,7 @@ function scene:buildButton( title, color, titleSize, x, y, action )
 
 
 	local planet = display.newImage("images/game/planet.".. color ..".png")
-	planet:scale(0.34,0.34)
+	planet:scale(0.36,0.36)
 	planet.x = x
 	planet.y = y
 	menu:insert(planet)
@@ -77,7 +90,7 @@ function scene:buildButton( title, color, titleSize, x, y, action )
 	text:setTextColor( 0 )	
 	text.x = x
 	text.y = y
-	menu[title] = text
+	text:addEventListener("touch", function(event) action() end)
 	menu:insert(text)
 	
 	local fire=CBE.VentGroup{
@@ -86,19 +99,11 @@ function scene:buildButton( title, color, titleSize, x, y, action )
 			preset="burn",
 			color=colors,
 			build=function()
-				local size=math.random(30, 35) -- Particles are a bit bigger than ice comet particles
+				local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
 				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
 			end,
-			onCreation=function(particle, vent)
-				menu[title]:removeSelf()
-         	menu[title] = display.newText( title, 0, 0, "SelfDestructButtonBB", titleSize )
-         	menu[title]:setTextColor( 0 )	
-         	menu[title].x = x
-         	menu[title].y = y
-         	menu[title]:addEventListener("touch", function(event) action() end)
-				menu:insert(menu[title])
-			end,
-			perEmit=10,
+			onCreation=function()end,
+			perEmit=6,
 			emissionNum=0,
 			x=x,
 			y=y,
@@ -106,7 +111,7 @@ function scene:buildButton( title, color, titleSize, x, y, action )
 			posRadius=40,
 			emitDelay=150,
 			fadeInTime=500,
-			lifeSpan=250, -- Particles are removed sooner than the ice comet
+			lifeSpan=50, -- Particles are removed sooner than the ice comet
 			lifeStart=250,
 			endAlpha=0,
 			physics={
