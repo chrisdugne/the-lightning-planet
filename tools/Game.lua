@@ -157,11 +157,24 @@ end
 
 function explodeAsteroid(asteroid)
 
-local light=CBE.VentGroup{
+	local colors
+	if(asteroid.color == "blue") then
+		colors={{0, 111, 255}, {0, 70, 255}}
+	elseif(asteroid.color == "green") then
+		colors={{181, 255, 111}, {120, 255, 70}}
+	elseif(asteroid.color == "yellow") then
+		colors={{255, 255, 111}, {255, 255, 70}}
+	elseif(asteroid.color == "red") then
+		colors={{255, 111, 0}, {255, 70, 0}}
+	else
+		colors={{255, 111, 0}, {255, 70, 0}}
+	end
+
+	local light=CBE.VentGroup{
 		{
 			title="explosion",
 			preset="burn",
-			color={{255, 111, 0}, {255, 70, 0}}, -- Reddish-orange colors
+			color=colors,
 			build=function()
 				local size=math.random(30, 35) -- Particles are a bit bigger than ice comet particles
 				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
@@ -192,7 +205,7 @@ local light=CBE.VentGroup{
 	}
 	light:start("explosion")
 
- 	destroyAsteroid(asteroid)
+	destroyAsteroid(asteroid)
 end
 
 ------------------------------------------------------------------------------------------

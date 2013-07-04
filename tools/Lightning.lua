@@ -19,10 +19,6 @@ function thunder(planetPosition, asteroidPosition, onComplete)
 end
 
 function lightBolt(segments, onComplete)
---   local g = graphics.newGradient(
---     { 255, 255, 255 },
---     { 0, 0, 0 },
---     "down" )
      
 	for i in pairs(segments) do
 		local brightness = segments[i].brightness
@@ -30,10 +26,6 @@ function lightBolt(segments, onComplete)
 		local line = display.newLine(segments[i].startPoint.x, segments[i].startPoint.y, segments[i].endPoint.x, segments[i].endPoint.y)
 		line:setColor(255, 255 - 225*(1-brightness), 255 - 225*(1-brightness))
        
-      -- sets gradient 'g' on rect
---      local line = display.newRect( segments[i].startPoint.x, segments[i].startPoint.y, 20, 5 )
---      line:setFillColor( g )
-	
    	line.alpha = 0
    	line.width = 1.7*brightness
 	
