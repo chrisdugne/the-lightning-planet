@@ -16,4 +16,8 @@ function openPlayground()
 	storyboard.gotoScene( "views.Playground" )
 end
 
+function openLevelSelection()
+	storyboard.gotoScene( "views.LevelSelection" )
+end
+
 ---------------------------------------------

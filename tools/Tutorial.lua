@@ -4,18 +4,28 @@ module(..., package.seeall)
 
 -----------------------------------------------------------------------------------------
 
-COMBO 		= 1
-KAMIKAZE 	= 2
-TIMEATTACK 	= 3
-
------------------------------------------------------------------------------------------
-
 planet = {}
-
-points = 0
-mode = "none"
-
 asteroids = {}
+
+texts = {
+	{ 
+		text 	= "This is your Planet",
+		x 		= 110,
+		y 		= display.contentHeight/2
+	}
+}
+
+arrows = {
+	{ 
+		way 	= "right",
+		xFrom 		= 110,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= display.contentWidth/2 - 60,
+		yTo 			= display.contentHeight/2
+	}
+}
+
+scene = {}
 
 -----------------------------------------------------------------------------------------
 --set up collision filters
@@ -25,17 +35,52 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 -----------------------------------------------------------------------------------------
 
-function prepare(view)
-	asteroidBuilder()
-	setPlanetColor(BLUE)
+function displayText(num)
+
+	local text = display.newText( texts[num].text, 0, 0, "SelfDestructButtonBB", 23 )
+	text:setTextColor( 255 )	
+	text.alpha = 0
+	text.x = texts[num].x
+	text.y = texts[num].y
+	scene:insert(text)
+
+	transition.to( text, { time=300, alpha=1, onComplete=function() step2() end} )
 end
 
-function asteroidBuilder()
-	timer.performWithDelay( 1450, function() --delay :  level params
-		createAsteroid()
-		asteroidBuilder()
-	end)
+-----------------------------------------------------------------------------------------
+
+function displayArrow(num)
+
+	local arrow = display.newImage("images/tutorial/arrow.".. arrows[num].way ..".png")
+	arrow:scale(0.36,0.36)
+	arrow.x = arrows[num].xFrom
+	arrow.y = arrows[num].yFrom
+	scene:insert(arrow)
+	
+	transition.to( arrow, { time=200, x = arrows[num].xTo, y = arrows[num].yTo , onComplete=function() displayText(num) end } )
+	
 end
+
+-----------------------------------------------------------------------------------------
+
+function step1(view)
+	scene = view
+	
+	hud.topRightText.text = "Level 1 : Tutorial"
+	hud.topRightText.x = display.contentWidth - hud.topRightText.contentWidth/2 - 10
+	
+	setPlanetColor(BLUE)
+	displayArrow(1)
+	
+end
+
+-----------------------------------------------------------------------------------------
+
+function step2()
+	createAsteroid()
+end
+
+-----------------------------------------------------------------------------------------
 
 function setPlanetColor(color)
 	
@@ -62,22 +107,6 @@ function crashAsteroid( self, event )
 		return
 	end
 	
-	--------------------------
-	-- calculating points
-	
-	if(planet.color == self.color) then
-		points = points + 5
-	else
-		points = points - 2
-	end
-	
-	if(points < 0) then
-		points = 0
-	end
-	
-	hud.topRightText.text = points
-	hud.topRightText.x = display.contentWidth - hud.topRightText.contentWidth/2 - 10
-
 	--------------------------
 	-- destroy
 	

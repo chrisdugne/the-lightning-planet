@@ -13,6 +13,15 @@ IMAGE_CENTER		= "IMAGE_CENTER";
 IMAGE_TOP_LEFT 	= "IMAGE_TOP_LEFT";
 
 -----------------------------------------------------------------------------------------
+
+BLUE		= "blue";
+GREEN 	= "green";
+YELLOW 	= "yellow";
+RED		= "red";
+
+COLORS = {BLUE, GREEN, YELLOW, RED}
+
+-----------------------------------------------------------------------------------------
 --- Corona's libraries
 json 				= require "json"
 widget 			= require "widget"
@@ -33,14 +42,23 @@ viewManager		= require "tools.ViewManager"
 lightning		= require "tools.Lightning"
 hud				= require "tools.HUD"
 game				= require "tools.Game"
+tutorial			= require "tools.Tutorial"
 
 ---- App globals
 
 GLOBALS = {
 
 }
---local sysFonts = native.getFontNames()
---for k,v in pairs(sysFonts) do print(v) end
+
+---- Levels
+
+LEVELS = {
+	{
+		colors = 2,
+		combo = {GREEN,BLUE,GREEN}
+	},
+}
+
 -----------------------------------------------------------------------------------------
 
 physics = require("physics") ; physics.start() ; physics.setGravity( 0,0 ) ; physics.setDrawMode( "normal" )
@@ -53,7 +71,21 @@ CBE	=	require("CBEffects.Library")
 
 ------------------------------------------
 
+savedData = utils.loadTable("savedData.json")
+	
+if(not savedData) then
+	savedData = {
+		levels = { 
+			{ available = true }, -- level 1 : tutorial combo 
+		}
+	}
+   utils.saveTable(savedData, "savedData.json")
+end
+
+------------------------------------------
+
 router.openAppHome()
+--router.openLevelSelection()
 
 ------------------------------------------
 --- ANDROID BACK BUTTON
@@ -68,8 +100,8 @@ local function onKeyEvent( event )
       if ( storyboard.currentScene == "splash" ) then
          native.requestExit()
       else
-      	native.setKeyboardFocus( nil )
-         router.lastBack()
+--      	native.setKeyboardFocus( nil )
+-- 		nothing
       end
    end
 

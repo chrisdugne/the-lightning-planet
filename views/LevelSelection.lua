@@ -1,10 +1,11 @@
 -----------------------------------------------------------------------------------------
 --
--- AppHome.lua
+-- LevelSelection
 --
 -----------------------------------------------------------------------------------------
 
 local scene = storyboard.newScene()
+local levels
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -16,20 +17,59 @@ local scene = storyboard.newScene()
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
+	levels = display.newGroup()
 end
 
 -----------------------------------------------------------------------------------------
 
--- Called when the scene's view does not exist:
 function scene:refreshScene()
+	utils.emptyGroup(levels)
 	viewManager.setupView(self.view);
-	hud.setupButtons(self.view)
+
+   for level = 1, 40 do
+   
+   	local i = (level-1)%10 
+   	local j = math.floor((level-1)/10) + 1
+		local levelAvailable = savedData.levels[level]
+   	
+   	local levelButton = display.newImage("images/hud/level.".. COLORS[j] .. ".png")
+   	levelButton:scale(0.36,0.36)
+   	levelButton.x = 50 + 53 * i
+   	levelButton.y = 65 * j
+   	levels:insert(levelButton)
 	
-	if(game.mode == game.COMBO and game.level == 1) then
-		tutorial.step1(self.view)
-	else
-   	game.prepare(self.view)
+		if(not levelAvailable) then
+      	local lock = display.newImage("images/hud/lock.png")
+      	lock:scale(0.20,0.20)
+      	lock.x = levelButton.x
+      	lock.y = levelButton.y
+      	levels:insert(lock)
+
+	   	levelButton.alpha = 0.6
+	   else
+   		levelButton:addEventListener("touch", function(event) openLevel(level) end)
+      end
+      
+   	local text = display.newText( level, 0, 0, "SelfDestructButtonBB", 26 )
+   	text:setTextColor( 255 )	
+   	if(levelAvailable) then
+      	text.alpha = 1
+      else 
+      	text.alpha = 0.4
+      end
+   	text.x = levelButton.x
+   	text.y = levelButton.y
+   	levels:insert(text)
+	
+   	self.view:insert(levels)
    end
+end
+
+------------------------------------------
+
+function openLevel( level )
+	game.level = level
+	router.openPlayground()
 end
 
 ------------------------------------------
@@ -38,7 +78,6 @@ end
 function scene:enterScene( event )
 	self:refreshScene();
 end
-
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )

@@ -35,12 +35,12 @@ function scene:refreshScene()
 	menu:insert(titleButton)
 	
 	self:buildButton("Combo", "blue", 25, display.contentWidth/5, display.contentHeight*0.6, combo)
-	self:buildButton("Kamikaze", "red", 20, display.contentWidth/2, display.contentHeight*0.8, kamikaze)
-	self:buildButton("Time attack", "yellow", 17, 4*display.contentWidth/5, display.contentHeight*0.45, timeAttack)
+	self:buildButton("Kamikaze", "red", 20, display.contentWidth/2, display.contentHeight*0.8, kamikaze, true)
+	self:buildButton("Time attack", "yellow", 17, 4*display.contentWidth/5, display.contentHeight*0.45, timeAttack, true)
 
-	fires[1]:start("fire")
-	fires[2]:start("fire")
-	fires[3]:start("fire")
+	for fire = 1, #fires do 
+		fires[fire]:start("fire")
+	end
 
 	self.view:insert(menu)
 end
@@ -49,7 +49,7 @@ end
 
 function combo()	
 	game.mode = game.COMBO 
-	router.openPlayground()
+	router.openLevelSelection()
 end
 
 function kamikaze()
@@ -64,7 +64,7 @@ end
 
 ------------------------------------------
 
-function scene:buildButton( title, color, titleSize, x, y, action )
+function scene:buildButton( title, color, titleSize, x, y, action, lockAtStartup )
 
 	local colors
 	if(color == "blue") then
@@ -90,40 +90,50 @@ function scene:buildButton( title, color, titleSize, x, y, action )
 	text:setTextColor( 0 )	
 	text.x = x
 	text.y = y
-	text:addEventListener("touch", function(event) action() end)
 	menu:insert(text)
 	
-	local fire=CBE.VentGroup{
-		{
-			title="fire",
-			preset="burn",
-			color=colors,
-			build=function()
-				local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
-				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
-			end,
-			onCreation=function()end,
-			perEmit=6,
-			emissionNum=0,
-			x=x,
-			y=y,
-			positionType="inRadius",
-			posRadius=40,
-			emitDelay=150,
-			fadeInTime=500,
-			lifeSpan=50, -- Particles are removed sooner than the ice comet
-			lifeStart=250,
-			endAlpha=0,
-			physics={
-				velocity=0.5,
-				xDamping=1,
-				gravityY=1.9,
-				gravityX=0
-			}
-		}
-	}
-	
-	table.insert(fires, fire)
+	if(lockAtStartup and not savedData.levels[2]) then
+   	local lock = display.newImage("images/hud/lock.png")
+   	lock:scale(0.50,0.50)
+   	lock.x = x
+   	lock.y = y
+   	menu:insert(lock)
+   else
+		text:addEventListener	("touch", function(event) action() end)
+		planet:addEventListener	("touch", function(event) action() end)
+
+   	local fire=CBE.VentGroup{
+   		{
+   			title="fire",
+   			preset="burn",
+   			color=colors,
+   			build=function()
+   				local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
+   				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
+   			end,
+   			onCreation=function()end,
+   			perEmit=2,
+   			emissionNum=0,
+   			x=x,
+   			y=y,
+   			positionType="inRadius",
+   			posRadius=40,
+   			emitDelay=50,
+   			fadeInTime=1500,
+   			lifeSpan=250, -- Particles are removed sooner than the ice comet
+   			lifeStart=250,
+   			endAlpha=0,
+   			physics={
+   				velocity=0.5,
+   				xDamping=1,
+   				gravityY=0.6,
+   				gravityX=0
+   			}
+   		}
+   	}
+   	
+   	table.insert(fires, fire)
+	end
 end
 
 ------------------------------------------
@@ -135,9 +145,9 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
-	fires[1]:stop("fire")
-	fires[2]:stop("fire")
-	fires[3]:stop("fire")
+	for fire = 1, #fires do 
+		fires[fire]:stop("fire")
+	end
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

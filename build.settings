@@ -35,12 +35,13 @@ settings = {
 		}
 	},
 	
-	--[[
-	-- Android permissions
-
-	androidPermissions = {
-  		"android.permission.INTERNET",
-  	},
-
-	]]--
+	android =
+    {
+        usesPermissions =
+        {
+            "com.android.vending.BILLING",
+	  		"android.permission.INTERNET",
+        },
+    },
+    
 }
