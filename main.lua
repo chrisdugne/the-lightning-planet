@@ -24,7 +24,6 @@ COLORS = {BLUE, GREEN, YELLOW, RED}
 -----------------------------------------------------------------------------------------
 --- Corona's libraries
 json 				= require "json"
-widget 			= require "widget"
 storyboard 		= require "storyboard"
 
 ---- Additional libs
@@ -36,7 +35,6 @@ vector2D			= require "libs.Vector2D"
 
 ---- App Tools
 router 			= require "tools.Router"
-imagesManager 	= require "tools.ImagesManager"
 viewManager		= require "tools.ViewManager"
 
 lightning		= require "tools.Lightning"
@@ -53,9 +51,9 @@ GLOBALS = {
 ---- Levels
 
 LEVELS = {
-	{
+	{--------------------- LEVEL 1 : Tutorial
 		colors = 2,
-		combo = {GREEN,BLUE,GREEN}
+		combo = {BLUE,GREEN,BLUE}
 	},
 }
 

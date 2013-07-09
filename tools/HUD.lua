@@ -137,6 +137,20 @@ end
 
 -----------------------------------------------------------------------------------------
 
+function drawCombo(level)
+	
+	for i in pairs(LEVELS[level].combo) do
+		local color = LEVELS[level].combo[i]
+   	local asteroid = display.newImage("images/game/asteroid." .. color .. ".png")
+   	asteroid:scale(0.5,0.5)
+   	asteroid.x = 10 + 20 * i
+   	asteroid.y = 15
+   	asteroid.alpha = 0.85
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
 function disableColors()
  	colorsEnabled = false 
 end

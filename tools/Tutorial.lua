@@ -23,7 +23,7 @@ texts = {
 	},
 	{ --------------------------- STEP 3
 		text 	= "Touch here to change your planet",
-		x 		= display.contentWidth/3,
+		x 		= display.contentWidth/2,
 		y 		= display.contentHeight - 75,
 		delay = 1000,
 	},
@@ -55,6 +55,42 @@ texts = {
 		text 	= "Here is the Combo requested",
 		x 		= display.contentWidth/4,
 		y 		= display.contentHeight/3 ,
+		delay = 800,
+	},
+	{ --------------------------- STEP 9
+		text 	= "You have to catch a blue asteroid first",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 800,
+	},
+	{ --------------------------- STEP 10
+		text 	= "Touch here to change your planet",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight - 35,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 11
+		text 	= "Same color when the asteroid crashes : OK !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 12
+		text 	= "Now have to catch a green asteroid",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 800,
+	},
+	{ --------------------------- STEP 13
+		text 	= "Touch here to change your planet",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight - 75,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 14
+		text 	= "Great !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
 		delay = 1000,
 	}
 }
@@ -98,10 +134,30 @@ arrows = {
 	},
 	{ --------------------------- STEP 8
 		way 			= "top",
-		xFrom 		= display.contentWidth/7,
+		xFrom 		= display.contentWidth/9,
 		yFrom 		= display.contentHeight/2,
-		xTo 			= display.contentWidth/7,
+		xTo 			= display.contentWidth/9,
 		yTo 			= 60
+	},
+	{ --------------------------- STEP 9
+	},
+	{ --------------------------- STEP 10
+		way 			= "right",
+		xFrom 		= display.contentWidth /2,
+		yFrom 		= display.contentHeight - 30,
+		xTo 			= display.contentWidth - 100,
+		yTo 			= display.contentHeight - 30
+	},
+	{ --------------------------- STEP 11
+	},
+	{ --------------------------- STEP 12
+	},
+	{ --------------------------- STEP 13
+		way 			= "right",
+		xFrom 		= display.contentWidth /2,
+		yFrom 		= display.contentHeight - 70,
+		xTo 			= display.contentWidth - 70,
+		yTo 			= display.contentHeight - 70
 	},
 }
 
@@ -119,6 +175,9 @@ function startTutorial(view)
 	hud.refreshTopRightText("Level 1 : Tutorial")
 	
 --	step1()
+
+	game.setPlanetColor(GREEN)
+	hud.setupPad(scene)
 	step(8)
 end
 
@@ -145,6 +204,20 @@ function step(num)
 		next = step9Content()
 	elseif(num == 10) then
 		next = step10Content()
+	elseif(num == 11) then
+		next = step11Content()
+	elseif(num == 12) then
+		next = step12Content()
+	elseif(num == 13) then
+		next = step13Content()
+	elseif(num == 14) then
+		next = step14Content()
+	elseif(num == 15) then
+		next = step15Content()
+	elseif(num == 16) then
+		next = step16Content()
+	elseif(num == 17) then
+		next = step17Content()
 	end
 	
 	openStep(num, next)
@@ -173,6 +246,10 @@ function conditionFilled(step)
 	elseif(step == 5) then
 		local asteroid = game.getAsteroid("asteroid_step5")
 		return not asteroid
+	elseif(step == 10) then
+		return game.planet.color == BLUE
+	elseif(step == 13) then
+		return game.planet.color == GREEN
 	else
 		return true
 	end
@@ -254,7 +331,68 @@ end
 function step8Content()
 	return function() 
    	hud.enableColors()
+   	hud.drawCombo(1)
+		local asteroid = createAsteroid(BLUE, -2*math.pi/3, 180, 8)
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		displayArrow(8)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step9Content()
+	return function() 
+		displayText(9)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step10Content()
+	return function() 
+		local asteroid = game.getAsteroid("asteroid_step8")
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+		asteroid:setLinearVelocity( 0, 0 )
+		displayArrow(10)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step11Content()
+	return function() 
+   	local asteroid = game.getAsteroid("asteroid_step8")
+		asteroid:setLinearVelocity( asteroid.vx, asteroid.vy )
+		displayText(11)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step12Content()
+	return function() 
+		displayText(9)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step13Content()
+	return function() 
+		local asteroid = game.getAsteroid("asteroid_step8")
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+		asteroid:setLinearVelocity( 0, 0 )
+		displayArrow(10)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step14Content()
+	return function() 
+   	local asteroid = game.getAsteroid("asteroid_step8")
+		asteroid:setLinearVelocity( asteroid.vx, asteroid.vy )
+		displayText(11)
 	end
 end
 
