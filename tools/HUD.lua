@@ -10,17 +10,40 @@ local redButton
 local blueButton
 local greenButton
 
+local colorsEnabled = true
+local lightningEnabled = true
+
 topRightText = {}
 
 -----------------------------------------------------------------------------------------
 
-function setupButtons(view)
+function initTopRightText()
+	topRightText = display.newText( "0", 0, 0, "Papyrus", 21 )
+	topRightText:setTextColor( 255 )	
+	topRightText:setReferencePoint( display.CenterReferencePoint )
+	topRightText.x = display.contentWidth - topRightText.contentWidth/2 - 10
+	topRightText.y = 20
+end
 
-	lightButton = display.newImage( view, "images/hud/button.light.png")
-	lightButton.x = 40
-	lightButton.y = display.contentHeight - 60
-	lightButton:scale(0.15,0.15)
-	lightButton:addEventListener("touch", function(event) touch(event, lightButton) light(event) end)
+function refreshTopRightText(text)
+	topRightText.text = text
+	topRightText.x 	= display.contentWidth - topRightText.contentWidth/2 - 10
+end
+
+-----------------------------------------------------------------------------------------
+
+function setupPad(view)
+	setupButtons(view)
+	setupLightningButton(view)
+	
+	colorsEnabled = true
+	lightningEnabled = true
+	
+end
+
+-----------------------------------------------------------------------------------------
+
+function setupButtons(view)
 
 	blueButton = display.newImage( view, "images/hud/button.blue.png")
 	blueButton.x = display.contentWidth - 55
@@ -50,27 +73,36 @@ function setupButtons(view)
    	redButton:addEventListener("touch", function(event) touch(event, redButton) color(event, "red") end)
    end
 
-
 	Runtime:addEventListener("touch", function(event) screenTouch(event) end)
+end
 
-	----
-		
-	topRightText = display.newText( "0", 0, 0, "Papyrus", 21 )
-	topRightText:setTextColor( 255 )	
-	topRightText:setReferencePoint( display.CenterReferencePoint )
-	topRightText.x = display.contentWidth - topRightText.contentWidth/2 - 10
-	topRightText.y = 20
-	
+-----------------------------------------------------------------------------------------
+
+function setupLightningButton(view)
+	lightButton = display.newImage( view, "images/hud/button.light.png")
+	lightButton.x = 40
+	lightButton.y = display.contentHeight - 60
+	lightButton:scale(0.15,0.15)
+	lightButton:addEventListener("touch", function(event) touch(event, lightButton) light(event) end)
 end
 
 ------------------------------------------------------------------------------------------
 
 function screenTouch( event )
 	if(event.phase == "ended") then
-   	lightButton.alpha 	= 1
-   	blueButton.alpha 		= 1
-   	greenButton.alpha	 	= 1
    	
+   	if(lightButton) then
+	   	lightButton.alpha = 1
+	   end
+   	
+   	if(blueButton) then
+	   	blueButton.alpha = 1
+	   end
+   	
+   	if(greenButton) then
+	   	greenButton.alpha = 1
+	   end
+
    	if(yellowButton) then
 	   	yellowButton.alpha = 1
 	   end
@@ -84,7 +116,7 @@ function screenTouch( event )
 end
 
 function light( event )
-	if(event.phase == "began") then
+	if(event.phase == "began" and lightningEnabled) then
 		transition.to( game.planet, { time=40, alpha=1 })
 		game.shootOnClosestAsteroid()
    end
@@ -97,7 +129,26 @@ function touch( event, button )
 end
 
 function color( event, color )
-	if(event.phase == "began") then
+	if(event.phase == "began" and colorsEnabled) then
    	game.setPlanetColor(color)
    end
+end
+
+
+-----------------------------------------------------------------------------------------
+
+function disableColors()
+ 	colorsEnabled = false 
+end
+
+function enableColors()
+ 	colorsEnabled = true 
+end
+
+function disableLightning()
+ 	lightningEnabled = false 
+end
+
+function enableLightning()
+ 	lightningEnabled = true 
 end

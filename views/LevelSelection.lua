@@ -24,7 +24,9 @@ end
 
 function scene:refreshScene()
 	utils.emptyGroup(levels)
-	viewManager.setupView(self.view);
+	viewManager.initView(self.view);
+	
+	local margin = display.contentWidth/2 -5*38 
 
    for level = 1, 40 do
    
@@ -33,8 +35,8 @@ function scene:refreshScene()
 		local levelAvailable = savedData.levels[level]
    	
    	local levelButton = display.newImage("images/hud/level.".. COLORS[j] .. ".png")
-   	levelButton:scale(0.36,0.36)
-   	levelButton.x = 50 + 53 * i
+   	levelButton:scale(0.25,0.25)
+   	levelButton.x = margin + 42 * i
    	levelButton.y = 65 * j
    	levels:insert(levelButton)
 	

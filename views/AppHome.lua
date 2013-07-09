@@ -25,7 +25,7 @@ end
 
 function scene:refreshScene()
 	utils.emptyGroup(menu)
-	viewManager.setupView(self.view);
+	viewManager.initView(self.view);
 	
 	titleButton = display.newText( "The Lightning Planet", 0, 0, "SelfDestructButtonBB-Italic", 45 )
 	titleButton:setTextColor( 255 )	

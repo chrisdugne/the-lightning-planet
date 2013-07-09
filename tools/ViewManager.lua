@@ -4,7 +4,7 @@ module(..., package.seeall)
 
 -----------------------------------------------------------------------------------------
 
-function setupView(view)
+function initView(view)
 	reset(view)
 end
 

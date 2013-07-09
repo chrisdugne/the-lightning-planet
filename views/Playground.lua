@@ -22,12 +22,12 @@ end
 
 -- Called when the scene's view does not exist:
 function scene:refreshScene()
-	viewManager.setupView(self.view);
-	hud.setupButtons(self.view)
+	viewManager.initView(self.view);
 	
 	if(game.mode == game.COMBO and game.level == 1) then
-		tutorial.step1(self.view)
+		tutorial.startTutorial(self.view)
 	else
+   	hud.setupPad(self.view)
    	game.prepare(self.view)
    end
 end

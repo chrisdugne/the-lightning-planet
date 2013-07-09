@@ -64,19 +64,20 @@ function crashAsteroid( self, event )
 	
 	--------------------------
 	-- calculating points
-	
-	if(planet.color == self.color) then
-		points = points + 5
-	else
-		points = points - 2
-	end
-	
-	if(points < 0) then
-		points = 0
-	end
-	
-	hud.topRightText.text = points
-	hud.topRightText.x = display.contentWidth - hud.topRightText.contentWidth/2 - 10
+	--  within game mode
+	--  
+--	if(planet.color == self.color) then
+--		points = points + 5
+--	else
+--		points = points - 2
+--	end
+--	
+--	if(points < 0) then
+--		points = 0
+--	end
+--	
+--	hud.topRightText.text = points
+--	hud.topRightText.x = display.contentWidth - hud.topRightText.contentWidth/2 - 10
 
 	--------------------------
 	-- destroy
@@ -208,6 +209,16 @@ function explodeAsteroid(asteroid)
 	light:start("explosion")
 
 	destroyAsteroid(asteroid)
+end
+
+------------------------------------------------------------------------------------------
+
+function getAsteroid(name)
+	for i in pairs(asteroids) do
+		if(asteroids[i].name == name) then
+			return asteroids[i]
+		end
+	end
 end
 
 ------------------------------------------------------------------------------------------
