@@ -27,8 +27,13 @@ function scene:refreshScene()
 	if(game.mode == game.COMBO and game.level == 1) then
 		tutorial.startTutorial(self.view)
 	else
-   	hud.setupPad(self.view)
-   	game.prepare(self.view)
+   	game.start(self.view)
+   	
+--   	hud.initTopRightText()
+--   	hud.refreshTopRightText("Level " .. LEVELS)
+--   	hud.setExit()
+--   	
+   	hud.setupPad()
    end
 end
 

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 APP_NAME 	= "TheLightningPlanet"
-APP_VERSION = "0.1"
+APP_VERSION = "1.0"
 
 -----------------------------------------------------------------------------------------
 
@@ -42,6 +42,7 @@ hud				= require "tools.HUD"
 game				= require "tools.Game"
 tutorial			= require "tools.Tutorial"
 
+-----------------------------------------------------------------------------------------
 ---- App globals
 
 GLOBALS = {
@@ -54,6 +55,10 @@ LEVELS = {
 	{--------------------- LEVEL 1 : Tutorial
 		colors = 2,
 		combo = {BLUE,GREEN,BLUE}
+	},
+	{--------------------- LEVEL 2
+		colors = 2,
+		combo = {BLUE,BLUE,GREEN,GREEN}
 	},
 }
 

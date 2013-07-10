@@ -34,11 +34,14 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 -----------------------------------------------------------------------------------------
 
-function prepare(view)
+function start(view)
 	scene = view
-	asteroidBuilder()
-	setPlanetColor(BLUE)
+	
+	game.scene 	= view
 	game.state	= game.RUNNING
+	
+	setPlanetColor(BLUE)
+	asteroidBuilder()
 end
 
 -----------------------------------------------------------------------------------------
