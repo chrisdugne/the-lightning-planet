@@ -108,7 +108,8 @@ end
 
 ------------------------------------------------------------------------------------------
 
-function destroyScene()
+function exit()
+	
 	while (#asteroids > 0) do
 		asteroids[1]:removeSelf() 
 		asteroids[1]=ni
@@ -116,6 +117,10 @@ function destroyScene()
 	end
 	
 	game.state	= game.IDLE
+	
+	router.openAppHome()
+	hud.exitButton:removeSelf()
+	
 end
 
 ------------------------------------------------------------------------------------------

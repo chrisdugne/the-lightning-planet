@@ -16,13 +16,7 @@ function setExit()
 	exitButton.x = display.contentWidth - 15
 	exitButton.y = 45
 	exitButton:scale(0.17,0.17)
-	exitButton:addEventListener("touch", function(event) exit() end)
-end
-
-function exit()
-	game.destroyScene()
-	router.openAppHome()
-	exitButton:removeSelf()
+	exitButton:addEventListener("touch", function(event) game.exit() end)
 end
 
 -----------------------------------------------------------------------------------------

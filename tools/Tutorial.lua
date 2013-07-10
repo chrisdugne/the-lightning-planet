@@ -405,7 +405,7 @@ end
 
 function step27Content()
 	return function() 
-		router.openLevelSelection()
+		game.exit()
 	end
 end
 
