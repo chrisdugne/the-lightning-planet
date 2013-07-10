@@ -25,6 +25,7 @@ end
 
 function scene:refreshScene()
 	utils.emptyGroup(menu)
+	cleanupFires()
 	viewManager.initView(self.view);
 	
 	titleButton = display.newText( "The Lightning Planet", 0, 0, "SelfDestructButtonBB-Italic", 45 )
@@ -47,6 +48,19 @@ end
 
 ------------------------------------------
 
+function cleanupFires()	
+	for fire = 1, #fires do 
+		fires[fire]:destroy("fire")
+	end
+	
+	while #fires > 0 do
+   	table.remove(fires, 1)
+   	print("removed fire")
+	end
+end
+
+------------------------------------------
+
 function combo()	
 	game.mode = game.COMBO 
 	router.openLevelSelection()
@@ -65,7 +79,7 @@ end
 ------------------------------------------
 
 function scene:buildButton( title, color, titleSize, x, y, action, lockAtStartup )
-
+	print("buildbutton", color)
 	local colors
 	if(color == "blue") then
 		colors={{0, 111, 255}, {0, 70, 255}}
@@ -145,9 +159,7 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
-	for fire = 1, #fires do 
-		fires[fire]:stop("fire")
-	end
+	cleanupFires()
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

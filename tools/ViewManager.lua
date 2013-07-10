@@ -11,8 +11,8 @@ end
 ------------------------------------------------------------------------------------------
 
 function reset(view)
-	local back = display.newImage( view, "images/stars.png")  
-	back:scale(0.6,0.6)
+	local back = display.newImage( view, "images/stars.jpg")  
+	back:scale(0.7,0.7)
 	back.x = display.viewableContentWidth/2  
 	back.y = display.viewableContentHeight/2  
 end

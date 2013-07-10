@@ -4,6 +4,15 @@ module(..., package.seeall)
 
 -----------------------------------------------------------------------------------------
 
+scene = {}
+
+-----------------------------------------------------------------------------------------
+
+RUNNING 		= 1
+IDLE 			= 2
+
+-----------------------------------------------------------------------------------------
+
 COMBO 		= 1
 KAMIKAZE 	= 2
 TIMEATTACK 	= 3
@@ -11,11 +20,11 @@ TIMEATTACK 	= 3
 -----------------------------------------------------------------------------------------
 
 planet = {}
-
-points = 0
-mode = "none"
-
 asteroids = {}
+
+points 	= 0
+mode 		= 0
+state 	= IDLE
 
 -----------------------------------------------------------------------------------------
 --set up collision filters
@@ -26,9 +35,20 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 -----------------------------------------------------------------------------------------
 
 function prepare(view)
+	scene = view
 	asteroidBuilder()
 	setPlanetColor(BLUE)
+	game.state	= game.RUNNING
 end
+
+-----------------------------------------------------------------------------------------
+
+function completeLevel(level)	
+	savedData.levels[level+1] = { available = true }
+   utils.saveTable(savedData, "savedData.json")
+end
+
+-----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
 	timer.performWithDelay( 1450, function() --delay :  level params
@@ -43,7 +63,7 @@ function setPlanetColor(color)
 		planet:removeSelf()
 	end
 	
-	planet = display.newImage("images/game/planet.".. color ..".png")
+	planet = display.newImage(scene, "images/game/planet.".. color ..".png")
 	planet:scale(0.17,0.17)
 	planet.x = display.contentWidth/2
 	planet.y = display.contentHeight/2
@@ -84,6 +104,18 @@ function crashAsteroid( self, event )
 	
 	self.beingDestroyed = true
 	destroyAsteroid(self)
+end
+
+------------------------------------------------------------------------------------------
+
+function destroyScene()
+	while (#asteroids > 0) do
+		asteroids[1]:removeSelf() 
+		asteroids[1]=ni
+		table.remove(asteroids, 1)
+	end
+	
+	game.state	= game.IDLE
 end
 
 ------------------------------------------------------------------------------------------

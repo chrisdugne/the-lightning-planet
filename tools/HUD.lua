@@ -4,12 +4,6 @@ module(..., package.seeall)
 
 -----------------------------------------------------------------------------------------
 
-local lightButton
-local yellowButton
-local redButton
-local blueButton
-local greenButton
-
 local colorsEnabled = true
 local lightningEnabled = true
 
@@ -17,8 +11,24 @@ topRightText = {}
 
 -----------------------------------------------------------------------------------------
 
+function setExit()
+	exitButton = display.newImage( game.scene, "images/hud/exit.png")
+	exitButton.x = display.contentWidth - 15
+	exitButton.y = 45
+	exitButton:scale(0.17,0.17)
+	exitButton:addEventListener("touch", function(event) exit() end)
+end
+
+function exit()
+	game.destroyScene()
+	router.openAppHome()
+	exitButton:removeSelf()
+end
+
+-----------------------------------------------------------------------------------------
+
 function initTopRightText()
-	topRightText = display.newText( "0", 0, 0, "Papyrus", 21 )
+	topRightText = display.newText( game.scene, "0", 0, 0, "Papyrus", 21 )
 	topRightText:setTextColor( 255 )	
 	topRightText:setReferencePoint( display.CenterReferencePoint )
 	topRightText.x = display.contentWidth - topRightText.contentWidth/2 - 10
@@ -32,33 +42,30 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function setupPad(view)
-	setupButtons(view)
-	setupLightningButton(view)
-	
-	colorsEnabled = true
-	lightningEnabled = true
-	
+function setupPad()
+	setupButtons()
+	setupLightningButton()
 end
 
 -----------------------------------------------------------------------------------------
 
-function setupButtons(view)
+function setupButtons()
+	colorsEnabled = true
 
-	blueButton = display.newImage( view, "images/hud/button.blue.png")
+	blueButton = display.newImage( game.scene, "images/hud/button.blue.png")
 	blueButton.x = display.contentWidth - 55
 	blueButton.y = display.contentHeight - 30
 	blueButton:scale(0.15,0.15)
 	blueButton:addEventListener("touch", function(event) touch(event, blueButton) color(event, "blue") end)
 
-	greenButton = display.newImage( view, "images/hud/button.green.png")
+	greenButton = display.newImage( game.scene, "images/hud/button.green.png")
 	greenButton.x = display.contentWidth - 25
 	greenButton.y = display.contentHeight - 70
 	greenButton:scale(0.15,0.15)
 	greenButton:addEventListener("touch", function(event) touch(event, greenButton) color(event, "green") end)
 
 	if(game.mode ~= game.COMBO or LEVELS[game.level].colors > 2) then	
-   	yellowButton = display.newImage( view, "images/hud/button.yellow.png")
+   	yellowButton = display.newImage( game.scene, "images/hud/button.yellow.png")
    	yellowButton.x = display.contentWidth - 85
    	yellowButton.y = display.contentHeight - 70
    	yellowButton:scale(0.15,0.15)
@@ -66,7 +73,7 @@ function setupButtons(view)
    end
 
 	if(game.mode ~= game.COMBO or LEVELS[game.level].colors > 3) then	
-   	redButton = display.newImage( view, "images/hud/button.red.png")
+   	redButton = display.newImage( game.scene, "images/hud/button.red.png")
    	redButton.x = display.contentWidth - 55
    	redButton.y = display.contentHeight - 110
    	redButton:scale(0.15,0.15)
@@ -78,8 +85,10 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function setupLightningButton(view)
-	lightButton = display.newImage( view, "images/hud/button.light.png")
+function setupLightningButton()
+	lightningEnabled = true
+
+	lightButton = display.newImage( game.scene, "images/hud/button.light.png")
 	lightButton.x = 40
 	lightButton.y = display.contentHeight - 60
 	lightButton:scale(0.15,0.15)
@@ -141,7 +150,7 @@ function drawCombo(level)
 	
 	for i in pairs(LEVELS[level].combo) do
 		local color = LEVELS[level].combo[i]
-   	local asteroid = display.newImage("images/game/asteroid." .. color .. ".png")
+   	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
    	asteroid:scale(0.5,0.5)
    	asteroid.x = 10 + 20 * i
    	asteroid.y = 15

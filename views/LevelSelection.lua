@@ -47,7 +47,8 @@ function scene:refreshScene()
       	lock.y = levelButton.y
       	levels:insert(lock)
 
-	   	levelButton.alpha = 0.6
+	   	lock.alpha = 0.7
+	   	levelButton.alpha = 0.2
 	   else
    		levelButton:addEventListener("touch", function(event) openLevel(level) end)
       end

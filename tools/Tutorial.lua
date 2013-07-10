@@ -5,161 +5,7 @@ module(..., package.seeall)
 -----------------------------------------------------------------------------------------
 
 scene = {}
-
------------------------------------------------------------------------------------------
-
-texts = {
-	{ --------------------------- STEP 1
-		text 	= "Your Planet",
-		x 		= display.contentWidth/5,
-		y 		= display.contentHeight/2,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 2 
-		text 	= "An asteroid",
-		x 		= display.contentWidth/3,
-		y 		= 50,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 3
-		text 	= "Touch here to change your planet",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight - 75,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 4
-		text 	= "Same color when the asteroid crashes : OK !",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 2600,
-	},
-	{ --------------------------- STEP 5
-		text 	= "Touch here to call Lightning !",
-		x 		= display.contentWidth * 0.6,
-		y 		= display.contentHeight - 63,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 6
-		text 	= "Lightning destroys asteroids !",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 7
-		text 	= "Time now for your first Combo",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 8
-		text 	= "Here is the Combo requested",
-		x 		= display.contentWidth/4,
-		y 		= display.contentHeight/3 ,
-		delay = 800,
-	},
-	{ --------------------------- STEP 9
-		text 	= "You have to catch a blue asteroid first",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 800,
-	},
-	{ --------------------------- STEP 10
-		text 	= "Touch here to change your planet",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight - 35,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 11
-		text 	= "Same color when the asteroid crashes : OK !",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 12
-		text 	= "Now have to catch a green asteroid",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 800,
-	},
-	{ --------------------------- STEP 13
-		text 	= "Touch here to change your planet",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight - 75,
-		delay = 1000,
-	},
-	{ --------------------------- STEP 14
-		text 	= "Great !",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
-		delay = 1000,
-	}
-}
-
------------------------------------------------------------------------------------------
-
-arrows = {
-	{ --------------------------- STEP 1
-		way 			= "right",
-		xFrom 		= 110,
-		yFrom 		= display.contentHeight/2,
-		xTo 			= display.contentWidth/2 - 60,
-		yTo 			= display.contentHeight/2
-	},
-	{ --------------------------- STEP 2
-		way 			= "right",
-		xFrom 		= 70,
-		yFrom 		= 10,
-		xTo 			= display.contentWidth/2 + 35,
-		yTo 			= 10
-	},
-	{ --------------------------- STEP 3
-		way 			= "right",
-		xFrom 		= display.contentWidth /2,
-		yFrom 		= display.contentHeight - 70,
-		xTo 			= display.contentWidth - 70,
-		yTo 			= display.contentHeight - 70
-	},
-	{ --------------------------- STEP 4
-	},
-	{ --------------------------- STEP 5
-		way 			= "left",
-		xFrom 		= display.contentWidth/2,
-		yFrom 		= display.contentHeight - 60,
-		xTo 			= 110,
-		yTo 			= display.contentHeight - 60
-	},
-	{ --------------------------- STEP 6
-	},
-	{ --------------------------- STEP 7
-	},
-	{ --------------------------- STEP 8
-		way 			= "top",
-		xFrom 		= display.contentWidth/9,
-		yFrom 		= display.contentHeight/2,
-		xTo 			= display.contentWidth/9,
-		yTo 			= 60
-	},
-	{ --------------------------- STEP 9
-	},
-	{ --------------------------- STEP 10
-		way 			= "right",
-		xFrom 		= display.contentWidth /2,
-		yFrom 		= display.contentHeight - 30,
-		xTo 			= display.contentWidth - 100,
-		yTo 			= display.contentHeight - 30
-	},
-	{ --------------------------- STEP 11
-	},
-	{ --------------------------- STEP 12
-	},
-	{ --------------------------- STEP 13
-		way 			= "right",
-		xFrom 		= display.contentWidth /2,
-		yFrom 		= display.contentHeight - 70,
-		xTo 			= display.contentWidth - 70,
-		yTo 			= display.contentHeight - 70
-	},
-}
+currentStep = 0
 
 -----------------------------------------------------------------------------------------
 --set up collision filters
@@ -170,21 +16,39 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 -----------------------------------------------------------------------------------------
 
 function startTutorial(view)
-	scene = view
+	scene 		= view
+	game.scene 	= view
+	game.state	= game.RUNNING
+	
 	hud.initTopRightText()
 	hud.refreshTopRightText("Level 1 : Tutorial")
 	
---	step1()
-
-	game.setPlanetColor(GREEN)
-	hud.setupPad(scene)
-	step(8)
+	hud.setExit()
+	
+	step1()
 end
 
 -----------------------------------------------------------------------------------------
 
 function step(num)
+
+	-------------------------------------------------
+	-- Checking tutorial status
+	
+	if(currentStep < num-1) then
+		-- Classic tutorial exit + come back
+		return
+	end
+
+	if(currentStep == num) then
+		-- Tutorial exit at step 1 and come back as quick as possible... return here and this will catch the previous stepper
+		return
+	end
+
+	-------------------------------------------------
+
 	local next
+	currentStep = num
 
 	if(num == 2) then
 		next = step2Content()
@@ -218,6 +82,26 @@ function step(num)
 		next = step16Content()
 	elseif(num == 17) then
 		next = step17Content()
+	elseif(num == 18) then
+		next = step18Content()
+	elseif(num == 19) then
+		next = step19Content()
+	elseif(num == 20) then
+		next = step20Content()
+	elseif(num == 21) then
+		next = step21Content()
+	elseif(num == 22) then
+		next = step22Content()
+	elseif(num == 23) then
+		next = step23Content()
+	elseif(num == 24) then
+		next = step24Content()
+	elseif(num == 25) then
+		next = step25Content()
+	elseif(num == 26) then
+		next = step26Content()
+	elseif(num == 27) then
+		next = step27Content()
 	end
 	
 	openStep(num, next)
@@ -226,6 +110,11 @@ end
 -----------------------------------------------------------------------------------------
 
 function openStep(step, next)
+
+	if (game.state == game.IDLE) then
+		return
+	end
+
 	if(conditionFilled(step-1)) then
 		transition.to( texts[step-1].item, 		{ time=300, alpha=0, onComplete = function() texts[step-1].item:removeSelf() end		})
 		transition.to( arrows[step-1].item, 	{ time=300, alpha=0, onComplete = function() arrows[step-1].item:removeSelf() end 	})
@@ -250,6 +139,11 @@ function conditionFilled(step)
 		return game.planet.color == BLUE
 	elseif(step == 13) then
 		return game.planet.color == GREEN
+	elseif(step == 21) then
+		local asteroid = game.getAsteroid("asteroid_step15")
+		return not asteroid
+	elseif(step == 24) then
+		return game.planet.color == BLUE
 	else
 		return true
 	end
@@ -259,6 +153,7 @@ end
 -----------------------------------------------------------------------------------------
 
 function step1()
+	currentStep = 1
 	game.setPlanetColor(BLUE)
 	displayArrow(1)
 end
@@ -277,7 +172,7 @@ end
 
 function step3Content()
 	return function() 
-   	hud.setupButtons(scene)
+   	hud.setupButtons()
 		local asteroid = game.getAsteroid("asteroid_step2")
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		asteroid:setLinearVelocity( 0, 0 )
@@ -300,11 +195,11 @@ end
 
 function step5Content()
 	return function() 
-   	hud.setupLightningButton(scene)
 		local asteroid = createAsteroid(BLUE, -2*math.pi/3, 180, 5)
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		
 		timer.performWithDelay( 1200, function ()
+   		hud.setupLightningButton()
    		asteroid:setLinearVelocity( 0, 0 )
    		displayArrow(5)
 		end) 
@@ -316,6 +211,7 @@ end
 
 function step6Content()
 	return function() 
+   	hud.disableLightning()
 		displayText(6)
 	end
 end
@@ -332,7 +228,7 @@ function step8Content()
 	return function() 
    	hud.enableColors()
    	hud.drawCombo(1)
-		local asteroid = createAsteroid(BLUE, -2*math.pi/3, 180, 8)
+		local asteroid = createAsteroid(BLUE, -3*math.pi/4, 300, 8)
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		displayArrow(8)
 	end
@@ -361,6 +257,7 @@ end
 
 function step11Content()
 	return function() 
+   	hud.disableColors()
    	local asteroid = game.getAsteroid("asteroid_step8")
 		asteroid:setLinearVelocity( asteroid.vx, asteroid.vy )
 		displayText(11)
@@ -371,7 +268,9 @@ end
 
 function step12Content()
 	return function() 
-		displayText(9)
+		local asteroid = createAsteroid(GREEN, -math.pi/3, 180, 12)
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+		displayText(12)
 	end
 end
 
@@ -379,10 +278,11 @@ end
 
 function step13Content()
 	return function() 
-		local asteroid = game.getAsteroid("asteroid_step8")
+   	hud.enableColors()
+		local asteroid = game.getAsteroid("asteroid_step12")
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		asteroid:setLinearVelocity( 0, 0 )
-		displayArrow(10)
+		displayArrow(13)
 	end
 end
 
@@ -390,9 +290,122 @@ end
 
 function step14Content()
 	return function() 
-   	local asteroid = game.getAsteroid("asteroid_step8")
+   	hud.disableColors()
+   	local asteroid = game.getAsteroid("asteroid_step12")
 		asteroid:setLinearVelocity( asteroid.vx, asteroid.vy )
-		displayText(11)
+		displayText(14)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step15Content()
+	return function() 
+		local asteroid = createAsteroid(GREEN, -2*math.pi/3, 180, 15)
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+		displayText(15)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step16Content()
+	return function() 
+   	hud.enableColors()
+		local asteroid = game.getAsteroid("asteroid_step15")
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+		asteroid:setLinearVelocity( 0, 0 )
+		displayText(16)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step17Content()
+	return function() 
+		displayText(17)
+	end
+end
+
+function step18Content()
+	return function() 
+		displayText(18)
+	end
+end
+
+function step19Content()
+	return function() 
+		displayText(19)
+	end
+end
+
+function step20Content()
+	return function() 
+		displayText(20)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step21Content()
+	return function()
+   	hud.enableLightning()
+   	displayArrow(21)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step22Content()
+	return function() 
+   	displayText(22)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step23Content()
+	return function() 
+		local asteroid = createAsteroid(BLUE, -math.pi/3, 180, 23)
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+   	displayText(23)
+	end
+end
+
+function step24Content()
+	return function() 
+		local asteroid = game.getAsteroid("asteroid_step23")
+		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
+		asteroid:setLinearVelocity( 0, 0 )
+   	displayArrow(24)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step25Content()
+	return function() 
+   	hud.disableColors()
+   	local asteroid = game.getAsteroid("asteroid_step23")
+		asteroid:setLinearVelocity( asteroid.vx, asteroid.vy )
+   	displayText(25)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step26Content()
+	return function() 
+		game.completeLevel(1)
+   	displayText(26)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function step27Content()
+	return function() 
+		router.openLevelSelection()
 	end
 end
 
@@ -466,5 +479,268 @@ function displayText(num)
 		end
 	})
 end
+
+-----------------------------------------------------------------------------------------
+
+texts = {
+	{ --------------------------- STEP 1
+		text 	= "This is your Planet",
+		x 		= display.contentWidth/5,
+		y 		= display.contentHeight/2,
+		delay = 1400,
+	},
+	{ --------------------------- STEP 2 
+		text 	= "And this is an asteroid",
+		x 		= display.contentWidth/3,
+		y 		= 50,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 3
+		text 	= "Touch here to turn your planet green",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight - 75,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 4
+		text 	= "Same color when the asteroid crashes : OK !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 2600,
+	},
+	{ --------------------------- STEP 5
+		text 	= "Touch here to call Lightning forth !",
+		x 		= display.contentWidth * 0.6,
+		y 		= display.contentHeight - 63,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 6
+		text 	= "Lightning destroys asteroids !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1300,
+	},
+	{ --------------------------- STEP 7
+		text 	= "Time now for your first Combo",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 8
+		text 	= "Here is the Combo requested",
+		x 		= display.contentWidth/4,
+		y 		= display.contentHeight/3 ,
+		delay = 1300,
+	},
+	{ --------------------------- STEP 9
+		text 	= "You have to catch a blue asteroid first",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 10
+		text 	= "Touch here to turn your planet blue",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight - 35,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 11
+		text 	= "Same color when the asteroid crashes : OK !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 2000,
+	},
+	{ --------------------------- STEP 12
+		text 	= "Now have to catch a green asteroid",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1800,
+	},
+	{ --------------------------- STEP 13
+		text 	= "Touch here to turn your planet green",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight - 75,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 14
+		text 	= "Great !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 3000,
+	},
+	{ --------------------------- STEP 15
+		text 	= "Finally you need a blue asteroid",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1800,
+	},
+	{ --------------------------- STEP 16
+		text 	= "Wait ! This one is green !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1300,
+	},
+	{ --------------------------- STEP 17
+		text 	= "If it crashes now you miss the combo !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1700,
+	},
+	{ --------------------------- STEP 18
+		text 	= "And if you turn the planet blue, you'd miss the crash",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 2500,
+	},
+	{ --------------------------- STEP 19
+		text 	= "and erase the combo as well",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 20
+		text 	= "You need the Lightning !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1400,
+	},
+	{ --------------------------- STEP 21
+		text 	= "Touch here to call Lightning forth !",
+		x 		= display.contentWidth * 0.6,
+		y 		= display.contentHeight - 63,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 22
+		text 	= "Now this green asteroid is no more",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 23
+		text 	= "Here is the final blue asteroid !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1500,
+	},
+	{ --------------------------- STEP 24
+		text 	= "Touch here to turn your planet blue",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight - 35,
+		delay = 1000,
+	},
+	{ --------------------------- STEP 25
+		text 	= "Nice !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 2500,
+	},
+	{ --------------------------- STEP 26
+		text 	= "Well done ! Now you're ready to play !",
+		x 		= display.contentWidth/2,
+		y 		= display.contentHeight/2 + 40,
+		delay = 1800,
+	},
+}
+
+-----------------------------------------------------------------------------------------
+
+arrows = {
+	{ --------------------------- STEP 1
+		way 			= "right",
+		xFrom 		= 110,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= display.contentWidth/2 - 60,
+		yTo 			= display.contentHeight/2
+	},
+	{ --------------------------- STEP 2
+		way 			= "right",
+		xFrom 		= 70,
+		yFrom 		= 10,
+		xTo 			= display.contentWidth/2 + 35,
+		yTo 			= 10
+	},
+	{ --------------------------- STEP 3
+		way 			= "right",
+		xFrom 		= display.contentWidth /2,
+		yFrom 		= display.contentHeight - 70,
+		xTo 			= display.contentWidth - 70,
+		yTo 			= display.contentHeight - 70
+	},
+	{ --------------------------- STEP 4
+	},
+	{ --------------------------- STEP 5
+		way 			= "left",
+		xFrom 		= display.contentWidth/2,
+		yFrom 		= display.contentHeight - 60,
+		xTo 			= 110,
+		yTo 			= display.contentHeight - 60
+	},
+	{ --------------------------- STEP 6
+	},
+	{ --------------------------- STEP 7
+	},
+	{ --------------------------- STEP 8
+		way 			= "top",
+		xFrom 		= display.contentWidth/9,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= display.contentWidth/9,
+		yTo 			= 60
+	},
+	{ --------------------------- STEP 9
+	},
+	{ --------------------------- STEP 10
+		way 			= "right",
+		xFrom 		= display.contentWidth /2,
+		yFrom 		= display.contentHeight - 30,
+		xTo 			= display.contentWidth - 100,
+		yTo 			= display.contentHeight - 30
+	},
+	{ --------------------------- STEP 11
+	},
+	{ --------------------------- STEP 12
+	},
+	{ --------------------------- STEP 13
+		way 			= "right",
+		xFrom 		= display.contentWidth /2,
+		yFrom 		= display.contentHeight - 70,
+		xTo 			= display.contentWidth - 70,
+		yTo 			= display.contentHeight - 70
+	},
+	{ --------------------------- STEP 14
+	},
+	{ --------------------------- STEP 15
+	},
+	{ --------------------------- STEP 16
+	},
+	{ --------------------------- STEP 17
+	},
+	{ --------------------------- STEP 18
+	},
+	{ --------------------------- STEP 19
+	},
+	{ --------------------------- STEP 20
+	},
+	{ --------------------------- STEP 21
+		way 			= "left",
+		xFrom 		= display.contentWidth/2,
+		yFrom 		= display.contentHeight - 60,
+		xTo 			= 110,
+		yTo 			= display.contentHeight - 60
+	},
+	{ --------------------------- STEP 22
+	},
+	{ --------------------------- STEP 23
+	},
+	{ --------------------------- STEP 24
+		way 			= "right",
+		xFrom 		= display.contentWidth /2,
+		yFrom 		= display.contentHeight - 30,
+		xTo 			= display.contentWidth - 100,
+		yTo 			= display.contentHeight - 30
+	},
+	{ --------------------------- STEP 25
+	},
+	{ --------------------------- STEP 26
+	},
+}
 
 -----------------------------------------------------------------------------------------
