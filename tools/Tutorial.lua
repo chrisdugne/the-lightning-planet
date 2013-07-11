@@ -19,6 +19,7 @@ function startTutorial(view)
 	scene 		= view
 	game.scene 	= view
 	game.state	= game.RUNNING
+   game.requestedAsteroid = 1
 	
 	hud.initTopRightText()
 	hud.refreshTopRightText("Level 1 : Tutorial")
@@ -26,6 +27,12 @@ function startTutorial(view)
 	hud.setExit()
 	
 	step1()
+
+-- debug got to step
+--	game.setPlanetColor(GREEN)
+--	hud.setupPad()
+--	currentStep = 7
+--	step(8)
 end
 
 -----------------------------------------------------------------------------------------
@@ -227,7 +234,7 @@ end
 function step8Content()
 	return function() 
    	hud.enableColors()
-   	hud.drawCombo(1)
+   	hud.drawCombo(1, 0)
 		local asteroid = createAsteroid(BLUE, -3*math.pi/4, 300, 8)
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		displayArrow(8)

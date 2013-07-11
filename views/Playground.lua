@@ -29,10 +29,14 @@ function scene:refreshScene()
 	else
    	game.start(self.view)
    	
---   	hud.initTopRightText()
---   	hud.refreshTopRightText("Level " .. LEVELS)
---   	hud.setExit()
---   	
+   	if(game.mode == game.COMBO) then
+   		hud.drawCombo(game.level, 0)
+   	end
+   	
+   	hud.initTopRightText()
+   	hud.refreshTopRightText("Level " .. game.level)
+   	hud.setExit()
+
    	hud.setupPad()
    end
 end

@@ -36,27 +36,37 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 function start(view)
 	scene = view
-	
-	game.scene 	= view
-	game.state	= game.RUNNING
+	state	= RUNNING
 	
 	setPlanetColor(BLUE)
 	asteroidBuilder()
+	
+	if(mode == COMBO) then
+   	requestedAsteroid = 1
+   end 
 end
 
 -----------------------------------------------------------------------------------------
 
-function completeLevel(level)	
+function completeLevel()	
+
+   timer.performWithDelay(300, stop)
+	hud.explodeCombo()
+	
 	savedData.levels[level+1] = { available = true }
    utils.saveTable(savedData, "savedData.json")
+   
+   timer.performWithDelay(5000, exit)
 end
 
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
 	timer.performWithDelay( 1450, function() --delay :  level params
-		createAsteroid()
-		asteroidBuilder()
+		if(state == RUNNING) then
+			createAsteroid()
+			asteroidBuilder()
+		end
 	end)
 end
 
@@ -78,40 +88,45 @@ end
 
 ------------------------------------------------------------------------------------------
 --
-function crashAsteroid( self, event )
+function crashAsteroid( asteroid, event )
 	local planet = event.other
-	
-	if(self.beingDestroyed) then
+	if(asteroid.beingDestroyed) then
 		return
 	end
 	
 	--------------------------
-	-- calculating points
-	--  within game mode
-	--  
---	if(planet.color == self.color) then
---		points = points + 5
---	else
---		points = points - 2
---	end
---	
---	if(points < 0) then
---		points = 0
---	end
---	
---	hud.topRightText.text = points
---	hud.topRightText.x = display.contentWidth - hud.topRightText.contentWidth/2 - 10
+	print(mode, requestedAsteroid)
+	if(mode == COMBO) then
+		
+		if(LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
+			hud.drawCombo(level, requestedAsteroid)
+			requestedAsteroid = requestedAsteroid + 1
+			
+			if(requestedAsteroid > #LEVELS[level].combo) then
+				completeLevel()
+   		end
+		end
+	
+	--------------------------
+	
+	elseif(mode == KAMIKAZE) then
+
+	--------------------------
+	
+	elseif(mode == TIMEATTACK) then
+	
+	end
 
 	--------------------------
 	-- destroy
 	
-	self.beingDestroyed = true
-	destroyAsteroid(self)
+	asteroid.beingDestroyed = true
+	destroyAsteroid(asteroid)
 end
 
 ------------------------------------------------------------------------------------------
 
-function exit()
+function stop()
 	
 	while (#asteroids > 0) do
 		asteroids[1]:removeSelf() 
@@ -119,11 +134,13 @@ function exit()
 		table.remove(asteroids, 1)
 	end
 	
-	game.state	= game.IDLE
-	
+	state	= IDLE
+end
+
+function exit()
+	stop()
 	router.openAppHome()
 	hud.exitButton:removeSelf()
-	
 end
 
 ------------------------------------------------------------------------------------------
@@ -265,8 +282,8 @@ end
 
 function createAsteroid()
 	local nbColors
-	if(game.mode == game.COMBO) then
-		nbColors = LEVELS[game.level].colors
+	if(mode == COMBO) then
+		nbColors = LEVELS[level].colors
 	else
 		nbColors = 4
 	end

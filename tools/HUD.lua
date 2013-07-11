@@ -8,6 +8,7 @@ local colorsEnabled = true
 local lightningEnabled = true
 
 topRightText = {}
+currentCombo = display.newGroup()
 
 -----------------------------------------------------------------------------------------
 
@@ -140,18 +141,49 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function drawCombo(level)
+function drawCombo(level, numCompleted)
+	
+	utils.emptyGroup(currentCombo)
 	
 	for i in pairs(LEVELS[level].combo) do
 		local color = LEVELS[level].combo[i]
-   	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
-   	asteroid:scale(0.5,0.5)
+   	local asteroid = display.newImage(currentCombo, "images/game/asteroid." .. color .. ".png")
    	asteroid.x = 10 + 20 * i
    	asteroid.y = 15
-   	asteroid.alpha = 0.85
+
+		if(i <= numCompleted) then
+   		asteroid:scale(0.68,0.68)
+   		asteroid.alpha = 1
+   	else
+   		asteroid:scale(0.5,0.5)
+   		asteroid.alpha = 0.75
+   	end
 	end
+	
+	game.scene:insert(currentCombo)
 end
 
+function explodeCombo()
+   for i=currentCombo.numChildren,1,-1 do
+		local asteroid = currentCombo[i]
+      local light=CBE.VentGroup{
+      	{
+      		title="comboFire",
+      		preset="wisps",
+      		color={{255,255,220},{255,255,120}},
+      		x = asteroid.x,
+      		y = asteroid.y,
+      		emissionNum = 1,
+      		physics={
+      			gravityY=5.2,
+      		}
+      	}
+      }
+      light:start("comboFire")
+      asteroid:removeSelf()
+	end
+end
+			
 -----------------------------------------------------------------------------------------
 
 function disableColors()
