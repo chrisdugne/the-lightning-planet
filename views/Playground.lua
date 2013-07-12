@@ -23,6 +23,7 @@ end
 -- Called when the scene's view does not exist:
 function scene:refreshScene()
 	viewManager.initView(self.view);
+	hud.initHUD()
 	
 	if(game.mode == game.COMBO and game.level == 1) then
 		tutorial.startTutorial(self.view)

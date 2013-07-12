@@ -44,6 +44,9 @@ function start(view)
 	if(mode == COMBO) then
    	requestedAsteroid = 1
    end 
+   
+   timer.performWithDelay(1200, completeLevel)
+   
 end
 
 -----------------------------------------------------------------------------------------
@@ -52,11 +55,12 @@ function completeLevel()
 
    timer.performWithDelay(300, stop)
 	hud.explodeCombo()
+	hud.explodeHUD()
 	
 	savedData.levels[level+1] = { available = true }
    utils.saveTable(savedData, "savedData.json")
    
-   timer.performWithDelay(5000, exit)
+   timer.performWithDelay(3000, exit)
 end
 
 -----------------------------------------------------------------------------------------
@@ -140,7 +144,14 @@ end
 function exit()
 	stop()
 	router.openAppHome()
-	hud.exitButton:removeSelf()
+	
+	if(hud.exitButton) then
+		hud.exitButton:removeSelf()
+	end
+
+	if(hud.topRightText) then
+		hud.topRightText:removeSelf()
+	end
 end
 
 ------------------------------------------------------------------------------------------

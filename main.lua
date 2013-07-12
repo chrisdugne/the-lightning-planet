@@ -58,7 +58,7 @@ LEVELS = {
 	},
 	{--------------------- LEVEL 2
 		colors = 2,
-		combo = {BLUE,BLUE,GREEN,GREEN}
+		combo = {BLUE,BLUE,GREEN,GREEN,BLUE,GREEN,GREEN,BLUE,GREEN,GREEN,BLUE,GREEN,GREEN}
 	},
 }
 

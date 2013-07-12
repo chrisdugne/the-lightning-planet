@@ -7,8 +7,16 @@ module(..., package.seeall)
 local colorsEnabled = true
 local lightningEnabled = true
 
-topRightText = {}
-currentCombo = display.newGroup()
+-----------------------------------------------------------------------------------------
+
+currentCombo	= display.newGroup()
+elements 		= display.newGroup()
+
+-----------------------------------------------------------------------------------------
+
+function initHUD()
+	utils.emptyGroup(elements)
+end
 
 -----------------------------------------------------------------------------------------
 
@@ -18,6 +26,7 @@ function setExit()
 	exitButton.y = 45
 	exitButton:scale(0.17,0.17)
 	exitButton:addEventListener("touch", function(event) game.exit() end)
+	elements:insert(exitButton)
 end
 
 -----------------------------------------------------------------------------------------
@@ -28,6 +37,7 @@ function initTopRightText()
 	topRightText:setReferencePoint( display.CenterReferencePoint )
 	topRightText.x = display.contentWidth - topRightText.contentWidth/2 - 10
 	topRightText.y = 20
+	elements:insert(topRightText)
 end
 
 function refreshTopRightText(text)
@@ -52,12 +62,14 @@ function setupButtons()
 	blueButton.y = display.contentHeight - 30
 	blueButton:scale(0.15,0.15)
 	blueButton:addEventListener("touch", function(event) touch(event, blueButton) color(event, "blue") end)
+	elements:insert(blueButton)
 
 	greenButton = display.newImage( game.scene, "images/hud/button.green.png")
 	greenButton.x = display.contentWidth - 25
 	greenButton.y = display.contentHeight - 70
 	greenButton:scale(0.15,0.15)
 	greenButton:addEventListener("touch", function(event) touch(event, greenButton) color(event, "green") end)
+	elements:insert(greenButton)
 
 	if(game.mode ~= game.COMBO or LEVELS[game.level].colors > 2) then	
    	yellowButton = display.newImage( game.scene, "images/hud/button.yellow.png")
@@ -65,6 +77,7 @@ function setupButtons()
    	yellowButton.y = display.contentHeight - 70
    	yellowButton:scale(0.15,0.15)
    	yellowButton:addEventListener("touch", function(event) touch(event, yellowButton) color(event, "yellow") end)
+   	elements:insert(yellowButton)
    end
 
 	if(game.mode ~= game.COMBO or LEVELS[game.level].colors > 3) then	
@@ -73,6 +86,7 @@ function setupButtons()
    	redButton.y = display.contentHeight - 110
    	redButton:scale(0.15,0.15)
    	redButton:addEventListener("touch", function(event) touch(event, redButton) color(event, "red") end)
+   	elements:insert(redButton)
    end
 
 	Runtime:addEventListener("touch", function(event) screenTouch(event) end)
@@ -88,6 +102,7 @@ function setupLightningButton()
 	lightButton.y = display.contentHeight - 60
 	lightButton:scale(0.15,0.15)
 	lightButton:addEventListener("touch", function(event) touch(event, lightButton) light(event) end)
+	elements:insert(lightButton)
 end
 
 ------------------------------------------------------------------------------------------
@@ -163,27 +178,6 @@ function drawCombo(level, numCompleted)
 	game.scene:insert(currentCombo)
 end
 
-function explodeCombo()
-   for i=currentCombo.numChildren,1,-1 do
-		local asteroid = currentCombo[i]
-      local light=CBE.VentGroup{
-      	{
-      		title="comboFire",
-      		preset="wisps",
-      		color={{255,255,220},{255,255,120}},
-      		x = asteroid.x,
-      		y = asteroid.y,
-      		emissionNum = 1,
-      		physics={
-      			gravityY=5.2,
-      		}
-      	}
-      }
-      light:start("comboFire")
-      asteroid:removeSelf()
-	end
-end
-			
 -----------------------------------------------------------------------------------------
 
 function disableColors()
@@ -201,3 +195,51 @@ end
 function enableLightning()
  	lightningEnabled = true 
 end
+
+-----------------------------------------------------------------------------------------
+
+function explodeCombo()
+   for i=currentCombo.numChildren,1,-1 do
+		local asteroid = currentCombo[i]
+      local light=CBE.VentGroup{
+      	{
+      		title="comboFire",
+      		preset="wisps",
+      		color={{255,255,220},{255,255,120}},
+      		x = asteroid.x + 10,
+      		y = asteroid.y + 20,
+      		emissionNum = 1,
+      		physics={
+      			gravityX=1.2,
+      			gravityY=11.2,
+      		}
+      	}
+      }
+      light:start("comboFire")
+      asteroid:removeSelf()
+	end
+end
+
+function explodeHUD()
+   for i=elements.numChildren,1,-1 do
+		local element = elements[i]
+      local light=CBE.VentGroup{
+      	{
+      		title="comboFire",
+      		preset="wisps",
+      		color={{255,255,220},{255,255,120}},
+      		x = element.x - 10,
+      		y = element.y - 20,
+      		emissionNum = 1,
+      		physics={
+      			gravityX=1.2,
+      			gravityY=11.2,
+      		}
+      	}
+      }
+      light:start("comboFire")
+      element:removeSelf()
+	end
+end
+			
+-----------------------------------------------------------------------------------------
