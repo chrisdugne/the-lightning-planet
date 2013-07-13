@@ -386,7 +386,7 @@ function endGame(message)
 	hud.explodeHUD()
 	hud.explode(planet)	
 	hud.endGameText(message)	
-   timer.performWithDelay(2000, exit)
+   timer.performWithDelay(4000, exit)
 end
 
 -----------------------------------------------------------------------------------------

@@ -228,7 +228,8 @@ function explode(element)
    		color={{255,255,220},{255,255,120}},
    		x = element.x,
    		y = element.y,
-   		emissionNum = 1,
+   		emissionNum = 3,
+   		fadeInTime = 3500,
    		physics={
    			gravityX=1.2,
    			gravityY=11.2,
@@ -255,8 +256,8 @@ function endGameText(text)
 	finalText:setReferencePoint( display.CenterReferencePoint )
 	elements:insert(finalText)
 	
-	transition.to( finalText, { time=740, alpha=1, onComplete=function()
-   	timer.performWithDelay(1000, function()
+	transition.to( finalText, { time=1140, alpha=1, onComplete=function()
+   	timer.performWithDelay(2000, function()
    		transition.to( finalText, { time=340, alpha=0 })
    	end)
 	end})

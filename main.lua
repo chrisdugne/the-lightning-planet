@@ -104,8 +104,7 @@ end
 
 ------------------------------------------
 
---router.openAppHome()
-router.intro()
+router.openAppHome()
 
 ------------------------------------------
 --- ANDROID BACK BUTTON

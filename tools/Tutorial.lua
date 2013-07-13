@@ -524,7 +524,7 @@ texts = {
 		text 	= "Touch here to turn your planet green",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight - 75,
-		delay = 1000,
+		delay = 100,
 	},
 	{ --------------------------- STEP 4
 		text 	= "Same color when the asteroid crashes : OK !",
@@ -536,7 +536,7 @@ texts = {
 		text 	= "Touch here to call Lightning  !",
 		x 		= display.contentWidth * 0.6,
 		y 		= display.contentHeight - 63,
-		delay = 1000,
+		delay = 100,
 	},
 	{ --------------------------- STEP 6
 		text 	= "Lightning destroys asteroids !",
@@ -566,7 +566,7 @@ texts = {
 		text 	= "Touch here to turn your planet blue",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight - 35,
-		delay = 1000,
+		delay = 100,
 	},
 	{ --------------------------- STEP 11
 		text 	= "Same color when the asteroid crashes : OK !",
@@ -584,7 +584,7 @@ texts = {
 		text 	= "Touch here to turn your planet green",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight - 75,
-		delay = 1000,
+		delay = 100,
 	},
 	{ --------------------------- STEP 14
 		text 	= "Great !",
@@ -605,19 +605,19 @@ texts = {
 		delay = 1300,
 	},
 	{ --------------------------- STEP 17
-		text 	= "If it crashes now you miss the combo !",
+		text 	= "If you catch it now you miss the combo",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
 		delay = 1700,
 	},
 	{ --------------------------- STEP 18
-		text 	= "And if you turn the planet blue, you'd miss the crash",
+		text 	= "And if you turn the planet blue, you miss the catch",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
 		delay = 2500,
 	},
 	{ --------------------------- STEP 19
-		text 	= "and erase the combo as well",
+		text 	= "and fail the combo as well",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
 		delay = 1500,
@@ -632,7 +632,7 @@ texts = {
 		text 	= "Touch here to call Lightning  !",
 		x 		= display.contentWidth * 0.6,
 		y 		= display.contentHeight - 63,
-		delay = 1500,
+		delay = 100,
 	},
 	{ --------------------------- STEP 22
 		text 	= "Now this green asteroid is no more",
@@ -650,7 +650,7 @@ texts = {
 		text 	= "Touch here to turn your planet blue",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight - 35,
-		delay = 1000,
+		delay = 100,
 	},
 	{ --------------------------- STEP 25
 		text 	= "Nice !",
@@ -662,7 +662,7 @@ texts = {
 		text 	= "Well done ! Now you're ready to play !",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
-		delay = 1800,
+		delay = 1200,
 	},
 }
 
