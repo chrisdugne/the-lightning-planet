@@ -53,7 +53,7 @@ function scene:refreshScene()
    		levelButton:addEventListener("touch", function(event) openLevel(level) end)
       end
       
-   	local text = display.newText( level, 0, 0, "SelfDestructButtonBB", 26 )
+   	local text = display.newText( level, 0, 0, FONT, 16 )
    	text:setTextColor( 255 )	
    	if(levelAvailable) then
       	text.alpha = 1

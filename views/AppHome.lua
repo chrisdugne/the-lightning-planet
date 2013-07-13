@@ -28,16 +28,16 @@ function scene:refreshScene()
 	cleanupFires()
 	viewManager.initView(self.view);
 	
-	titleButton = display.newText( "The Lightning Planet", 0, 0, "SelfDestructButtonBB-Italic", 45 )
-	titleButton:setTextColor( 255 )	
-	titleButton.x = display.contentWidth/2
-	titleButton.y = 45
-	titleButton:setReferencePoint( display.CenterReferencePoint )
-	menu:insert(titleButton)
+	title = display.newText( "The Lightning Planet", 0, 0, FONT, 35 )
+	title:setTextColor( 255 )	
+	title.x = display.contentWidth/2
+	title.y = 45
+	title:setReferencePoint( display.CenterReferencePoint )
+	menu:insert(title)
 	
-	self:buildButton("Combo", "blue", 25, display.contentWidth/5, display.contentHeight*0.6, combo)
-	self:buildButton("Kamikaze", "red", 20, display.contentWidth/2, display.contentHeight*0.8, kamikaze, true)
-	self:buildButton("Time attack", "yellow", 17, 4*display.contentWidth/5, display.contentHeight*0.45, timeAttack, true)
+	self:buildButton("Combo", "blue", 22, display.contentWidth/5, display.contentHeight*0.6, combo)
+	self:buildButton("Kamikaze", "red", 16, display.contentWidth/2, display.contentHeight*0.8, kamikaze, true)
+	self:buildButton("Time Attack", "yellow", 13, 4*display.contentWidth/5, display.contentHeight*0.45, timeAttack, true)
 
 	for fire = 1, #fires do 
 		fires[fire]:start("fire")
@@ -55,7 +55,6 @@ function cleanupFires()
 	
 	while #fires > 0 do
    	table.remove(fires, 1)
-   	print("removed fire")
 	end
 end
 
@@ -79,7 +78,7 @@ end
 ------------------------------------------
 
 function scene:buildButton( title, color, titleSize, x, y, action, lockAtStartup )
-	print("buildbutton", color)
+
 	local colors
 	if(color == "blue") then
 		colors={{0, 111, 255}, {0, 70, 255}}
@@ -93,14 +92,13 @@ function scene:buildButton( title, color, titleSize, x, y, action, lockAtStartup
 		colors={{255, 111, 0}, {255, 70, 0}}
 	end
 
-
 	local planet = display.newImage("images/game/planet.".. color ..".png")
 	planet:scale(0.36,0.36)
 	planet.x = x
 	planet.y = y
 	menu:insert(planet)
 	
-	local text = display.newText( title, 0, 0, "SelfDestructButtonBB", titleSize )
+	local text = display.newText( title, 0, 0, FONT, titleSize )
 	text:setTextColor( 0 )	
 	text.x = x
 	text.y = y

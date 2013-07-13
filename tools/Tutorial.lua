@@ -24,15 +24,31 @@ function startTutorial(view)
 	hud.initTopRightText()
 	hud.refreshTopRightText("Level 1 : Tutorial")
 	
-	hud.setExit()
+	hud.setExit(function()
+		if(currentStep > 1 and texts[currentStep-1].item) then
+   		hud.explode(texts[currentStep-1].item)
+   	end
+		
+		if(currentStep > 1 and arrows[currentStep-1].item) then
+			hud.explode(arrows[currentStep-1].item)
+   	end
+   	
+		if(texts[currentStep].item) then
+   		hud.explode(texts[currentStep].item)
+   	end
+		
+		if(arrows[currentStep].item) then
+			hud.explode(arrows[currentStep].item)
+   	end
+	end)
 	
-	step1()
+--	step1()
 
 -- debug got to step
---	game.setPlanetColor(GREEN)
---	hud.setupPad()
---	currentStep = 7
---	step(8)
+	game.setPlanetColor(GREEN)
+	hud.setupPad()
+	currentStep = 7
+	step(8)
 end
 
 -----------------------------------------------------------------------------------------
@@ -123,11 +139,11 @@ function openStep(step, next)
 	end
 
 	if(conditionFilled(step-1)) then
-		transition.to( texts[step-1].item, 		{ time=300, alpha=0, onComplete = function() texts[step-1].item:removeSelf() end		})
-		transition.to( arrows[step-1].item, 	{ time=300, alpha=0, onComplete = function() arrows[step-1].item:removeSelf() end 	})
+		transition.to( texts[step-1].item, 		{ time=300, alpha=0, onComplete = function() display.remove(texts[step-1].item) end		})
+		transition.to( arrows[step-1].item, 	{ time=300, alpha=0, onComplete = function() display.remove(arrows[step-1].item) end 	})
 		next()
 	else
-		timer.performWithDelay( 200, function ()
+		timer.performWithDelay( 40, function ()
 			openStep(step, next)
 		end) 
    end
@@ -171,7 +187,7 @@ function step2Content()
 	return function() 
 		local asteroid = createAsteroid(GREEN, -math.pi/3, 180, 2)
 		local vx, vy = asteroid:getLinearVelocity() 
-		displayArrow(2, vx, vy)
+		displayText(2)
 	end
 end
 
@@ -412,7 +428,9 @@ end
 
 function step27Content()
 	return function() 
-		game.exit()
+		hud.explode(texts[currentStep].item)
+		hud.explode(arrows[currentStep].item)
+		game.endGame()
 	end
 end
 
@@ -449,7 +467,7 @@ end
 function displayArrow(num, velocityX, velocityY)
 
 	local arrow = display.newImage("images/tutorial/arrow.".. arrows[num].way ..".png")
-	arrow:scale(0.36,0.36)
+	arrow:scale(0.21,0.21)
 	arrow.x = arrows[num].xFrom
 	arrow.y = arrows[num].yFrom
 	scene:insert(arrow)
@@ -468,7 +486,7 @@ end
 
 function displayText(num)
 
-	local text = display.newText( texts[num].text, 0, 0, "SelfDestructButtonBB", 18 )
+	local text = display.newText( texts[num].text, 0, 0, FONT, 15 )
 	text:setTextColor( 255 )	
 	text.alpha = 0
 	text.x = texts[num].x
@@ -498,8 +516,8 @@ texts = {
 	},
 	{ --------------------------- STEP 2 
 		text 	= "And this is an asteroid",
-		x 		= display.contentWidth/3,
-		y 		= 50,
+		x 		= display.contentWidth/2,
+		y 		= 100,
 		delay = 1500,
 	},
 	{ --------------------------- STEP 3
@@ -515,7 +533,7 @@ texts = {
 		delay = 2600,
 	},
 	{ --------------------------- STEP 5
-		text 	= "Touch here to call Lightning forth !",
+		text 	= "Touch here to call Lightning  !",
 		x 		= display.contentWidth * 0.6,
 		y 		= display.contentHeight - 63,
 		delay = 1000,
@@ -611,7 +629,7 @@ texts = {
 		delay = 1400,
 	},
 	{ --------------------------- STEP 21
-		text 	= "Touch here to call Lightning forth !",
+		text 	= "Touch here to call Lightning  !",
 		x 		= display.contentWidth * 0.6,
 		y 		= display.contentHeight - 63,
 		delay = 1500,
@@ -659,11 +677,6 @@ arrows = {
 		yTo 			= display.contentHeight/2
 	},
 	{ --------------------------- STEP 2
-		way 			= "right",
-		xFrom 		= 70,
-		yFrom 		= 10,
-		xTo 			= display.contentWidth/2 + 35,
-		yTo 			= 10
 	},
 	{ --------------------------- STEP 3
 		way 			= "right",
@@ -687,10 +700,10 @@ arrows = {
 	},
 	{ --------------------------- STEP 8
 		way 			= "top",
-		xFrom 		= display.contentWidth/9,
+		xFrom 		= 35,
 		yFrom 		= display.contentHeight/2,
-		xTo 			= display.contentWidth/9,
-		yTo 			= 60
+		xTo 			= 35,
+		yTo 			= 40
 	},
 	{ --------------------------- STEP 9
 	},

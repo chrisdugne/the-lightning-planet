@@ -9,8 +9,7 @@ local lightningEnabled = true
 
 -----------------------------------------------------------------------------------------
 
-currentCombo	= display.newGroup()
-elements 		= display.newGroup()
+elements = display.newGroup()
 
 -----------------------------------------------------------------------------------------
 
@@ -20,19 +19,24 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function setExit()
+function setExit(toApply)
 	exitButton = display.newImage( game.scene, "images/hud/exit.png")
 	exitButton.x = display.contentWidth - 15
 	exitButton.y = 45
 	exitButton:scale(0.17,0.17)
-	exitButton:addEventListener("touch", function(event) game.exit() end)
+	exitButton:addEventListener("touch", function(event)
+		if(toApply) then 
+			toApply()
+		end 
+		game.endGame() 
+	end)
 	elements:insert(exitButton)
 end
 
 -----------------------------------------------------------------------------------------
 
 function initTopRightText()
-	topRightText = display.newText( game.scene, "0", 0, 0, "Papyrus", 21 )
+	topRightText = display.newText( game.scene, "0", 0, 0, FONT, 21 )
 	topRightText:setTextColor( 255 )	
 	topRightText:setReferencePoint( display.CenterReferencePoint )
 	topRightText.x = display.contentWidth - topRightText.contentWidth/2 - 10
@@ -158,24 +162,34 @@ end
 
 function drawCombo(level, numCompleted)
 	
-	utils.emptyGroup(currentCombo)
-	
-	for i in pairs(LEVELS[level].combo) do
-		local color = LEVELS[level].combo[i]
-   	local asteroid = display.newImage(currentCombo, "images/game/asteroid." .. color .. ".png")
-   	asteroid.x = 10 + 20 * i
-   	asteroid.y = 15
-
-		if(i <= numCompleted) then
-   		asteroid:scale(0.68,0.68)
-   		asteroid.alpha = 1
-   	else
-   		asteroid:scale(0.5,0.5)
-   		asteroid.alpha = 0.75
+   for i=elements.numChildren,1,-1 do
+		if(elements[i].isComboElement) then
+			display.remove(elements[i])
    	end
 	end
 	
-	game.scene:insert(currentCombo)
+	for c in pairs(LEVELS[level].combo) do
+		local color = LEVELS[level].combo[c]
+   	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
+   	
+   	local i = (c-1)%20
+   	local j = math.floor((c-1)/20) + 1
+   	
+   	asteroid.x = 10 + 20 * i
+   	asteroid.y = 15 * j
+
+		if(c <= numCompleted) then
+   		asteroid:scale(0.58,0.58)
+   		asteroid.alpha = 1
+   	else
+   		asteroid:scale(0.48,0.48)
+   		asteroid.alpha = 0.75
+   	end
+   	
+		asteroid.isComboElement = true
+   	elements:insert(asteroid)
+	end
+	
 end
 
 -----------------------------------------------------------------------------------------
@@ -198,48 +212,52 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function explodeCombo()
-   for i=currentCombo.numChildren,1,-1 do
-		local asteroid = currentCombo[i]
-      local light=CBE.VentGroup{
-      	{
-      		title="comboFire",
-      		preset="wisps",
-      		color={{255,255,220},{255,255,120}},
-      		x = asteroid.x + 10,
-      		y = asteroid.y + 20,
-      		emissionNum = 1,
-      		physics={
-      			gravityX=1.2,
-      			gravityY=11.2,
-      		}
-      	}
-      }
-      light:start("comboFire")
-      asteroid:removeSelf()
-	end
-end
-
 function explodeHUD()
    for i=elements.numChildren,1,-1 do
-		local element = elements[i]
-      local light=CBE.VentGroup{
-      	{
-      		title="comboFire",
-      		preset="wisps",
-      		color={{255,255,220},{255,255,120}},
-      		x = element.x - 10,
-      		y = element.y - 20,
-      		emissionNum = 1,
-      		physics={
-      			gravityX=1.2,
-      			gravityY=11.2,
-      		}
-      	}
-      }
-      light:start("comboFire")
-      element:removeSelf()
+		explode(elements[i])
 	end
 end
 			
 -----------------------------------------------------------------------------------------
+
+function explode(element)
+   local light=CBE.VentGroup{
+   	{
+   		title="comboFire",
+   		preset="wisps",
+   		color={{255,255,220},{255,255,120}},
+   		x = element.x,
+   		y = element.y,
+   		emissionNum = 1,
+   		physics={
+   			gravityX=1.2,
+   			gravityY=11.2,
+   		}
+   	}
+   }
+   light:start("comboFire")
+   display.remove(element)
+end
+			
+-----------------------------------------------------------------------------------------
+
+function endGameText(text)
+
+	if(not text) then
+		return
+	end
+
+	finalText = display.newText( text, 0, 0, FONT, 25 )
+	finalText:setTextColor( 255 )	
+	finalText.x = display.contentWidth/2
+	finalText.y = display.contentHeight/2
+	finalText.alpha = 0
+	finalText:setReferencePoint( display.CenterReferencePoint )
+	elements:insert(finalText)
+	
+	transition.to( finalText, { time=740, alpha=1, onComplete=function()
+   	timer.performWithDelay(1000, function()
+   		transition.to( finalText, { time=340, alpha=0 })
+   	end)
+	end})
+end

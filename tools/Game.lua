@@ -45,28 +45,14 @@ function start(view)
    	requestedAsteroid = 1
    end 
    
-   timer.performWithDelay(1200, completeLevel)
+--   timer.performWithDelay(4200, completeLevel)
    
-end
-
------------------------------------------------------------------------------------------
-
-function completeLevel()	
-
-   timer.performWithDelay(300, stop)
-	hud.explodeCombo()
-	hud.explodeHUD()
-	
-	savedData.levels[level+1] = { available = true }
-   utils.saveTable(savedData, "savedData.json")
-   
-   timer.performWithDelay(3000, exit)
 end
 
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
-	timer.performWithDelay( 1450, function() --delay :  level params
+	timer.performWithDelay( 650, function() --delay :  level params
 		if(state == RUNNING) then
 			createAsteroid()
 			asteroidBuilder()
@@ -76,9 +62,7 @@ end
 
 function setPlanetColor(color)
 	
-	if(planet.name) then
-		planet:removeSelf()
-	end
+	display.remove(planet)
 	
 	planet = display.newImage(scene, "images/game/planet.".. color ..".png")
 	planet:scale(0.17,0.17)
@@ -99,18 +83,22 @@ function crashAsteroid( asteroid, event )
 	end
 	
 	--------------------------
+
+	local goodCatch = asteroid.color == planet.color
+	
+	--------------------------
 	print(mode, requestedAsteroid)
 	if(mode == COMBO) then
-		
-		if(LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
-			hud.drawCombo(level, requestedAsteroid)
-			requestedAsteroid = requestedAsteroid + 1
-			
-			if(requestedAsteroid > #LEVELS[level].combo) then
-				completeLevel()
-   		end
-		end
-	
+--		
+--		if(LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
+--			hud.drawCombo(level, requestedAsteroid)
+--			requestedAsteroid = requestedAsteroid + 1
+--			
+--			if(requestedAsteroid > #LEVELS[level].combo) then
+--				completeLevel()
+--   		end
+--		end
+--	
 	--------------------------
 	
 	elseif(mode == KAMIKAZE) then
@@ -125,33 +113,12 @@ function crashAsteroid( asteroid, event )
 	-- destroy
 	
 	asteroid.beingDestroyed = true
-	destroyAsteroid(asteroid)
-end
-
-------------------------------------------------------------------------------------------
-
-function stop()
 	
-	while (#asteroids > 0) do
-		asteroids[1]:removeSelf() 
-		asteroids[1]=ni
-		table.remove(asteroids, 1)
-	end
-	
-	state	= IDLE
-end
-
-function exit()
-	stop()
-	router.openAppHome()
-	
-	if(hud.exitButton) then
-		hud.exitButton:removeSelf()
-	end
-
-	if(hud.topRightText) then
-		hud.topRightText:removeSelf()
-	end
+	if(goodCatch) then
+		catchAsteroid(asteroid)
+	else
+		explodeAsteroid(asteroid)
+   end
 end
 
 ------------------------------------------------------------------------------------------
@@ -170,7 +137,7 @@ function destroyAsteroid(asteroid)
 	--------------------------
 	-- destroy
 	
-	transition.to( asteroid, { time=150, alpha=0, onComplete=function() asteroid:removeSelf() asteroid=nil end } )
+	transition.to( asteroid, { time=150, alpha=0, onComplete=function() display.remove(asteroid) end } )
 end
 
 ------------------------------------------------------------------------------------------
@@ -226,6 +193,71 @@ end
 
 ------------------------------------------------------------------------------------------
 
+function catchAsteroid(asteroid)
+
+	local asteroidColors
+	if(asteroid.color == "blue") then
+		asteroidColors={{0, 111, 255}, {0, 70, 255}}
+	elseif(asteroid.color == "green") then
+		asteroidColors={{181, 255, 111}, {120, 255, 70}}
+	elseif(asteroid.color == "yellow") then
+		asteroidColors={{255, 255, 111}, {255, 255, 70}}
+	elseif(asteroid.color == "red") then
+		asteroidColors={{255, 111, 0}, {255, 70, 0}}
+	else
+		asteroidColors={{255, 111, 0}, {255, 70, 0}}
+	end
+
+	local planetColors
+	if(asteroid.color == "blue") then
+		planetColors={{0, 111, 255}, {0, 70, 255}}
+	elseif(asteroid.color == "green") then
+		planetColors={{181, 255, 111}, {120, 255, 70}}
+	elseif(asteroid.color == "yellow") then
+		planetColors={{255, 255, 111}, {255, 255, 70}}
+	elseif(asteroid.color == "red") then
+		planetColors={{255, 111, 0}, {255, 70, 0}}
+	else
+		planetColors={{255, 111, 0}, {255, 70, 0}}
+	end
+
+	local light=CBE.VentGroup{
+		{
+   		title="explosion",
+   		preset="wisps",
+   		color=asteroidColors,
+   		x = asteroid.x,
+   		y = asteroid.y,
+   		emissionNum = 3,
+   		physics={
+   			gravityX=-16.2,
+   			gravityY=-11.2,
+			}
+		}
+	}
+	light:start("explosion")
+
+	local light=CBE.VentGroup{
+		{
+   		title="explosionPlanet",
+   		preset="wisps",
+   		color=planetColors,
+   		x = planet.x,
+   		y = planet.y,
+   		emissionNum = 3,
+   		physics={
+   			gravityX=0,
+   			gravityY=4.5,
+			}
+		}
+	}
+	light:start("explosionPlanet")
+
+	destroyAsteroid(asteroid)
+end
+
+------------------------------------------------------------------------------------------
+
 function explodeAsteroid(asteroid)
 
 	local colors
@@ -247,10 +279,10 @@ function explodeAsteroid(asteroid)
 			preset="burn",
 			color=colors,
 			build=function()
-				local size=math.random(30, 35) -- Particles are a bit bigger than ice comet particles
+				local size=math.random(30, 35)
 				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
 			end,
-			onCreation=function()end, -- See the note for the ice comet
+			onCreation=function()end,
 			perEmit=4,
 			emissionNum=math.random(3,5),
 			x=asteroid.x,
@@ -259,7 +291,7 @@ function explodeAsteroid(asteroid)
 			posRadius=20,
 			emitDelay=50,
 			fadeInTime=50,
-			lifeSpan=250, -- Particles are removed sooner than the ice comet
+			lifeSpan=250,
 			lifeStart=250,
 			endAlpha=0,
 			physics={
@@ -324,4 +356,43 @@ function createAsteroid()
 	asteroid.name = "asteroid"..math.random(1000)
 	
 	table.insert(asteroids, asteroid)
+end
+
+
+------------------------------------------------------------------------------------------
+
+function stop()
+	
+	while (#asteroids > 0) do
+		hud.explode(asteroids[1])	
+		table.remove(asteroids, 1)
+	end
+	
+	state	= IDLE
+end
+
+function exit()
+	stop()
+	router.openAppHome()
+	
+	display.remove(hud.exitButton)
+	display.remove(hud.topRightText)
+end
+
+-----------------------------------------------------------------------------------------
+
+function endGame(message)
+   stop()
+	hud.explodeHUD()
+	hud.explode(planet)	
+	hud.endGameText(message)	
+   timer.performWithDelay(2000, exit)
+end
+
+-----------------------------------------------------------------------------------------
+
+function completeLevel()	
+	endGame("Level " .. level .. " Complete !")
+	savedData.levels[level+1] = { available = true }
+   utils.saveTable(savedData, "savedData.json")
 end

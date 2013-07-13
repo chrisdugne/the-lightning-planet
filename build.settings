@@ -27,11 +27,13 @@ settings = {
                 }
             },
 	        
+            --]]
+            
 	        UIAppFonts = 
             {
-                "Papyrus.ttc"
+                "Macondo-Regular.ttf",
+                "SpaceWorm02.ttf"
             }
-            --]]
 		}
 	},
 	

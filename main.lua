@@ -22,6 +22,17 @@ RED		= "red";
 COLORS = {BLUE, GREEN, YELLOW, RED}
 
 -----------------------------------------------------------------------------------------
+
+if "Android" == system.getInfo( "platformName" ) then
+   FONT = "Macondo-Regular"
+else
+	FONT = "Macondo"
+end
+
+local sysFonts = native.getFontNames()
+for k,v in pairs(sysFonts) do print(v) end
+
+-----------------------------------------------------------------------------------------
 --- Corona's libraries
 json 				= require "json"
 storyboard 		= require "storyboard"
@@ -58,7 +69,11 @@ LEVELS = {
 	},
 	{--------------------- LEVEL 2
 		colors = 2,
-		combo = {BLUE,BLUE,GREEN,GREEN,BLUE,GREEN,GREEN,BLUE,GREEN,GREEN,BLUE,GREEN,GREEN}
+		combo = {BLUE,BLUE,GREEN,GREEN}
+	},
+	{--------------------- LEVEL 3
+		colors = 2,
+		combo = {BLUE,GREEN,BLUE,GREEN,BLUE}
 	},
 }
 
