@@ -39,13 +39,13 @@ function start(view)
 	state	= RUNNING
 	
 	setPlanetColor(BLUE)
-	asteroidBuilder()
 	
 	if(mode == COMBO) then
    	requestedAsteroid = 1
    end 
-   
---   timer.performWithDelay(4200, completeLevel)
+	
+	hud.centerText("Start !", display.contentHeight/4, 45)
+	timer.performWithDelay(2000, asteroidBuilder)
    
 end
 
@@ -87,18 +87,18 @@ function crashAsteroid( asteroid, event )
 	local goodCatch = asteroid.color == planet.color
 	
 	--------------------------
-	print(mode, requestedAsteroid)
+
 	if(mode == COMBO) then
---		
---		if(LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
---			hud.drawCombo(level, requestedAsteroid)
---			requestedAsteroid = requestedAsteroid + 1
---			
---			if(requestedAsteroid > #LEVELS[level].combo) then
---				completeLevel()
---   		end
---		end
---	
+		
+		if(LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
+			hud.drawCombo(level, requestedAsteroid)
+			requestedAsteroid = requestedAsteroid + 1
+			
+			if(requestedAsteroid > #LEVELS[level].combo) then
+				completeLevel()
+   		end
+		end
+	
 	--------------------------
 	
 	elseif(mode == KAMIKAZE) then
@@ -364,7 +364,7 @@ end
 function stop()
 	
 	while (#asteroids > 0) do
-		hud.explode(asteroids[1])	
+		hud.explode(asteroids[1], 4, 4400, asteroids[1].color)
 		table.remove(asteroids, 1)
 	end
 	
@@ -385,7 +385,7 @@ function endGame(message)
    stop()
 	hud.explodeHUD()
 	hud.explode(planet)	
-	hud.endGameText(message)	
+	hud.centerText(message)	
    timer.performWithDelay(4000, exit)
 end
 

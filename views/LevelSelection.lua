@@ -25,6 +25,12 @@ end
 function scene:refreshScene()
 	utils.emptyGroup(levels)
 	viewManager.initView(self.view);
+
+	game.scene = self.view
+	hud.initHUD()
+	hud.initTopRightText()
+	hud.refreshTopRightText("Select your level")
+	hud.setExit(exitSelection)
 	
 	local margin = display.contentWidth/2 -5*38 
 
@@ -70,9 +76,19 @@ end
 
 ------------------------------------------
 
+function exitSelection()
+	for i = levels.numChildren,1,-1  do
+		transition.to( levels[i], { time=500, alpha=0 })
+		hud.explode(levels[i], 1, 8000)
+	end
+	
+	hud.explodeHUD()
+end
+
 function openLevel( level )
 	game.level = level
-	router.openPlayground()
+	exitSelection()
+	timer.performWithDelay(3000, router.openPlayground)
 end
 
 ------------------------------------------

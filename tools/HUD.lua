@@ -171,6 +171,7 @@ function drawCombo(level, numCompleted)
 	for c in pairs(LEVELS[level].combo) do
 		local color = LEVELS[level].combo[c]
    	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
+   	asteroid.color = color
    	
    	local i = (c-1)%20
    	local j = math.floor((c-1)/20) + 1
@@ -214,44 +215,74 @@ end
 
 function explodeHUD()
    for i=elements.numChildren,1,-1 do
-		explode(elements[i])
+		explode(elements[i], 4, 2400, elements[i].color)
 	end
 end
 			
 -----------------------------------------------------------------------------------------
 
-function explode(element)
-   local light=CBE.VentGroup{
+function explode(element, emissionNum, fadeInTime, color)
+
+	local colors
+	if(color == BLUE) then
+		colors={{0, 111, 255}, {0, 70, 255}}
+	elseif(color == GREEN) then
+		colors={{181, 255, 111}, {120, 255, 70}}
+	elseif(color == YELLOW) then
+		colors={{255, 255, 111}, {255, 255, 70}}
+	elseif(color == RED) then
+		colors={{255, 111, 0}, {255, 70, 0}}
+	else
+		colors={{255,255,220},{255,255,120}}
+	end
+	
+	if(not emissionNum) then
+		emissionNum = 3
+	end
+
+	if(not fadeInTime) then
+		fadeInTime = 3500
+	end
+	
+   local explosion=CBE.VentGroup{
    	{
-   		title="comboFire",
+   		title="fire",
    		preset="wisps",
-   		color={{255,255,220},{255,255,120}},
+   		color=colors,
    		x = element.x,
    		y = element.y,
-   		emissionNum = 3,
-   		fadeInTime = 3500,
+   		emissionNum = emissionNum,
+   		fadeInTime = fadeInTime,
    		physics={
    			gravityX=1.2,
-   			gravityY=11.2,
+   			gravityY=13.2,
    		}
    	}
    }
-   light:start("comboFire")
+   explosion:start("fire")
    display.remove(element)
 end
 			
 -----------------------------------------------------------------------------------------
 
-function endGameText(text)
+function centerText(text, y, fontSize)
 
 	if(not text) then
 		return
 	end
 
-	finalText = display.newText( text, 0, 0, FONT, 25 )
+	if(not y) then
+		y = display.contentHeight/2
+	end
+
+	if(not fontSize) then
+		fontSize = 25
+	end
+
+	finalText = display.newText( text, 0, 0, FONT, fontSize )
 	finalText:setTextColor( 255 )	
 	finalText.x = display.contentWidth/2
-	finalText.y = display.contentHeight/2
+	finalText.y = y
 	finalText.alpha = 0
 	finalText:setReferencePoint( display.CenterReferencePoint )
 	elements:insert(finalText)

@@ -21,7 +21,6 @@ local introComplete = true
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	
-	
 	menu = display.newGroup()
 	screen = display.newGroup()
 
@@ -48,7 +47,6 @@ function scene:createScene( event )
          timer.performWithDelay(7500, function()
          	utils.emptyGroup(screen)
          	self:refreshScene()
-         	introComplete = true
          end)
       end)
    end)
@@ -68,6 +66,14 @@ function scene:refreshScene()
 	title.y = 45
 	title:setReferencePoint( display.CenterReferencePoint )
 	menu:insert(title)
+
+	if(introComplete) then
+   	title.alpha = 0
+   	transition.to( title, { time=1800, alpha=1 })
+   else  
+   	title.alpha = 1
+   	introComplete = true
+   end	
 	
 	self:buildButton("Combo", "blue", 22, display.contentWidth/5, display.contentHeight*0.6, combo)
 	self:buildButton("Kamikaze", "red", 16, display.contentWidth/2, display.contentHeight*0.8, kamikaze, true)
@@ -269,7 +275,7 @@ end
 ------------------------------------------
 
 function displayIntroText(text, x, y, fade)
-	print("text", text, "fade", fade)
+
 	if(not text) then
 		return
 	end

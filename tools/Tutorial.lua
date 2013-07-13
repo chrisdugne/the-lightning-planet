@@ -22,7 +22,7 @@ function startTutorial(view)
    game.requestedAsteroid = 1
 	
 	hud.initTopRightText()
-	hud.refreshTopRightText("Level 1 : Tutorial")
+	hud.refreshTopRightText("Tutorial")
 	
 	hud.setExit(function()
 		if(currentStep > 1 and texts[currentStep-1].item) then
@@ -251,7 +251,7 @@ function step8Content()
 	return function() 
    	hud.enableColors()
    	hud.drawCombo(1, 0)
-		local asteroid = createAsteroid(BLUE, -3*math.pi/4, 300, 8)
+		local asteroid = createAsteroid(BLUE, -math.pi/4, 300, 8)
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
 		displayArrow(8)
 	end
@@ -261,7 +261,7 @@ end
 
 function step9Content()
 	return function() 
-		displayText(9)
+		displayArrow(9)
 	end
 end
 
@@ -293,7 +293,7 @@ function step12Content()
 	return function() 
 		local asteroid = createAsteroid(GREEN, -math.pi/3, 180, 12)
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
-		displayText(12)
+		displayArrow(12)
 	end
 end
 
@@ -326,7 +326,7 @@ function step15Content()
 	return function() 
 		local asteroid = createAsteroid(GREEN, -2*math.pi/3, 180, 15)
 		asteroid.vx, asteroid.vy = asteroid:getLinearVelocity()
-		displayText(15)
+		displayArrow(15)
 	end
 end
 
@@ -346,7 +346,7 @@ end
 
 function step17Content()
 	return function() 
-		displayText(17)
+		displayArrow(17)
 	end
 end
 
@@ -527,7 +527,7 @@ texts = {
 		delay = 100,
 	},
 	{ --------------------------- STEP 4
-		text 	= "Same color when the asteroid crashes : OK !",
+		text 	= "You catch an asteroid when it's the same color",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
 		delay = 2600,
@@ -553,13 +553,13 @@ texts = {
 	{ --------------------------- STEP 8
 		text 	= "Here is the Combo requested",
 		x 		= display.contentWidth/4,
-		y 		= display.contentHeight/3 ,
+		y 		= display.contentHeight/5 ,
 		delay = 1300,
 	},
 	{ --------------------------- STEP 9
-		text 	= "You have to catch a blue asteroid first",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
+		text 	= "First, you have to catch a blue asteroid",
+		x 		= display.contentWidth/4 + 5,
+		y 		= display.contentHeight/5 ,
 		delay = 1500,
 	},
 	{ --------------------------- STEP 10
@@ -569,15 +569,15 @@ texts = {
 		delay = 100,
 	},
 	{ --------------------------- STEP 11
-		text 	= "Same color when the asteroid crashes : OK !",
+		text 	= "Planet and asteroid have the same color : Well done !",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
 		delay = 2000,
 	},
 	{ --------------------------- STEP 12
 		text 	= "Now have to catch a green asteroid",
-		x 		= display.contentWidth/2,
-		y 		= display.contentHeight/2 + 40,
+		x 		= display.contentWidth/4,
+		y 		= display.contentHeight/5 ,
 		delay = 1800,
 	},
 	{ --------------------------- STEP 13
@@ -662,7 +662,7 @@ texts = {
 		text 	= "Well done ! Now you're ready to play !",
 		x 		= display.contentWidth/2,
 		y 		= display.contentHeight/2 + 40,
-		delay = 1200,
+		delay = 800,
 	},
 }
 
@@ -700,12 +700,17 @@ arrows = {
 	},
 	{ --------------------------- STEP 8
 		way 			= "top",
-		xFrom 		= 35,
+		xFrom 		= 30,
 		yFrom 		= display.contentHeight/2,
-		xTo 			= 35,
-		yTo 			= 40
+		xTo 			= 30,
+		yTo 			= 50
 	},
 	{ --------------------------- STEP 9
+		way 			= "top",
+		xFrom 		= 10,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= 10,
+		yTo 			= 40
 	},
 	{ --------------------------- STEP 10
 		way 			= "right",
@@ -717,6 +722,11 @@ arrows = {
 	{ --------------------------- STEP 11
 	},
 	{ --------------------------- STEP 12
+		way 			= "top",
+		xFrom 		= 30,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= 30,
+		yTo 			= 40
 	},
 	{ --------------------------- STEP 13
 		way 			= "right",
@@ -728,10 +738,20 @@ arrows = {
 	{ --------------------------- STEP 14
 	},
 	{ --------------------------- STEP 15
+		way 			= "top",
+		xFrom 		= 50,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= 50,
+		yTo 			= 40
 	},
 	{ --------------------------- STEP 16
 	},
 	{ --------------------------- STEP 17
+		way 			= "top",
+		xFrom 		= 50,
+		yFrom 		= display.contentHeight/2,
+		xTo 			= 50,
+		yTo 			= 40
 	},
 	{ --------------------------- STEP 18
 	},
