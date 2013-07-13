@@ -157,7 +157,6 @@ function color( event, color )
    end
 end
 
-
 -----------------------------------------------------------------------------------------
 
 function drawCombo(level, numCompleted)
@@ -190,6 +189,121 @@ function drawCombo(level, numCompleted)
 		asteroid.isComboElement = true
    	elements:insert(asteroid)
 	end
+	
+end
+
+-----------------------------------------------------------------------------------------
+
+function drawBag()
+   for i=elements.numChildren,1,-1 do
+		if(elements[i].isBagElement) then
+			display.remove(elements[i])
+   	end
+	end
+	
+	for c in pairs(COLORS) do
+		local color = COLORS[c]
+   	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
+   	asteroid.color = color
+   	
+   	local i = 20
+   	
+   	asteroid.x = 13
+   	asteroid.y = 25 * c - 10 
+		asteroid:scale(0.48,0.48)
+		asteroid.alpha = 0.75
+
+   	colorText = display.newText( game.asteroidsCaught[color], 0, 0, FONT, 13 )
+   	colorText:setTextColor( 255 )	
+   	colorText.x = 30
+   	colorText.y = asteroid.y - 3
+   	colorText:setReferencePoint( display.CenterReferencePoint )
+		colorText.isBagElement = true
+   	elements:insert(colorText)
+
+		asteroid.isBagElement = true
+   	elements:insert(asteroid)
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function drawCatch(asteroid, value, huge)
+
+	if(value > 0) then
+		value = "+ " .. value
+	end
+
+	local scale = 2.5
+	if(huge) then scale = 4 end	
+
+	local time = 1600
+	if(huge) then time = 3000 end	
+	
+	local rgb = getRGB(asteroid.color) 
+	local colorText = display.newText( value, 0, 0, FONT, 16 )
+	colorText:setTextColor( rgb[1], rgb[2], rgb[3] )	
+	colorText.x = asteroid.x
+	colorText.y = asteroid.y
+	colorText.alpha = 1
+	colorText:setReferencePoint( display.CenterReferencePoint )
+	
+	transition.to( colorText, { 
+		time=time, 
+		alpha=0, 
+		x= 40, 
+		y= 25 * getColorNum(asteroid.color) - 10, 
+		xScale=scale,
+		yScale=scale,
+		onComplete=function()
+			display.remove(colorText)
+		end
+	})
+	
+end
+
+-----------------------------------------------------------------------------------------
+
+function drawPoints(change, total, asteroid, huge)
+
+	if(type(change) == "number" and change > 0) then
+		change = "+ " .. change
+	end
+	
+	refreshTopRightText(total .. " pts")
+	
+	local scale = 2.5
+	local time = 2000
+	
+	local x = asteroid.x
+	local y = asteroid.y
+
+	if(huge) then 
+		scale = 4 
+   	time = 4000
+   	x = 40
+		y= 25 * getColorNum(asteroid.color) - 10 
+	end	
+	
+	local rgb = getRGB(asteroid.color) 
+	local changeText = display.newText( change, 0, 0, FONT, 16 )
+	changeText:setTextColor( rgb[1], rgb[2], rgb[3] )	
+	changeText.x = x
+	changeText.y = y
+	changeText.alpha = 1
+	changeText:setReferencePoint( display.CenterReferencePoint )
+	
+	transition.to( changeText, { 
+		time=2000,
+		alpha=0, 
+		x= topRightText.x -20,
+		y= 5, 
+		xScale=2.5,
+		yScale=2.5,
+		onComplete=function()
+			display.remove(changeText)
+		end
+	})
 	
 end
 

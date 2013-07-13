@@ -37,10 +37,12 @@ function scene:refreshScene()
       	hud.refreshTopRightText("Level " .. game.level)
 		
 		elseif(game.mode == game.KAMIKAZE) then 
-      	hud.refreshTopRightText("Kamikaze")
+      	hud.refreshTopRightText("0 pts")
+      	hud.drawBag()
 		
 		elseif(game.mode == game.TIMEATTACK) then 
       	hud.refreshTopRightText("Time Attack")
+      	hud.drawBag()
       
       end
    	

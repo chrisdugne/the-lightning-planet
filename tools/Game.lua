@@ -21,6 +21,9 @@ TIMEATTACK 	= 3
 
 planet = {}
 asteroids = {}
+asteroidsCaught = {}
+
+-----------------------------------------------------------------------------------------
 
 points 	= 0
 mode 		= 0
@@ -41,7 +44,12 @@ function init(view)
 	
 	if(mode == COMBO) then
    	requestedAsteroid = 1
-   end 
+   else
+	   for i = 1, #COLORS do
+   	   asteroidsCaught[COLORS[i]] = 0
+   	end
+   end
+   
 end
 
 function start(requireAsteroidBuilder)
@@ -61,7 +69,7 @@ end
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
-	timer.performWithDelay( 650, function() --delay :  level params
+	timer.performWithDelay( 2650, function() --delay :  level params
 		if(state == RUNNING) then
 			createAsteroid()
 			asteroidBuilder()
@@ -110,12 +118,38 @@ function crashAsteroid( asteroid, event )
 	
 	--------------------------
 	
-	elseif(mode == KAMIKAZE) then
+	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then
+		
+		local change 	= 0 
+		local catch 	= 0 
+		local total 	= points
+		
+		if(goodCatch) then
+			catch = 1
+			asteroidsCaught[planet.color] = asteroidsCaught[planet.color] + 1
+			change = asteroidsCaught[planet.color]
+		else 
+			catch = -1
+			asteroidsCaught[planet.color] = asteroidsCaught[planet.color] - 1
+			change = -3
+		end
+		
+		total = points + change
 
-	--------------------------
-	
-	elseif(mode == TIMEATTACK) then
-	
+		if(asteroidsCaught[planet.color] < 0) then
+			asteroidsCaught[planet.color] = 0
+		end
+
+		if(total < 0) then
+			total = 0
+		end
+		
+		hud.drawCatch(asteroid, catch)
+		hud.drawBag()
+		hud.drawPoints(change, total, asteroid)
+		
+		points = total
+
 	end
 
 	--------------------------
@@ -128,6 +162,23 @@ function crashAsteroid( asteroid, event )
 	else
 		explodeAsteroid(asteroid)
    end
+end
+
+------------------------------------------------------------------------------------------
+
+function squarePointsWithLighting(asteroid)
+	
+	if(mode == KAMIKAZE or mode == TIMEATTACK) then
+		
+		local change 		= asteroidsCaught[asteroid.color] * asteroidsCaught[asteroid.color]
+		local changeText 	= asteroidsCaught[asteroid.color] .. " x "  ..  asteroidsCaught[asteroid.color]
+		local total = points + change
+
+		hud.drawPoints(changeText, total, asteroid, true)
+		
+		points = total
+	end
+	
 end
 
 ------------------------------------------------------------------------------------------
@@ -167,7 +218,12 @@ function shootOnClosestAsteroid()
    	
    	local planetPosition = vector2D:Add(center, direction)
    	
-   	local thunderDone = function() explodeAsteroid(asteroid) end
+   	local thunderDone = function() 
+      	lightPlanet(asteroid) 
+   		squarePointsWithLighting(asteroid)
+   		explodeAsteroid(asteroid) 
+   	end
+   	
    	lightning.thunder(planetPosition, asteroidPosition, thunderDone)
    end
 	
@@ -202,49 +258,20 @@ end
 
 ------------------------------------------------------------------------------------------
 
-function catchAsteroid(asteroid)
-
-	local asteroidColors
-	if(asteroid.color == "blue") then
-		asteroidColors={{0, 111, 255}, {0, 70, 255}}
-	elseif(asteroid.color == "green") then
-		asteroidColors={{181, 255, 111}, {120, 255, 70}}
-	elseif(asteroid.color == "yellow") then
-		asteroidColors={{255, 255, 111}, {255, 255, 70}}
-	elseif(asteroid.color == "red") then
-		asteroidColors={{255, 111, 0}, {255, 70, 0}}
-	else
-		asteroidColors={{255, 111, 0}, {255, 70, 0}}
-	end
+function lightPlanet(asteroidDestoyed)
 
 	local planetColors
-	if(asteroid.color == "blue") then
+	if(asteroidDestoyed.color == BLUE) then
 		planetColors={{0, 111, 255}, {0, 70, 255}}
-	elseif(asteroid.color == "green") then
+	elseif(asteroidDestoyed.color == GREEN) then
 		planetColors={{181, 255, 111}, {120, 255, 70}}
-	elseif(asteroid.color == "yellow") then
+	elseif(asteroidDestoyed.color == YELLOW) then
 		planetColors={{255, 255, 111}, {255, 255, 70}}
-	elseif(asteroid.color == "red") then
+	elseif(asteroidDestoyed.color == RED) then
 		planetColors={{255, 111, 0}, {255, 70, 0}}
 	else
 		planetColors={{255, 111, 0}, {255, 70, 0}}
 	end
-
-	local light=CBE.VentGroup{
-		{
-   		title="explosion",
-   		preset="wisps",
-   		color=asteroidColors,
-   		x = asteroid.x,
-   		y = asteroid.y,
-   		emissionNum = 3,
-   		physics={
-   			gravityX=-16.2,
-   			gravityY=-11.2,
-			}
-		}
-	}
-	light:start("explosion")
 
 	local light=CBE.VentGroup{
 		{
@@ -261,6 +288,40 @@ function catchAsteroid(asteroid)
 		}
 	}
 	light:start("explosionPlanet")
+end
+
+function catchAsteroid(asteroid)
+	local asteroidColors
+	if(asteroid.color == "blue") then
+		asteroidColors={{0, 111, 255}, {0, 70, 255}}
+	elseif(asteroid.color == "green") then
+		asteroidColors={{181, 255, 111}, {120, 255, 70}}
+	elseif(asteroid.color == "yellow") then
+		asteroidColors={{255, 255, 111}, {255, 255, 70}}
+	elseif(asteroid.color == "red") then
+		asteroidColors={{255, 111, 0}, {255, 70, 0}}
+	else
+		asteroidColors={{255, 111, 0}, {255, 70, 0}}
+	end
+
+
+	local light=CBE.VentGroup{
+		{
+   		title="explosion",
+   		preset="wisps",
+   		color=asteroidColors,
+   		x = asteroid.x,
+   		y = asteroid.y,
+   		emissionNum = 3,
+   		physics={
+   			gravityX=-16.2,
+   			gravityY=-11.2,
+			}
+		}
+	}
+
+	light:start("explosion")
+   lightPlanet(asteroid)
 
 	destroyAsteroid(asteroid)
 end

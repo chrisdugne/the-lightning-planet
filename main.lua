@@ -21,6 +21,26 @@ RED		= "red";
 
 COLORS = {BLUE, GREEN, YELLOW, RED}
 
+function getColorNum(color)
+	for i = 1, #COLORS do
+		if(color == COLORS[i]) then
+			return i
+   	end
+	end
+end
+
+function getRGB(color)
+	if(color == BLUE) then
+		return {0, 111, 255}
+	elseif(color == GREEN) then
+		return {0, 255, 120}
+	elseif(color == RED) then
+		return {255, 125, 120}
+	elseif(color == YELLOW) then
+		return {255, 255, 120}
+	end
+end
+
 -----------------------------------------------------------------------------------------
 
 if "Android" == system.getInfo( "platformName" ) then
