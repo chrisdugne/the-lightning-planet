@@ -17,12 +17,6 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 function startTutorial(view)
 	scene 		= view
-	game.scene 	= view
-	game.state	= game.RUNNING
-   game.requestedAsteroid = 1
-	
-	hud.initTopRightText()
-	hud.refreshTopRightText("Tutorial")
 	
 	hud.setExit(function()
 		if(currentStep > 1 and texts[currentStep-1].item) then
@@ -42,13 +36,13 @@ function startTutorial(view)
    	end
 	end)
 	
---	step1()
+	step1()
 
 -- debug got to step
-	game.setPlanetColor(GREEN)
-	hud.setupPad()
-	currentStep = 7
-	step(8)
+--	game.setPlanetColor(GREEN)
+--	hud.setupPad()
+--	currentStep = 7
+--	step(8)
 end
 
 -----------------------------------------------------------------------------------------
@@ -575,7 +569,7 @@ texts = {
 		delay = 2000,
 	},
 	{ --------------------------- STEP 12
-		text 	= "Now have to catch a green asteroid",
+		text 	= "Now you have to catch a green asteroid",
 		x 		= display.contentWidth/4,
 		y 		= display.contentHeight/5 ,
 		delay = 1800,

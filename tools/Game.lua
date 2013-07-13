@@ -34,19 +34,28 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 -----------------------------------------------------------------------------------------
 
-function start(view)
+function init(view)
 	scene = view
-	state	= RUNNING
 	
 	setPlanetColor(BLUE)
 	
 	if(mode == COMBO) then
    	requestedAsteroid = 1
    end 
+end
+
+function start(requireAsteroidBuilder)
 	
-	hud.centerText("Start !", display.contentHeight/4, 45)
-	timer.performWithDelay(2000, asteroidBuilder)
-   
+	if(requireAsteroidBuilder == nil) then
+		requireAsteroidBuilder = true
+	end
+
+	state	= RUNNING
+	
+	if(requireAsteroidBuilder) then
+   	hud.centerText("Start !", display.contentHeight/4, 45)
+		timer.performWithDelay(2000, asteroidBuilder)
+	end
 end
 
 -----------------------------------------------------------------------------------------
@@ -384,7 +393,7 @@ end
 function endGame(message)
    stop()
 	hud.explodeHUD()
-	hud.explode(planet)	
+	hud.explode(planet, 7, 3500, planet.color)	
 	hud.centerText(message)	
    timer.performWithDelay(4000, exit)
 end

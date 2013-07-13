@@ -23,23 +23,32 @@ end
 -- Called when the scene's view does not exist:
 function scene:refreshScene()
 	viewManager.initView(self.view);
+	game.init(self.view)
 	hud.initHUD()
+	hud.initTopRightText()
 	
 	if(game.mode == game.COMBO and game.level == 1) then
+		hud.refreshTopRightText("Tutorial")
+		game.start(false)
 		tutorial.startTutorial(self.view)
 	else
-   	game.start(self.view)
+		if(game.mode == game.COMBO) then 
+			hud.drawCombo(game.level, 0)
+      	hud.refreshTopRightText("Level " .. game.level)
+		
+		elseif(game.mode == game.KAMIKAZE) then 
+      	hud.refreshTopRightText("Kamikaze")
+		
+		elseif(game.mode == game.TIMEATTACK) then 
+      	hud.refreshTopRightText("Time Attack")
+      
+      end
    	
-   	if(game.mode == game.COMBO) then
-   		hud.drawCombo(game.level, 0)
-   	end
-   	
-   	hud.initTopRightText()
-   	hud.refreshTopRightText("Level " .. game.level)
    	hud.setExit()
-
    	hud.setupPad()
+   	game.start()
    end
+
 end
 
 ------------------------------------------
