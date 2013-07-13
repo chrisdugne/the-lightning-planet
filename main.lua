@@ -29,9 +29,6 @@ else
 	FONT = "Macondo"
 end
 
-local sysFonts = native.getFontNames()
-for k,v in pairs(sysFonts) do print(v) end
-
 -----------------------------------------------------------------------------------------
 --- Corona's libraries
 json 				= require "json"
@@ -47,6 +44,7 @@ vector2D			= require "libs.Vector2D"
 ---- App Tools
 router 			= require "tools.Router"
 viewManager		= require "tools.ViewManager"
+musicManager	= require "tools.MusicManager"
 
 lightning		= require "tools.Lightning"
 hud				= require "tools.HUD"
@@ -102,8 +100,12 @@ end
 
 ------------------------------------------
 
-router.openAppHome()
---router.openLevelSelection()
+ musicManager.playMusic()
+
+------------------------------------------
+
+--router.openAppHome()
+router.intro()
 
 ------------------------------------------
 --- ANDROID BACK BUTTON
