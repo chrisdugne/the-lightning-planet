@@ -10,6 +10,7 @@ local lightningEnabled = true
 -----------------------------------------------------------------------------------------
 
 elements = display.newGroup()
+powerBarFire 	= nil
 
 -----------------------------------------------------------------------------------------
 
@@ -241,6 +242,41 @@ end
 
 -----------------------------------------------------------------------------------------
 
+function drawProgressBar(percent)         
+	if(powerBarFire) then powerBarFire:stop("fire") end
+	
+	powerBarFire=CBE.VentGroup{
+   	{
+   		title="fire",
+   		preset="burn",
+   		color={{140-percent,155*percent/100,15 + percent/40}},
+   		build=function()
+   			local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
+   			return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
+			end,
+			onCreation=function()end,
+			perEmit=10,
+			emissionNum=0,
+			point1={display.contentWidth/4, 20},
+			point2={display.contentWidth/4 + display.contentWidth/2 * percent/100, 20},
+			positionType="alongLine",
+			emitDelay=10,
+   		fadeInTime=600,
+   		lifeSpan=450, -- Particles are removed sooner than the ice comet
+   		lifeStart=50,
+   		endAlpha=0,
+   		physics={
+   			velocity=0.2,
+   			gravityY=0.1,
+   		}
+   	}
+	}
+   	
+	powerBarFire:start("fire")
+end
+
+-----------------------------------------------------------------------------------------
+
 function drawCatch(x, y, color, value, huge)
 
 	if(type(value) == "number" and value > 0) then
@@ -344,6 +380,8 @@ function explodeHUD()
    for i=elements.numChildren,1,-1 do
 		explode(elements[i], 4, 2400, elements[i].color)
 	end
+	
+	if(powerBarFire) then powerBarFire:stop("fire") end
 end
 			
 -----------------------------------------------------------------------------------------

@@ -29,6 +29,8 @@ points 	= 0
 mode 		= 0
 state 	= IDLE
 
+kamikazePercent = 100
+
 -----------------------------------------------------------------------------------------
 --set up collision filters
 
@@ -48,6 +50,10 @@ function init(view)
 	   for i = 1, #COLORS do
    	   asteroidsCaught[COLORS[i]] = 0
    	end
+   end
+
+	if(mode == KAMIKAZE) then
+		kamikazePercent = 100
    end
    
 end
@@ -132,6 +138,8 @@ function crashAsteroid( asteroid, event )
 			catch = -1
 			asteroidsCaught[planet.color] = asteroidsCaught[planet.color] - 1
 			change = -3
+			
+			kamikazePercent = kamikazePercent - 3
 		end
 		
 		total = points + change
@@ -147,6 +155,7 @@ function crashAsteroid( asteroid, event )
 		hud.drawCatch(asteroid.x, asteroid.y, planet.color, catch)
 		hud.drawBag()
 		hud.drawPoints(change, total, asteroid)
+		hud.drawProgressBar(kamikazePercent)
 		
 		points = total
 
@@ -175,10 +184,12 @@ function squarePointsWithLighting(asteroid)
 		local total = points + change
 
 		asteroidsCaught[asteroid.color] = math.floor(asteroidsCaught[asteroid.color]/2)
+		kamikazePercent = kamikazePercent - 20
 
 		hud.drawPoints(changeText, total, asteroid, true)
 		hud.drawCatch(asteroid.x, asteroid.y, asteroid.color, "/2")
 		hud.drawBag()
+		hud.drawProgressBar(kamikazePercent)
 		
 		points = total
 	end

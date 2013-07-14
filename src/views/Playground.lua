@@ -41,10 +41,10 @@ function scene:refreshScene()
 	if(game.mode == game.KAMIKAZE and game.level == 1) then
 		tutorial = true
 		hud.refreshTopRightText("Tutorial")
+		hud.drawProgressBar(100)
 		game.start(false)
 		tutorialKamikaze.start(self.view)
 	end
-	
 	
 	if(not tutorial) then
 		
@@ -53,6 +53,7 @@ function scene:refreshScene()
       	hud.refreshTopRightText("Level " .. game.level)
 		
 		elseif(game.mode == game.KAMIKAZE) then 
+   		hud.drawProgressBar(100)
       	hud.refreshTopRightText("0 pts")
       	hud.drawBag()
 		
