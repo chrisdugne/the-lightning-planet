@@ -69,7 +69,7 @@ end
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
-	timer.performWithDelay( 2650, function() --delay :  level params
+	timer.performWithDelay( math.random(1000,3000), function() --delay :  level params
 		if(state == RUNNING) then
 			createAsteroid()
 			asteroidBuilder()
@@ -81,7 +81,7 @@ function setPlanetColor(color)
 	
 	display.remove(planet)
 	
-	planet = display.newImage(scene, "images/game/planet.".. color ..".png")
+	planet = display.newImage(scene, "assets/images/game/planet.".. color ..".png")
 	planet:scale(0.17,0.17)
 	planet.x = display.contentWidth/2
 	planet.y = display.contentHeight/2
@@ -107,11 +107,11 @@ function crashAsteroid( asteroid, event )
 
 	if(mode == COMBO) then
 		
-		if(LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
+		if(COMBO_LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
 			hud.drawCombo(level, requestedAsteroid)
 			requestedAsteroid = requestedAsteroid + 1
 			
-			if(requestedAsteroid > #LEVELS[level].combo) then
+			if(requestedAsteroid > #COMBO_LEVELS[level].combo) then
 				completeLevel()
    		end
 		end
@@ -144,7 +144,7 @@ function crashAsteroid( asteroid, event )
 			total = 0
 		end
 		
-		hud.drawCatch(asteroid, catch)
+		hud.drawCatch(asteroid.x, asteroid.y, planet.color, catch)
 		hud.drawBag()
 		hud.drawPoints(change, total, asteroid)
 		
@@ -174,7 +174,11 @@ function squarePointsWithLighting(asteroid)
 		local changeText 	= asteroidsCaught[asteroid.color] .. " x "  ..  asteroidsCaught[asteroid.color]
 		local total = points + change
 
+		asteroidsCaught[asteroid.color] = math.floor(asteroidsCaught[asteroid.color]/2)
+
 		hud.drawPoints(changeText, total, asteroid, true)
+		hud.drawCatch(asteroid.x, asteroid.y, asteroid.color, "/2")
+		hud.drawBag()
 		
 		points = total
 	end
@@ -217,13 +221,14 @@ function shootOnClosestAsteroid()
    	direction:mult(20)
    	
    	local planetPosition = vector2D:Add(center, direction)
+
+   	lightPlanet(asteroid) 
    	
    	local thunderDone = function() 
-      	lightPlanet(asteroid) 
    		squarePointsWithLighting(asteroid)
    		explodeAsteroid(asteroid) 
    	end
-   	
+
    	lightning.thunder(planetPosition, asteroidPosition, thunderDone)
    end
 	
@@ -396,21 +401,24 @@ end
 function createAsteroid()
 	local nbColors
 	if(mode == COMBO) then
-		nbColors = LEVELS[level].colors
-	else
-		nbColors = 4
+		nbColors = COMBO_LEVELS[level].colors
+	elseif(mode == KAMIKAZE) then
+		nbColors = KAMIKAZE_LEVELS[level].colors
+	elseif(mode == TIMEATTACK) then
+		nbColors = TIMEATTACK_LEVELS[level].colors
 	end
 	
 	local num = math.random(1,nbColors)
 	local color = COLORS[num]
 	
-	local asteroid = display.newImageRect( "images/game/asteroid." .. color .. ".png", 24, 24 )
+	local asteroid = display.newImageRect( "assets/images/game/asteroid." .. color .. ".png", 24, 24 )
 	asteroid.color = color
 	physics.addBody( asteroid, { bounce=0, radius=12, filter=asteroidFilter } )
 	
 	local planetCenterPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2)
-	local alpha = math.random(-180,180)
-	local distance = 250
+	
+	local alpha = math.rad(math.random(360))
+	local distance = 300
 	
 	local asteroidPoint = vector2D:new(distance*math.cos(alpha), distance*math.sin(alpha))
 	asteroidPoint = vector2D:Add(planetCenterPoint, asteroidPoint)
@@ -456,7 +464,7 @@ function endGame(message)
 	hud.explodeHUD()
 	hud.explode(planet, 7, 3500, planet.color)	
 	hud.centerText(message)	
-   timer.performWithDelay(4000, exit)
+   timer.performWithDelay(2000, exit)
 end
 
 -----------------------------------------------------------------------------------------

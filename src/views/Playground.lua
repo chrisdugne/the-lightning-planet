@@ -1,11 +1,10 @@
 -----------------------------------------------------------------------------------------
 --
--- LevelSelection
+-- AppHome.lua
 --
 -----------------------------------------------------------------------------------------
 
 local scene = storyboard.newScene()
-local levels
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -17,78 +16,57 @@ local levels
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
-	levels = display.newGroup()
 end
 
 -----------------------------------------------------------------------------------------
 
+-- Called when the scene's view does not exist:
 function scene:refreshScene()
-	utils.emptyGroup(levels)
 	viewManager.initView(self.view);
-
-	game.scene = self.view
+	game.init(self.view)
 	hud.initHUD()
 	hud.initTopRightText()
-	hud.refreshTopRightText("Select your level")
-	hud.setExit(exitSelection)
 	
-	local margin = display.contentWidth/2 -5*38 
-
-   for level = 1, 40 do
-   
-   	local i = (level-1)%10 
-   	local j = math.floor((level-1)/10) + 1
-		local levelAvailable = savedData.levels[level]
-   	
-   	local levelButton = display.newImage("images/hud/level.".. COLORS[j] .. ".png")
-   	levelButton:scale(0.25,0.25)
-   	levelButton.x = margin + 42 * i
-   	levelButton.y = 65 * j
-   	levels:insert(levelButton)
+	local tutorial = false
 	
-		if(not levelAvailable) then
-      	local lock = display.newImage("images/hud/lock.png")
-      	lock:scale(0.20,0.20)
-      	lock.x = levelButton.x
-      	lock.y = levelButton.y
-      	levels:insert(lock)
+	-- Tutorial Combo
+	if(game.mode == game.COMBO and game.level == 1) then
+		tutorial = true
+		hud.refreshTopRightText("Tutorial")
+		game.start(false)
+		tutorialCombo.start(self.view)
+	end
 
-	   	lock.alpha = 0.7
-	   	levelButton.alpha = 0.2
-	   else
-   		levelButton:addEventListener("touch", function(event) openLevel(level) end)
-      end
-      
-   	local text = display.newText( level, 0, 0, FONT, 16 )
-   	text:setTextColor( 255 )	
-   	if(levelAvailable) then
-      	text.alpha = 1
-      else 
-      	text.alpha = 0.4
-      end
-   	text.x = levelButton.x
-   	text.y = levelButton.y
-   	levels:insert(text)
-	
-   	self.view:insert(levels)
-   end
-end
-
-------------------------------------------
-
-function exitSelection()
-	for i = levels.numChildren,1,-1  do
-		transition.to( levels[i], { time=500, alpha=0 })
-		hud.explode(levels[i], 1, 8000)
+	-- Tutorial Kamikaze
+	if(game.mode == game.KAMIKAZE and game.level == 1) then
+		tutorial = true
+		hud.refreshTopRightText("Tutorial")
+		game.start(false)
+		tutorialKamikaze.start(self.view)
 	end
 	
-	hud.explodeHUD()
-end
+	
+	if(not tutorial) then
+		
+		if(game.mode == game.COMBO) then 
+			hud.drawCombo(game.level, 0)
+      	hud.refreshTopRightText("Level " .. game.level)
+		
+		elseif(game.mode == game.KAMIKAZE) then 
+      	hud.refreshTopRightText("0 pts")
+      	hud.drawBag()
+		
+		elseif(game.mode == game.TIMEATTACK) then 
+      	hud.refreshTopRightText("Time Attack")
+      	hud.drawBag()
+      
+      end
+   	
+   	hud.setExit()
+   	hud.setupPad()
+   	game.start()
+   end
 
-function openLevel( level )
-	game.level = level
-	exitSelection()
-	timer.performWithDelay(3000, router.openPlayground)
 end
 
 ------------------------------------------
@@ -97,6 +75,7 @@ end
 function scene:enterScene( event )
 	self:refreshScene();
 end
+
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )

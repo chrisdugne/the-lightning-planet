@@ -20,7 +20,7 @@ end
 -----------------------------------------------------------------------------------------
 
 function setExit(toApply)
-	exitButton = display.newImage( game.scene, "images/hud/exit.png")
+	exitButton = display.newImage( game.scene, "assets/images/hud/exit.png")
 	exitButton.x = display.contentWidth - 15
 	exitButton.y = 45
 	exitButton:scale(0.17,0.17)
@@ -61,22 +61,25 @@ end
 function setupButtons()
 	colorsEnabled = true
 
-	blueButton = display.newImage( game.scene, "images/hud/button.blue.png")
+	blueButton = display.newImage( game.scene, "assets/images/hud/button.blue.png")
 	blueButton.x = display.contentWidth - 55
 	blueButton.y = display.contentHeight - 30
 	blueButton:scale(0.15,0.15)
 	blueButton:addEventListener("touch", function(event) touch(event, blueButton) color(event, "blue") end)
 	elements:insert(blueButton)
 
-	greenButton = display.newImage( game.scene, "images/hud/button.green.png")
+	greenButton = display.newImage( game.scene, "assets/images/hud/button.green.png")
 	greenButton.x = display.contentWidth - 25
 	greenButton.y = display.contentHeight - 70
 	greenButton:scale(0.15,0.15)
 	greenButton:addEventListener("touch", function(event) touch(event, greenButton) color(event, "green") end)
 	elements:insert(greenButton)
 
-	if(game.mode ~= game.COMBO or LEVELS[game.level].colors > 2) then	
-   	yellowButton = display.newImage( game.scene, "images/hud/button.yellow.png")
+	if((game.mode == game.COMBO 		and COMBO_LEVELS[game.level].colors > 2)
+	or (game.mode == game.KAMIKAZE 	and KAMIKAZE_LEVELS[game.level].colors > 2)
+	or (game.mode == game.TIMEATTACK and TIMEATTACK_LEVELS[game.level].colors > 2)) 
+	then	
+   	yellowButton = display.newImage( game.scene, "assets/images/hud/button.yellow.png")
    	yellowButton.x = display.contentWidth - 85
    	yellowButton.y = display.contentHeight - 70
    	yellowButton:scale(0.15,0.15)
@@ -84,8 +87,11 @@ function setupButtons()
    	elements:insert(yellowButton)
    end
 
-	if(game.mode ~= game.COMBO or LEVELS[game.level].colors > 3) then	
-   	redButton = display.newImage( game.scene, "images/hud/button.red.png")
+	if((game.mode == game.COMBO 		and COMBO_LEVELS[game.level].colors > 3)
+	or (game.mode == game.KAMIKAZE 	and KAMIKAZE_LEVELS[game.level].colors > 3)
+	or (game.mode == game.TIMEATTACK and TIMEATTACK_LEVELS[game.level].colors > 3)) 
+	then
+   	redButton = display.newImage( game.scene, "assets/images/hud/button.red.png")
    	redButton.x = display.contentWidth - 55
    	redButton.y = display.contentHeight - 110
    	redButton:scale(0.15,0.15)
@@ -101,7 +107,7 @@ end
 function setupLightningButton()
 	lightningEnabled = true
 
-	lightButton = display.newImage( game.scene, "images/hud/button.light.png")
+	lightButton = display.newImage( game.scene, "assets/images/hud/button.light.png")
 	lightButton.x = 40
 	lightButton.y = display.contentHeight - 60
 	lightButton:scale(0.15,0.15)
@@ -167,9 +173,9 @@ function drawCombo(level, numCompleted)
    	end
 	end
 	
-	for c in pairs(LEVELS[level].combo) do
-		local color = LEVELS[level].combo[c]
-   	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
+	for c in pairs(COMBO_LEVELS[level].combo) do
+		local color = COMBO_LEVELS[level].combo[c]
+   	local asteroid = display.newImage(game.scene, "assets/images/game/asteroid." .. color .. ".png")
    	asteroid.color = color
    	
    	local i = (c-1)%20
@@ -201,9 +207,16 @@ function drawBag()
    	end
 	end
 	
-	for c in pairs(COLORS) do
+	local LEVELS
+	if(game.mode == KAMIKAZE) then
+		LEVELS = KAMIKAZE_LEVELS
+	else
+		LEVELS = TIMEATTACK_LEVELS
+	end
+	
+	for c = 1, LEVELS[game.level].colors do
 		local color = COLORS[c]
-   	local asteroid = display.newImage(game.scene, "images/game/asteroid." .. color .. ".png")
+   	local asteroid = display.newImage(game.scene, "assets/images/game/asteroid." .. color .. ".png")
    	asteroid.color = color
    	
    	local i = 20
@@ -228,9 +241,9 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function drawCatch(asteroid, value, huge)
+function drawCatch(x, y, color, value, huge)
 
-	if(value > 0) then
+	if(type(value) == "number" and value > 0) then
 		value = "+ " .. value
 	end
 
@@ -240,11 +253,11 @@ function drawCatch(asteroid, value, huge)
 	local time = 1600
 	if(huge) then time = 3000 end	
 	
-	local rgb = getRGB(asteroid.color) 
+	local rgb = getRGB(color) 
 	local colorText = display.newText( value, 0, 0, FONT, 16 )
 	colorText:setTextColor( rgb[1], rgb[2], rgb[3] )	
-	colorText.x = asteroid.x
-	colorText.y = asteroid.y
+	colorText.x = x
+	colorText.y = y
 	colorText.alpha = 1
 	colorText:setReferencePoint( display.CenterReferencePoint )
 	
@@ -252,7 +265,7 @@ function drawCatch(asteroid, value, huge)
 		time=time, 
 		alpha=0, 
 		x= 40, 
-		y= 25 * getColorNum(asteroid.color) - 10, 
+		y= 25 * getColorNum(color) - 10, 
 		xScale=scale,
 		yScale=scale,
 		onComplete=function()

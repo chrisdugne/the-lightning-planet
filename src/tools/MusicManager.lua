@@ -4,7 +4,7 @@ module(..., package.seeall)
 
 -----------------------------------------------------------------------------------------
 
-local mainMusic = audio.loadSound("music/1-TheFirstDawn.mp3")
+local mainMusic = audio.loadSound("assets/music/1-TheFirstDawn.mp3")
 
 -----------------------------------------------------------------------------------------
 

@@ -1,10 +1,11 @@
 -----------------------------------------------------------------------------------------
 --
--- AppHome.lua
+-- LevelSelection
 --
 -----------------------------------------------------------------------------------------
 
 local scene = storyboard.newScene()
+local levels
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -16,41 +17,59 @@ local scene = storyboard.newScene()
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
+	levels = display.newGroup()
 end
 
 -----------------------------------------------------------------------------------------
 
--- Called when the scene's view does not exist:
 function scene:refreshScene()
+	utils.emptyGroup(levels)
 	viewManager.initView(self.view);
-	game.init(self.view)
+
+	game.scene = self.view
 	hud.initHUD()
 	hud.initTopRightText()
+	hud.refreshTopRightText("Combo")
+	hud.setExit(exitSelection)
 	
-	if(game.mode == game.COMBO and game.level == 1) then
-		hud.refreshTopRightText("Tutorial")
-		game.start(false)
-		tutorial.startTutorial(self.view)
-	else
-		if(game.mode == game.COMBO) then 
-			hud.drawCombo(game.level, 0)
-      	hud.refreshTopRightText("Level " .. game.level)
-		
-		elseif(game.mode == game.KAMIKAZE) then 
-      	hud.refreshTopRightText("0 pts")
-      	hud.drawBag()
-		
-		elseif(game.mode == game.TIMEATTACK) then 
-      	hud.refreshTopRightText("Time Attack")
-      	hud.drawBag()
-      
-      end
-   	
-   	hud.setExit()
-   	hud.setupPad()
-   	game.start()
-   end
+	local margin = display.contentWidth/2 -5*38 
 
+   for level = 1, 40 do
+   	local i = (level-1)%10 
+   	local j = math.floor((level-1)/10) + 1
+		local levelLocked = not savedData.levels[level]
+	
+		viewManager.buildSmallButton(
+			levels, 
+			level, 
+			COLORS[j], 
+			21, 
+			margin + 42 * i, 
+			65 * j, 
+			function() 
+				openLevel(level) 
+			end, 
+			levelLocked
+		)
+   end
+	
+	self.view:insert(levels)
+end
+
+------------------------------------------
+
+function exitSelection()
+	for i = levels.numChildren,1,-1  do
+		hud.explode(levels[i], 1, 1000, levels[i].color)
+	end
+	
+	hud.explodeHUD()
+end
+
+function openLevel( level )
+	game.level = level
+	exitSelection()
+	timer.performWithDelay(1500, router.openPlayground)
 end
 
 ------------------------------------------
@@ -59,7 +78,6 @@ end
 function scene:enterScene( event )
 	self:refreshScene();
 end
-
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )

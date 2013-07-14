@@ -7,7 +7,6 @@
 local scene = storyboard.newScene()
 local menu
 local screen
-local fires = {}
 local introComplete = true
 
 -----------------------------------------------------------------------------------------
@@ -29,7 +28,7 @@ function scene:createScene( event )
 	
 	utils.emptyGroup(screen)
 
-	local back = display.newImage( screen, "images/stars.jpg")  
+	local back = display.newImage( screen, "assets/images/stars.jpg")  
 	back:scale(0.7,0.7)
 	back.x = display.viewableContentWidth/2  
 	back.y = display.viewableContentHeight/2  
@@ -57,7 +56,6 @@ end
 
 function scene:refreshScene()
 	utils.emptyGroup(menu)
-	cleanupFires()
 	viewManager.initView(self.view);
 	
 	title = display.newText( "The Lightning Planet", 0, 0, FONT, 35 )
@@ -75,27 +73,11 @@ function scene:refreshScene()
    	introComplete = true
    end	
 	
-	self:buildButton("Combo", "blue", 22, display.contentWidth/5, display.contentHeight*0.6, combo)
-	self:buildButton("Kamikaze", "red", 16, display.contentWidth/2, display.contentHeight*0.8, kamikaze, true)
-	self:buildButton("Time Attack", "yellow", 13, 4*display.contentWidth/5, display.contentHeight*0.45, timeAttack, true)
-
-	for fire = 1, #fires do 
-		fires[fire]:start("fire")
-	end
+	viewManager.buildButton(menu, "Combo", 		"blue", 		22, display.contentWidth/5, 	display.contentHeight*0.6, 	combo)
+	viewManager.buildButton(menu, "Kamikaze", 	"red", 		20, display.contentWidth/2, 	display.contentHeight*0.8, 	kamikaze, 	true, (not savedData.levels[2]))
+	viewManager.buildButton(menu, "Time Attack", "yellow", 	16, 4*display.contentWidth/5, display.contentHeight*0.45, 	timeAttack, true, (not savedData.levels[2]))
 
 	self.view:insert(menu)
-end
-
-------------------------------------------
-
-function cleanupFires()	
-	for fire = 1, #fires do 
-		fires[fire]:destroy("fire")
-	end
-	
-	while #fires > 0 do
-   	table.remove(fires, 1)
-	end
 end
 
 ------------------------------------------
@@ -107,91 +89,12 @@ end
 
 function kamikaze()
 	game.mode = game.KAMIKAZE 
-	router.openPlayground()
+	router.openKamikazeSelection()
 end
 
 function timeAttack()
 	game.mode = game.TIMEATTACK
-	router.openPlayground()
-end
-
-------------------------------------------
-
-function scene:buildButton( title, color, titleSize, x, y, action, lockAtStartup )
-
-	local colors
-	if(color == "blue") then
-		colors={{0, 111, 255}, {0, 70, 255}}
-	elseif(color == "green") then
-		colors={{181, 255, 111}, {120, 255, 70}}
-	elseif(color == "yellow") then
-		colors={{255, 131, 111}, {255, 211, 70}}
-	elseif(color == "red") then
-		colors={{255, 111, 0}, {255, 70, 0}}
-	else
-		colors={{255, 111, 0}, {255, 70, 0}}
-	end
-
-	local planet = display.newImage("images/game/planet.".. color ..".png")
-	planet:scale(0.36,0.36)
-	planet.x = x
-	planet.y = y
-	planet.alpha = 0
-	menu:insert(planet)
-	
-	
-	local text = display.newText( title, 0, 0, FONT, titleSize )
-	text:setTextColor( 0 )	
-	text.x = x
-	text.y = y
-	text.alpha = 0
-	menu:insert(text)
-	
-	transition.to( planet, { time=2000, alpha=1 })
-	transition.to( text, { time=2000, alpha=1 })
-	
-	if(lockAtStartup and not savedData.levels[2]) then
-   	local lock = display.newImage("images/hud/lock.png")
-   	lock:scale(0.50,0.50)
-   	lock.x = x
-   	lock.y = y
-   	menu:insert(lock)
-   else
-		text:addEventListener	("touch", function(event) action() end)
-		planet:addEventListener	("touch", function(event) action() end)
-
-   	local fire=CBE.VentGroup{
-   		{
-   			title="fire",
-   			preset="burn",
-   			color=colors,
-   			build=function()
-   				local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
-   				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
-   			end,
-   			onCreation=function()end,
-   			perEmit=2,
-   			emissionNum=0,
-   			x=x,
-   			y=y,
-   			positionType="inRadius",
-   			posRadius=40,
-   			emitDelay=50,
-   			fadeInTime=1500,
-   			lifeSpan=250, -- Particles are removed sooner than the ice comet
-   			lifeStart=250,
-   			endAlpha=0,
-   			physics={
-   				velocity=0.5,
-   				xDamping=1,
-   				gravityY=0.6,
-   				gravityX=0
-   			}
-   		}
-   	}
-   	
-   	table.insert(fires, fire)
-	end
+	router.openTimeAttackSelection()
 end
 
 ------------------------------------------
@@ -307,7 +210,7 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
-	cleanupFires()
+	viewManager.cleanupFires()
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

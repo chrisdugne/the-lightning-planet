@@ -15,8 +15,8 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 -----------------------------------------------------------------------------------------
 
-function startTutorial(view)
-	scene 		= view
+function start(view)
+	scene = view
 	
 	hud.setExit(function()
 		if(currentStep > 1 and texts[currentStep-1].item) then
@@ -432,7 +432,7 @@ end
 
 function createAsteroid(color, alpha, distance, step)
 	
-	local asteroid = display.newImageRect( "images/game/asteroid." .. color .. ".png", 24, 24 )
+	local asteroid = display.newImageRect( "assets/images/game/asteroid." .. color .. ".png", 24, 24 )
 	asteroid.color = color
 	physics.addBody( asteroid, { bounce=0, radius=12, filter=asteroidFilter } )
 	
@@ -460,7 +460,7 @@ end
 
 function displayArrow(num, velocityX, velocityY)
 
-	local arrow = display.newImage("images/tutorial/arrow.".. arrows[num].way ..".png")
+	local arrow = display.newImage("assets/images/tutorial/arrow.".. arrows[num].way ..".png")
 	arrow:scale(0.21,0.21)
 	arrow.x = arrows[num].xFrom
 	arrow.y = arrows[num].yFrom
