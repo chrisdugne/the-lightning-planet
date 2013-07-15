@@ -77,6 +77,19 @@ function scene:refreshScene()
 	viewManager.buildButton(menu, "Kamikaze", 	"red", 		20, display.contentWidth/2, 	display.contentHeight*0.73, 	kamikaze, 	true, (not savedData.levels[2]))
 	viewManager.buildButton(menu, "Time Attack", "yellow", 	16, 4*display.contentWidth/5, display.contentHeight*0.39, 	timeAttack, true, (not savedData.levels[2]))
 
+
+		viewManager.buildSmallButton(
+			menu, 
+			" ", 
+			COLORS[2], 
+			20,
+			display.contentWidth - 30, 
+			display.contentHeight - 30, 
+			function() 
+				self:reset() 
+			end
+		)
+
 	self.view:insert(menu)
 end
 
@@ -197,6 +210,20 @@ function displayIntroText(text, x, y, fade)
 			end)
 		end
 	end})
+end
+
+function scene:reset()
+	savedData = {
+		levels = { 
+			{ available = true }, -- level 1 : tutorial combo 
+		},
+		kamikazeAvailable = false, 	-- require tutorial complete
+		timeAttackAvailable = false, 	-- require tutorial complete
+	}
+   utils.saveTable(savedData, "savedData.json")
+   
+   introComplete = false
+   self:refreshScene()
 end
 
 ------------------------------------------
