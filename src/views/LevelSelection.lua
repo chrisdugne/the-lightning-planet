@@ -64,6 +64,8 @@ function exitSelection()
 	end
 	
 	hud.explodeHUD()
+	
+	musicManager.playSpace()
 end
 
 function openLevel( level )

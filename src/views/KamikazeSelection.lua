@@ -46,9 +46,11 @@ function scene:exitSelection()
 	for i = kamikazeLevels.numChildren,1,-1  do
 		hud.explode(kamikazeLevels[i], 2, 2000, kamikazeLevels[i].color)
 	end
-	
+
 	hud.explodeHUD()
 	viewManager.cleanupFires()
+
+	musicManager.playSpace()	
 end
 
 ------------------------------------------

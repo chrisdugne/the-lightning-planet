@@ -49,6 +49,8 @@ function scene:exitSelection()
 	
 	hud.explodeHUD()
 	viewManager.cleanupFires()
+	
+	musicManager.playSpace()
 end
 
 ------------------------------------------

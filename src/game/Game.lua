@@ -284,6 +284,7 @@ function shootOnClosestAsteroid()
    	end
 
    	lightning.thunder(planetPosition, asteroidPosition, thunderDone)
+   	musicManager.playLight()
    end
 	
 end
@@ -381,6 +382,7 @@ function catchAsteroid(asteroid)
 
 	light:start("explosion")
    lightPlanet(asteroid)
+   musicManager.playPlanet()
 
 	destroyAsteroid(asteroid)
 end
@@ -438,6 +440,7 @@ function explodeAsteroid(asteroid)
 	light:start("explosion")
 
 	destroyAsteroid(asteroid)
+   musicManager.playAsteroid()
 end
 
 ------------------------------------------------------------------------------------------
