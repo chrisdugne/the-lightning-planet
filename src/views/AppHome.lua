@@ -7,7 +7,7 @@
 local scene = storyboard.newScene()
 local menu
 local screen
-local introComplete = true
+local introComplete = system.getInfo("environment") == "simulator"
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -74,8 +74,8 @@ function scene:refreshScene()
    end	
 	
 	viewManager.buildButton(menu, "Combo", 		"blue", 		22, display.contentWidth/5, 	display.contentHeight*0.6, 	combo)
-	viewManager.buildButton(menu, "Kamikaze", 	"red", 		20, display.contentWidth/2, 	display.contentHeight*0.8, 	kamikaze, 	true, (not savedData.levels[2]))
-	viewManager.buildButton(menu, "Time Attack", "yellow", 	16, 4*display.contentWidth/5, display.contentHeight*0.45, 	timeAttack, true, (not savedData.levels[2]))
+	viewManager.buildButton(menu, "Kamikaze", 	"red", 		20, display.contentWidth/2, 	display.contentHeight*0.73, 	kamikaze, 	true, (not savedData.levels[2]))
+	viewManager.buildButton(menu, "Time Attack", "yellow", 	16, 4*display.contentWidth/5, display.contentHeight*0.39, 	timeAttack, true, (not savedData.levels[2]))
 
 	self.view:insert(menu)
 end

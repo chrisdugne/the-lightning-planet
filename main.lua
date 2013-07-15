@@ -48,8 +48,7 @@ vector2D			= require "src.libs.Vector2D"
 -- Translations
 
 local translations = require("assets.Translations")
---local LANG =  userDefinedLanguage or system.getPreference("ui", "language")
-local LANG = "fr"
+local LANG =  userDefinedLanguage or system.getPreference("ui", "language")
 
 function T(enText)
 	return translations[enText][LANG] or enText
@@ -262,10 +261,6 @@ musicManager.playMusic()
 ------------------------------------------
 
 router.openAppHome()
-
---game.mode = game.TIMEATTACK 
---game.level = 1
---router.openPlayground()
 
 -----------------------------------------------------------------------------------------
 

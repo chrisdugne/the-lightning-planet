@@ -28,7 +28,6 @@ function scene:refreshScene()
 	hud.initTopRightText()
 	
 	local tutorial = false
-	print("playground", game.mode, game.level)
 	
 	-- Tutorial Combo
 	if(game.mode == game.COMBO and game.level == 1) then
@@ -61,6 +60,7 @@ function scene:refreshScene()
 		if(game.mode == game.COMBO) then 
 			hud.drawCombo(game.level, 0)
       	hud.refreshTopRightText("Level " .. game.level)
+      	hud.startComboTimer()
 		
 		elseif(game.mode == game.KAMIKAZE) then 
    		hud.drawProgressBar(100)

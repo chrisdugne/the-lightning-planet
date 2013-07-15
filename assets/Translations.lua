@@ -1,5 +1,21 @@
 local translations =
 {
+    ["Tutorial"] = {
+        ["fr"] = "Tutoriel",
+    },
+    
+    ["Easy"] = {
+        ["fr"] = "Facile",
+    },
+    
+    ["Hard"] = {
+        ["fr"] = "Difficile",
+    },
+    
+    ["Extreme"] = {
+        ["fr"] = "Extrême",
+    },
+    
     ["Here are counted caught asteroids"] = {
         ["fr"] = "On compte les astéroides attrapées",
     },
@@ -50,10 +66,6 @@ local translations =
   
     ["Tutorial Complete !"] = {
         ["fr"] = "Tutoriel Terminé !",
-    },
-  
-    ["Tutorial"] = {
-        ["fr"] = "Tutoriel",
     },
   
     ["This is your Planet"] = {

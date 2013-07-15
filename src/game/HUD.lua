@@ -21,11 +21,12 @@ end
 -----------------------------------------------------------------------------------------
 
 function setExit(toApply)
+	display.remove(exitButton)
 	exitButton = display.newImage( game.scene, "assets/images/hud/exit.png")
-	exitButton.x = display.contentWidth - 15
+	exitButton.x = display.contentWidth - 20
 	exitButton.y = 45
 	exitButton.alpha = 0.5
-	exitButton:scale(0.12,0.12)
+	exitButton:scale(0.75,0.75)
 	exitButton:addEventListener("touch", function(event)
 		if(toApply) then 
 			toApply()
@@ -38,6 +39,7 @@ end
 -----------------------------------------------------------------------------------------
 
 function initTopRightText()
+	display.remove(topRightText)
 	topRightText = display.newText( game.scene, "0", 0, 0, FONT, 21 )
 	topRightText:setTextColor( 255 )	
 	topRightText:setReferencePoint( display.CenterReferencePoint )
@@ -47,8 +49,10 @@ function initTopRightText()
 end
 
 function refreshTopRightText(text)
-	topRightText.text = text
-	topRightText.x 	= display.contentWidth - topRightText.contentWidth/2 - 10
+	if(topRightText) then
+		topRightText.text = text
+		topRightText.x 	= display.contentWidth - topRightText.contentWidth/2 - 10
+	end
 end
 
 -----------------------------------------------------------------------------------------
@@ -474,7 +478,7 @@ function explode(element, emissionNum, fadeInTime, color)
 	elseif(color == RED) then
 		colors={{255, 111, 0}, {255, 70, 0}}
 	else
-		colors={{255,255,220},{255,255,120}}
+		colors={{65,65,62},{55,55,20}}
 	end
 	
 	if(not emissionNum) then
@@ -510,6 +514,7 @@ function drawTimer(seconds)
 	
 	local min,sec = utils.getMinSec(seconds)
 	
+	display.remove(timeLeftText)
 	timeLeftText = display.newText( game.scene, "0", 0, 0, FONT, 34 )
 	timeLeftText:setTextColor( 255 )	
 	timeLeftText.text = min .. ":" .. sec
@@ -523,7 +528,6 @@ end
 
 
 function time(seconds)
-	print("time", seconds)
 	if(game.state == game.IDLE) then	return end
 	
 	seconds = seconds-1
@@ -533,9 +537,36 @@ function time(seconds)
 	if(seconds == 0) then
 		game.timerDone()
 	else	
-		timer.performWithDelay(100, function() time(seconds) end)
+		timer.performWithDelay(200, function() time(seconds) end)
 	end
 	
+end
+			
+-----------------------------------------------------------------------------------------
+
+function startComboTimer()
+	display.remove(timeLeftText)
+	timeLeftText = display.newText( game.scene, "0", 0, 0, FONT, 24 )
+	timeLeftText:setTextColor( 255 )	
+	timeLeftText.text = "0:00"
+	timeLeftText:setReferencePoint( display.CenterReferencePoint )
+	timeLeftText.x = display.contentWidth/2
+	timeLeftText.y = 20
+	elements:insert(timeLeftText)
+
+	game.timeCombo = 0
+	timer.performWithDelay(1000, nextSecondCombo)
+end
+
+
+function nextSecondCombo()
+	if(game.state == game.IDLE) then	return end
+	
+	game.timeCombo = game.timeCombo+1
+	local min,sec = utils.getMinSec(game.timeCombo)
+	timeLeftText.text = min .. ":" .. sec
+	
+	timer.performWithDelay(1000, nextSecondCombo)
 end
 
 -----------------------------------------------------------------------------------------
@@ -551,7 +582,7 @@ function centerText(text, y, fontSize)
 	end
 
 	if(not fontSize) then
-		fontSize = 25
+		fontSize = 45
 	end
 
 	finalText = display.newText( text, 0, 0, FONT, fontSize )
@@ -559,14 +590,15 @@ function centerText(text, y, fontSize)
 	finalText.x = display.contentWidth/2
 	finalText.y = y
 	finalText.alpha = 0
+	finalText:scale(0.5,0.5) 
 	finalText:setReferencePoint( display.CenterReferencePoint )
 	elements:insert(finalText)
 	
 	transition.to( finalText, { 
 		time=1140, 
 		alpha=1, 
-		xScale=1.8,
-		yScale=1.8,
+		xScale=1,
+		yScale=1,
 		onComplete=function()
 			transition.to( finalText, { time=1200, alpha=0 })
 		end

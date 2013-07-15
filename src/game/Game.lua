@@ -531,10 +531,7 @@ end
 
 function exit()
 	stop()
-	router.openAppHome()
-	
-	display.remove(hud.exitButton)
-	display.remove(hud.topRightText)
+	router.openScore()
 end
 
 -----------------------------------------------------------------------------------------
@@ -543,8 +540,14 @@ function endGame(message)
    stop()
 	hud.explodeHUD()
 	hud.explode(planet, 7, 3500, planet.color)	
-	hud.centerText(message)	
-   timer.performWithDelay(2000, exit)
+
+	if(message) then		
+		hud.centerText(message)
+   	timer.performWithDelay(2000, exit)
+   else
+   	-- button exit
+		router.openAppHome()
+   end
 end
 
 -----------------------------------------------------------------------------------------

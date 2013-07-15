@@ -31,8 +31,7 @@ settings = {
             
 	        UIAppFonts = 
             {
-                "Macondo-Regular.ttf",
-                "SpaceWorm02.ttf"
+                "Macondo-Regular.ttf"
             }
 		}
 	},

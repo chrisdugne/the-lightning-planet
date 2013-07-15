@@ -20,6 +20,20 @@ end
 
 ---------------------------------------------
 
+function openSelection()
+	if(game.mode == game.COMBO) then
+		openLevelSelection()
+	end
+
+	if(game.mode == game.KAMIKAZE) then
+		openKamikazeSelection()
+	end
+
+	if(game.mode == game.TIMEATTACK) then
+		openTimeAttackSelection()
+	end
+end
+
 function openLevelSelection()
 	storyboard.gotoScene( "src.views.LevelSelection" )
 end
@@ -33,3 +47,7 @@ function openTimeAttackSelection()
 end
 
 ---------------------------------------------
+
+function openScore()
+	storyboard.gotoScene( "src.views.Score" )
+end
