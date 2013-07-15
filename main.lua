@@ -21,26 +21,6 @@ RED		= "red";
 
 COLORS = {BLUE, GREEN, YELLOW, RED}
 
-function getColorNum(color)
-	for i = 1, #COLORS do
-		if(color == COLORS[i]) then
-			return i
-   	end
-	end
-end
-
-function getRGB(color)
-	if(color == BLUE) then
-		return {0, 111, 255}
-	elseif(color == GREEN) then
-		return {0, 255, 120}
-	elseif(color == RED) then
-		return {255, 125, 120}
-	elseif(color == YELLOW) then
-		return {255, 255, 120}
-	end
-end
-
 -----------------------------------------------------------------------------------------
 
 if "Android" == system.getInfo( "platformName" ) then
@@ -59,6 +39,18 @@ xml 				= require "src.libs.Xml"
 utils 			= require "src.libs.Utils"
 vector2D			= require "src.libs.Vector2D"
 
+-----------------------------------------------------------------------------------------
+-- Translations
+
+local translations = require("assets.Translations")
+--local LANG =  userDefinedLanguage or system.getPreference("ui", "language")
+local LANG = "fr"
+
+function T(enText)
+	return translations[enText][LANG] or enText
+end
+
+-----------------------------------------------------------------------------------------
 ---- Server access Managers
 
 ---- App Tools
@@ -75,7 +67,7 @@ game				= require "src.game.Game"
 tutorialCombo			= require "src.game.tutorials.TutorialCombo"
 tutorialKamikaze		= require "src.game.tutorials.TutorialKamikaze"
 tutorialTimeAttack	= require "src.game.tutorials.TutorialTimeAttack"
-
+ 
 -----------------------------------------------------------------------------------------
 ---- App globals
 
@@ -138,7 +130,6 @@ TIMEATTACK_LEVELS = {
 
 physics = require("physics") ; physics.start() ; physics.setGravity( 0,0 ) ; physics.setDrawMode( "normal" )
 math.randomseed( os.time() )
-display.setStatusBar( display.HiddenStatusBar ) 
 
 ------------------------------------------
 
@@ -161,15 +152,42 @@ end
 
 ------------------------------------------
 
- musicManager.playMusic()
+musicManager.playMusic()
 
 ------------------------------------------
 
---router.openAppHome()
+router.openAppHome()
 
-game.mode = game.KAMIKAZE 
-game.level = 1
-router.openPlayground()
+--game.mode = game.TIMEATTACK 
+--game.level = 1
+--router.openPlayground()
+
+-----------------------------------------------------------------------------------------
+
+function getColorNum(color)
+	for i = 1, #COLORS do
+		if(color == COLORS[i]) then
+			return i
+   	end
+	end
+end
+
+function getRGB(color)
+	if(color == BLUE) then
+		return {0, 111, 255}
+	elseif(color == GREEN) then
+		return {0, 255, 120}
+	elseif(color == RED) then
+		return {255, 125, 120}
+	elseif(color == YELLOW) then
+		return {255, 255, 120}
+	end
+end
+
+------------------------------------------
+--- iOS Status Bar
+
+display.setStatusBar( display.HiddenStatusBar ) 
 
 ------------------------------------------
 --- ANDROID BACK BUTTON

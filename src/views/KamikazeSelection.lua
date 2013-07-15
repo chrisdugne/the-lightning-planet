@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 local scene = storyboard.newScene()
-local levels
+local kamikazeLevels
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -17,34 +17,34 @@ local levels
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
-	levels = display.newGroup()
+	kamikazeLevels = display.newGroup()
 end
 
 -----------------------------------------------------------------------------------------
 
 function scene:refreshScene()
-	utils.emptyGroup(levels)
+	utils.emptyGroup(kamikazeLevels)
 	viewManager.initView(self.view);
 
 	game.scene = self.view
 	hud.initHUD()
 	hud.initTopRightText()
 	hud.refreshTopRightText("Kamikaze")
-	hud.setExit(exitSelection)
+	hud.setExit(self.exitSelection)
 	
-	viewManager.buildButton(levels, "Tutorial", 	COLORS[1], 22, display.contentWidth/5, 	display.contentHeight*0.4, function() openLevel(1)	end	)
-	viewManager.buildButton(levels, "Easy",	 	COLORS[2], 22, 2*display.contentWidth/5, 	display.contentHeight*0.6, function() openLevel(2)	end, 	true,	(not savedData.kamikazeAvailable))
-	viewManager.buildButton(levels, "Hard", 		COLORS[3], 22, 3*display.contentWidth/5, 	display.contentHeight*0.4, function() openLevel(3)	end, 	true,	(not savedData.kamikazeAvailable))
-	viewManager.buildButton(levels, "Extreme", 	COLORS[4], 22, 4*display.contentWidth/5, 	display.contentHeight*0.6, function() openLevel(4)	end, 	true,	(not savedData.kamikazeAvailable))
+	viewManager.buildButton(kamikazeLevels, "Tutorial", 	COLORS[1], 22, display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(1)	end	)
+	viewManager.buildButton(kamikazeLevels, "Easy",	 		COLORS[2], 22, 2*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(2)	end, 	true,	(not savedData.kamikazeAvailable))
+	viewManager.buildButton(kamikazeLevels, "Hard", 		COLORS[3], 22, 3*display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(3)	end, 	true,	(not savedData.kamikazeAvailable))
+	viewManager.buildButton(kamikazeLevels, "Extreme", 	COLORS[4], 22, 4*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(4)	end, 	true,	(not savedData.kamikazeAvailable))
 
-	self.view:insert(levels)
+	self.view:insert(kamikazeLevels)
 end
 
 ------------------------------------------
 
-function exitSelection()
-	for i = levels.numChildren,1,-1  do
-		hud.explode(levels[i], 2, 2000, levels[i].color)
+function scene:exitSelection()
+	for i = kamikazeLevels.numChildren,1,-1  do
+		hud.explode(kamikazeLevels[i], 2, 2000, kamikazeLevels[i].color)
 	end
 	
 	hud.explodeHUD()
@@ -53,9 +53,9 @@ end
 
 ------------------------------------------
 
-function openLevel( level )
+function scene:openLevel( level )
 	game.level = level
-	exitSelection()
+	self:exitSelection()
 	timer.performWithDelay(1500, router.openPlayground)
 end
 

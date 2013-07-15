@@ -210,13 +210,13 @@ end
 
 function step7Content()
 	return function() 
-		displayText(7)
+		displayArrow(7)
 	end
 end
 
 function step8Content()
 	return function() 
-		displayText(8)
+		displayArrow(8)
 	end
 end
 
@@ -231,7 +231,10 @@ end
 function step10Content()
 	return function() 
 		hud.explode(texts[9].item)
-		game.endGame()
+		game.endGame("Tutorial Complete !")
+	
+		savedData.timeAttackAvailable = true 
+   	utils.saveTable(savedData, "savedData.json")
 	end
 end
 
@@ -312,57 +315,57 @@ end
 
 texts = {
 	{ --------------------------- STEP 1
-		text 	= "Here are counted caught asteroids",
+		text 	= T "Here are counted caught asteroids",
 		x 		= 80,
-		y 		= 15,
+		y 		= 40,
 		delay = 3000,
 	},
 	{ --------------------------- STEP 2 
-		text 	= "The more asteroids you gather...",
+		text 	= T "The more asteroids you gather...",
 		x 		= 50,
-		y 		= 15,
+		y 		= 40,
 		delay = 3000,
 	},
 	{ --------------------------- STEP 3
-		text 	= "...the more points the next one will give",
+		text 	= T "...the more points the next one will give",
 		x 		= 150,
-		y 		= 15,
+		y 		= 40,
 		delay = 3500,
 	},
 	{ --------------------------- STEP 4
-		text 	= "Catching a wrong color decrease the count",
+		text 	= T "Catching a wrong color decrease the count",
 		x 		= 80,
-		y 		= 3,
+		y 		= 40,
 		delay = 1700,
 	},
 	{ --------------------------- STEP 5
-		text 	= "And decrease points",
+		text 	= T "And decrease points",
 		x 		= display.contentWidth - 300,
-		y 		= 3,
+		y 		= 40,
 		delay = 2000,
 	},
 	{ --------------------------- STEP 6
-		text 	= "Touch here to call Lightning  !",
+		text 	= T "Touch here to call Lightning  !",
 		x 		= 150,
 		y 		= display.contentHeight - 75,
 		delay = 100,
 	},
 	{ --------------------------- STEP 7
-		text 	= "Lightning squares the color count as points !",
+		text 	= T "Lightning squares the color count as points !",
 		x 		= display.contentWidth - 400,
-		y 		= 30,
+		y 		= 40,
 		delay = 1800,
 	},
 	{ --------------------------- STEP 8
-		text 	= "And divide your count by 2",
+		text 	= T "And reduces the count",
 		x 		= 80,
-		y 		= 30,
+		y 		= 40,
 		delay = 1500,
 	},
 	{ --------------------------- STEP 9
-		text 	= "Kamikaze is now unlocked !",
+		text 	= T "Get the more points before the end of Time !",
 		x 		= 80,
-		y 		= 30,
+		y 		= 40,
 		delay = 1500,
 	},
 }
@@ -403,8 +406,18 @@ arrows = {
 		yTo 			= display.contentHeight - 60
 	},
 	{ --------------------------- STEP 7
+		way 			= "right",
+		xFrom 		= display.contentWidth/2,
+		yFrom 		= 22,
+		xTo 			= display.contentWidth - 100,
+		yTo 			= 22
 	},
 	{ --------------------------- STEP 8
+		way 			= "left",
+		xFrom 		= display.contentWidth/2,
+		yFrom 		= 15,
+		xTo 			= 50,
+		yTo 			= 15
 	},
 	{ --------------------------- STEP 9
 	},

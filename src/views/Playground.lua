@@ -28,11 +28,12 @@ function scene:refreshScene()
 	hud.initTopRightText()
 	
 	local tutorial = false
+	print("playground", game.mode, game.level)
 	
 	-- Tutorial Combo
 	if(game.mode == game.COMBO and game.level == 1) then
 		tutorial = true
-		hud.refreshTopRightText("Tutorial")
+		hud.refreshTopRightText(T "Tutorial")
 		game.start(false)
 		tutorialCombo.start(self.view)
 	end
@@ -40,11 +41,19 @@ function scene:refreshScene()
 	-- Tutorial Kamikaze
 	if(game.mode == game.KAMIKAZE and game.level == 1) then
 		tutorial = true
-		hud.refreshTopRightText("Tutorial")
-		hud.drawProgressBar(100)
+		hud.refreshTopRightText(T "Tutorial")
 		game.start(false)
 		tutorialKamikaze.start(self.view)
 	end
+
+	-- Tutorial Time Attack
+	if(game.mode == game.TIMEATTACK and game.level == 1) then
+		tutorial = true
+		hud.refreshTopRightText(T "Tutorial")
+		game.start(false)
+		tutorialTimeAttack.start(self.view)
+	end
+	
 	
 	if(not tutorial) then
 		

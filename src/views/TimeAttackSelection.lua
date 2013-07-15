@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 local scene = storyboard.newScene()
-local levels
+local timeAttackLevels
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -17,34 +17,34 @@ local levels
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
-	levels = display.newGroup()
+	timeAttackLevels = display.newGroup()
 end
 
 -----------------------------------------------------------------------------------------
 
 function scene:refreshScene()
-	utils.emptyGroup(levels)
+	utils.emptyGroup(timeAttackLevels)
 	viewManager.initView(self.view);
 
 	game.scene = self.view
 	hud.initHUD()
 	hud.initTopRightText()
 	hud.refreshTopRightText("Time Attack")
-	hud.setExit(exitSelection)
+	hud.setExit(self.exitSelection)
 	
-	viewManager.buildButton(levels, "Tutorial", 	COLORS[1], 22, display.contentWidth/5, 	display.contentHeight*0.4, function() openLevel(1)	end			)
-	viewManager.buildButton(levels, "2 min",	 	COLORS[2], 22, 2*display.contentWidth/5, 	display.contentHeight*0.6, function() openLevel(2)	end, 	true,	(not savedData.timeAttackAvailable))
-	viewManager.buildButton(levels, "5 min", 		COLORS[3], 22, 3*display.contentWidth/5, 	display.contentHeight*0.4, function() openLevel(3)	end, 	true,	(not savedData.timeAttackAvailable))
-	viewManager.buildButton(levels, "8 min", 		COLORS[4], 22, 4*display.contentWidth/5, 	display.contentHeight*0.6, function() openLevel(4)	end, 	true,	(not savedData.timeAttackAvailable))
+	viewManager.buildButton(timeAttackLevels, "Tutorial", 	COLORS[1], 22, display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(1)	end			)
+	viewManager.buildButton(timeAttackLevels, "2 min",	 		COLORS[2], 22, 2*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(2)	end, 	true,	(not savedData.timeAttackAvailable))
+	viewManager.buildButton(timeAttackLevels, "5 min", 		COLORS[3], 22, 3*display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(3)	end, 	true,	(not savedData.timeAttackAvailable))
+	viewManager.buildButton(timeAttackLevels, "8 min", 		COLORS[4], 22, 4*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(4)	end, 	true,	(not savedData.timeAttackAvailable))
 
-	self.view:insert(levels)
+	self.view:insert(timeAttackLevels)
 end
 
 ------------------------------------------
 
-function exitSelection()
-	for i = levels.numChildren,1,-1  do
-		hud.explode(levels[i], 2, 2000, levels[i].color)
+function scene:exitSelection()
+	for i = timeAttackLevels.numChildren,1,-1  do
+		hud.explode(timeAttackLevels[i], 2, 2000, timeAttackLevels[i].color)
 	end
 	
 	hud.explodeHUD()
@@ -53,9 +53,9 @@ end
 
 ------------------------------------------
 
-function openLevel( level )
+function scene:openLevel( level )
 	game.level = level
-	exitSelection()
+	self:exitSelection()
 	timer.performWithDelay(1500, router.openPlayground)
 end
 

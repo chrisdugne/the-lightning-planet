@@ -24,7 +24,8 @@ function setExit(toApply)
 	exitButton = display.newImage( game.scene, "assets/images/hud/exit.png")
 	exitButton.x = display.contentWidth - 15
 	exitButton.y = 45
-	exitButton:scale(0.17,0.17)
+	exitButton.alpha = 0.5
+	exitButton:scale(0.12,0.12)
 	exitButton:addEventListener("touch", function(event)
 		if(toApply) then 
 			toApply()
@@ -242,7 +243,7 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function drawProgressBar(percent)         
+function drawProgressBar(percent, loss)         
 	if(powerBarFire) then powerBarFire:stop("fire") end
 	
 	powerBarFire=CBE.VentGroup{
@@ -273,6 +274,38 @@ function drawProgressBar(percent)
 	}
    	
 	powerBarFire:start("fire")
+
+	if(loss) then	
+   	local lossFire=CBE.VentGroup{
+      	{
+      		title="fire",
+      		preset="burn",
+      		color={{140-percent,155*percent/100,15 + percent/40}},
+      		build=function()
+      			local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
+      			return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
+   			end,
+   			onCreation=function()end,
+   			perEmit=6,
+   			emissionNum=loss,
+   			point1={display.contentWidth/4 + display.contentWidth/2 * percent/100, 20},
+   			point2={display.contentWidth/4 + display.contentWidth/2 * (percent+loss)/100, 20},
+   			positionType="alongLine",
+   			emitDelay=10,
+      		fadeInTime=1600,
+      		lifeSpan=450, -- Particles are removed sooner than the ice comet
+      		lifeStart=50,
+      		endAlpha=0,
+      		physics={
+      			velocity=0.2,
+      			gravityX=2.1,
+      			gravityY=1.1,
+      		}
+      	}
+   	}
+      	
+   	lossFire:start("fire")
+   end
 end
 
 -----------------------------------------------------------------------------------------
@@ -453,8 +486,8 @@ function centerText(text, y, fontSize)
 	elements:insert(finalText)
 	
 	transition.to( finalText, { time=1140, alpha=1, onComplete=function()
-   	timer.performWithDelay(2000, function()
-   		transition.to( finalText, { time=340, alpha=0 })
+   	timer.performWithDelay(700, function()
+   		transition.to( finalText, { time=640, alpha=0 })
    	end)
 	end})
 end

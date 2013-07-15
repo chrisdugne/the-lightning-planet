@@ -139,7 +139,9 @@ function crashAsteroid( asteroid, event )
 			asteroidsCaught[planet.color] = asteroidsCaught[planet.color] - 1
 			change = -3
 			
-			kamikazePercent = kamikazePercent - 3
+			if(mode == KAMIKAZE) then
+				kamikazePercent = kamikazePercent - 3
+			end
 		end
 		
 		total = points + change
@@ -155,7 +157,7 @@ function crashAsteroid( asteroid, event )
 		hud.drawCatch(asteroid.x, asteroid.y, planet.color, catch)
 		hud.drawBag()
 		hud.drawPoints(change, total, asteroid)
-		hud.drawProgressBar(kamikazePercent)
+		if(not goodCatch and mode == KAMIKAZE) then hud.drawProgressBar(kamikazePercent, 3) end
 		
 		points = total
 
@@ -189,7 +191,8 @@ function squarePointsWithLighting(asteroid)
 		hud.drawPoints(changeText, total, asteroid, true)
 		hud.drawCatch(asteroid.x, asteroid.y, asteroid.color, "/2")
 		hud.drawBag()
-		hud.drawProgressBar(kamikazePercent)
+		
+		if(mode == KAMIKAZE) then hud.drawProgressBar(kamikazePercent, 20) end
 		
 		points = total
 	end
