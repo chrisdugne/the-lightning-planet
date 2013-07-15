@@ -52,6 +52,7 @@ function scene:refreshScene()
 		hud.refreshTopRightText(T "Tutorial")
 		game.start(false)
 		tutorialTimeAttack.start(self.view)
+		hud.drawTimer(50)
 	end
 	
 	
@@ -67,8 +68,15 @@ function scene:refreshScene()
       	hud.drawBag()
 		
 		elseif(game.mode == game.TIMEATTACK) then 
-      	hud.refreshTopRightText("Time Attack")
+      	hud.refreshTopRightText("0 pts")
       	hud.drawBag()
+      	if(game.level == 2) then
+				hud.drawTimer(120)
+      	elseif(game.level == 3) then
+				hud.drawTimer(300)
+      	elseif(game.level == 4) then
+				hud.drawTimer(480)
+         end
       
       end
    	

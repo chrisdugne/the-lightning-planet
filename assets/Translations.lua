@@ -117,11 +117,11 @@ local translations =
     },
   
     ["And if you turn the planet blue, you miss the catch"] = {
-        ["fr"] = "Et si on change la planète en bleu, on va la rater",
+        ["fr"] = "Et si on change la planète en bleu, elle va s'écraser",
     },
   
     ["and fail the combo as well"] = {
-        ["fr"] = "et échouer la Combo aussi",
+        ["fr"] = "et manquer la Combo aussi",
     },
   
     ["You need the Lightning !"] = {

@@ -64,18 +64,30 @@ function start(requireAsteroidBuilder)
 		requireAsteroidBuilder = true
 	end
 
-	state	= RUNNING
+	state					= RUNNING
+	points 			 	= 0
+	kamikazePercent 	= 100
 	
 	if(requireAsteroidBuilder) then
    	hud.centerText("Start !", display.contentHeight/4, 45)
-		timer.performWithDelay(2000, asteroidBuilder)
+		asteroidBuilder()
 	end
 end
 
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
-	timer.performWithDelay( math.random(1000,3000), function() --delay :  level params
+	local LEVELS
+	
+	if(mode == COMBO) then
+		LEVELS = COMBO_LEVELS
+	elseif(mode == KAMIKAZE) then
+		LEVELS = KAMIKAZE_LEVELS
+	elseif(mode == TIMEATTACK) then
+		LEVELS = TIMEATTACK_LEVELS
+	end
+	
+	timer.performWithDelay( math.random(LEVELS[level].minDelay, LEVELS[level].maxDelay), function()
 		if(state == RUNNING) then
 			createAsteroid()
 			asteroidBuilder()
@@ -113,13 +125,26 @@ function crashAsteroid( asteroid, event )
 
 	if(mode == COMBO) then
 		
-		if(COMBO_LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
-			hud.drawCombo(level, requestedAsteroid)
-			requestedAsteroid = requestedAsteroid + 1
-			
-			if(requestedAsteroid > #COMBO_LEVELS[level].combo) then
-				completeLevel()
+		local comboFailed = false
+		
+		if(goodCatch) then
+   		if(COMBO_LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
+   			hud.drawCombo(level, requestedAsteroid)
+   			requestedAsteroid = requestedAsteroid + 1
+   			
+   			if(requestedAsteroid > #COMBO_LEVELS[level].combo) then
+   				completeLevel()
+      		end
+   		else
+	   		comboFailed = true
    		end
+   	else
+   		comboFailed = true
+   	end
+
+		if(game.level > 1 and comboFailed) then
+			requestedAsteroid = 1
+			hud.drawCombo(level, 0)
 		end
 	
 	--------------------------
@@ -140,7 +165,7 @@ function crashAsteroid( asteroid, event )
 			change = -3
 			
 			if(mode == KAMIKAZE) then
-				kamikazePercent = kamikazePercent - 3
+				kamikazePercent = kamikazePercent - ASTEROID_CRASH_KAMIKAZE_PERCENT
 			end
 		end
 		
@@ -157,7 +182,15 @@ function crashAsteroid( asteroid, event )
 		hud.drawCatch(asteroid.x, asteroid.y, planet.color, catch)
 		hud.drawBag()
 		hud.drawPoints(change, total, asteroid)
-		if(not goodCatch and mode == KAMIKAZE) then hud.drawProgressBar(kamikazePercent, 3) end
+		
+		if(not goodCatch and mode == KAMIKAZE) then
+			if(kamikazePercent > 0) then 
+				hud.drawProgressBar(kamikazePercent, ASTEROID_CRASH_KAMIKAZE_PERCENT)
+			else 
+      		hud.drawProgressBar(1, ASTEROID_CRASH_KAMIKAZE_PERCENT)
+				kamikazeOver()
+   		end
+		end
 		
 		points = total
 
@@ -186,13 +219,20 @@ function squarePointsWithLighting(asteroid)
 		local total = points + change
 
 		asteroidsCaught[asteroid.color] = math.floor(asteroidsCaught[asteroid.color]/2)
-		kamikazePercent = kamikazePercent - 20
+		kamikazePercent = kamikazePercent - LIGHTNING_KAMIKAZE_PERCENT
 
 		hud.drawPoints(changeText, total, asteroid, true)
 		hud.drawCatch(asteroid.x, asteroid.y, asteroid.color, "/2")
 		hud.drawBag()
 		
-		if(mode == KAMIKAZE) then hud.drawProgressBar(kamikazePercent, 20) end
+		if(mode == KAMIKAZE) then
+   		if(kamikazePercent > 0) then 
+      		hud.drawProgressBar(kamikazePercent, LIGHTNING_KAMIKAZE_PERCENT)
+			else 
+      		hud.drawProgressBar(1, LIGHTNING_KAMIKAZE_PERCENT)
+				kamikazeOver()
+   		end 
+		end 
 		
 		points = total
 	end
@@ -413,6 +453,17 @@ end
 ------------------------------------------------------------------------------------------
 
 function createAsteroid()
+
+	local LEVELS
+	
+	if(mode == COMBO) then
+		LEVELS = COMBO_LEVELS
+	elseif(mode == KAMIKAZE) then
+		LEVELS = KAMIKAZE_LEVELS
+	elseif(mode == TIMEATTACK) then
+		LEVELS = TIMEATTACK_LEVELS
+	end
+
 	local nbColors
 	if(mode == COMBO) then
 		nbColors = COMBO_LEVELS[level].colors
@@ -439,8 +490,9 @@ function createAsteroid()
 	asteroid.x = asteroidPoint.x
 	asteroid.y = asteroidPoint.y
 
+
 	asteroidDirection = vector2D:Sub(planetCenterPoint, asteroidPoint)
-	asteroidDirection:mult(math.random(20,40)/100) --random range : level params
+	asteroidDirection:mult(math.random(LEVELS[level].minSpeed,LEVELS[level].maxSpeed)/100) 
 	asteroid:setLinearVelocity( asteroidDirection.x, asteroidDirection.y )
 	
 	asteroid.collision = crashAsteroid ; 
@@ -450,6 +502,20 @@ function createAsteroid()
 	table.insert(asteroids, asteroid)
 end
 
+
+------------------------------------------------------------------------------------------
+
+-- end of Time Attack Level
+function timerDone()
+	endGame(points .. " pts")
+end
+
+------------------------------------------------------------------------------------------
+
+-- end of Kamikaze Level
+function kamikazeOver()
+	endGame(points .. " pts")
+end
 
 ------------------------------------------------------------------------------------------
 

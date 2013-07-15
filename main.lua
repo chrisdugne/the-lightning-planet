@@ -23,6 +23,11 @@ COLORS = {BLUE, GREEN, YELLOW, RED}
 
 -----------------------------------------------------------------------------------------
 
+ASTEROID_CRASH_KAMIKAZE_PERCENT 	= 3
+LIGHTNING_KAMIKAZE_PERCENT 		= 20
+
+-----------------------------------------------------------------------------------------
+
 if "Android" == system.getInfo( "platformName" ) then
    FONT = "Macondo-Regular"
 else
@@ -80,15 +85,83 @@ GLOBALS = {
 COMBO_LEVELS = {
 	{--------------------- LEVEL 1 : Tutorial
 		colors = 2,
-		combo = {BLUE,GREEN,BLUE}
+		combo = {BLUE,GREEN,BLUE},
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 2
 		colors = 2,
-		combo = {BLUE,BLUE,GREEN,GREEN}
+		combo = {BLUE,GREEN},
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 3
 		colors = 2,
-		combo = {BLUE,GREEN,BLUE,GREEN,BLUE}
+		combo = {BLUE,BLUE,GREEN},
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
+	},
+	{--------------------- LEVEL 4
+		colors = 2,
+		combo = {BLUE,GREEN,BLUE,GREEN,BLUE},
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
+	},
+	{--------------------- LEVEL 5
+		colors = 2,
+		combo = {BLUE,BLUE,BLUE,BLUE,BLUE,GREEN},
+		minDelay = 1500,
+		maxDelay = 2000,
+		minSpeed = 24,
+		maxSpeed = 28,
+	},
+	{--------------------- LEVEL 6
+		colors = 3,
+		combo = {BLUE,GREEN,YELLOW,BLUE},
+		minDelay = 1500,
+		maxDelay = 2000,
+		minSpeed = 24,
+		maxSpeed = 28,
+	},
+	{--------------------- LEVEL 7
+		colors = 3,
+		combo = {GREEN,GREEN,YELLOW,BLUE,YELLOW},
+		minDelay = 1500,
+		maxDelay = 2000,
+		minSpeed = 24,
+		maxSpeed = 31,
+	},
+	{--------------------- LEVEL 8
+		colors = 3,
+		combo = {YELLOW,GREEN,YELLOW,BLUE,YELLOW, YELLOW, GREEN},
+		minDelay = 1200,
+		maxDelay = 1800,
+		minSpeed = 24,
+		maxSpeed = 31,
+	},
+	{--------------------- LEVEL 9
+		colors = 3,
+		combo = {GREEN,GREEN,BLUE,YELLOW, YELLOW, GREEN, BLUE, BLUE, YELLOW},
+		minDelay = 1200,
+		maxDelay = 1800,
+		minSpeed = 26,
+		maxSpeed = 32,
+	},
+	{--------------------- LEVEL 10
+		colors = 3,
+		combo = {BLUE,GREEN,BLUE,YELLOW, YELLOW, GREEN, GREEN, YELLOW, BLUE, GREEN, YELLOW},
+		minDelay = 1000,
+		maxDelay = 1700,
+		minSpeed = 26,
+		maxSpeed = 32,
 	},
 }
 
@@ -96,16 +169,32 @@ COMBO_LEVELS = {
 
 KAMIKAZE_LEVELS = {
 	{--------------------- LEVEL 1 : Tutorial
-		colors = 2
+		colors = 2,
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 2 : Easy
 		colors = 2,
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 3 : Hard
 		colors = 3,
+		minDelay = 600,
+		maxDelay = 1300,
+		minSpeed = 25,
+		maxSpeed = 35,
 	},
 	{--------------------- LEVEL 4 : Extreme
 		colors = 4,
+		minDelay = 300,
+		maxDelay = 1000,
+		minSpeed = 30,
+		maxSpeed = 45,
 	},
 }
 
@@ -113,16 +202,32 @@ KAMIKAZE_LEVELS = {
 
 TIMEATTACK_LEVELS = {
 	{--------------------- LEVEL 1 : Tutorial
-		colors = 2
+		colors = 2,
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 2 : Easy
 		colors = 2,
+		minDelay = 1500,
+		maxDelay = 2500,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 3 : Hard
 		colors = 3,
+		minDelay = 600,
+		maxDelay = 1300,
+		minSpeed = 25,
+		maxSpeed = 35,
 	},
 	{--------------------- LEVEL 4 : Extreme
 		colors = 4,
+		minDelay = 300,
+		maxDelay = 1000,
+		minSpeed = 30,
+		maxSpeed = 45,
 	},
 }
 
@@ -212,4 +317,3 @@ end
 
 --add the key callback
 Runtime:addEventListener( "key", onKeyEvent )
-

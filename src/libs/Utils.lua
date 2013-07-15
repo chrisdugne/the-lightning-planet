@@ -16,6 +16,17 @@ module(..., package.seeall)
 -----------------------------------------------------------------------------------------
 --
 --
+function getMinSec(seconds)
+	local min = math.floor(seconds/60)
+	local sec = seconds - min * 60
+	
+	if(sec < 10) then
+		sec = "0" .. sec
+	end
+	
+	return min, sec
+end
+
 function getUrlParams(url)
 
 	local index = string.find(url,"?")

@@ -167,10 +167,49 @@ end
 
 -----------------------------------------------------------------------------------------
 
+function lightCombo(element)
+	local light=CBE.VentGroup{
+   	{
+   		title="fire",
+   		preset="burn",
+   		color={getRGB(element.color)},
+   		build=function()
+   			local size=math.random(24, 30) -- Particles are a bit bigger than ice comet particles
+   			return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
+			end,
+			onCreation=function()end,
+			perEmit=2,
+			emissionNum=2,
+			point1={element.x-4, element.y},
+			point2={element.x+4, element.y},
+			positionType="alongLine",
+			emitDelay=10,
+   		fadeInTime=1600,
+   		lifeSpan=450, -- Particles are removed sooner than the ice comet
+   		lifeStart=50,
+   		endAlpha=0,
+   		physics={
+   			velocity=0.2,
+   			gravityX=0.1,
+   			gravityY=0.6,
+   		}
+   	}
+	}
+   	
+	light:start("fire")
+end
+
+-----------------------------------------------------------------------------------------
+
 function drawCombo(level, numCompleted)
 	
    for i=elements.numChildren,1,-1 do
 		if(elements[i].isComboElement) then
+   		
+   		if(numCompleted == 0) then
+				lightCombo(elements[i])
+      	end
+			
 			display.remove(elements[i])
    	end
 	end
@@ -192,6 +231,10 @@ function drawCombo(level, numCompleted)
    	else
    		asteroid:scale(0.48,0.48)
    		asteroid.alpha = 0.75
+   	end
+   	
+		if(c == numCompleted) then
+			lightCombo(asteroid)
    	end
    	
 		asteroid.isComboElement = true
@@ -463,6 +506,40 @@ end
 			
 -----------------------------------------------------------------------------------------
 
+function drawTimer(seconds)
+	
+	local min,sec = utils.getMinSec(seconds)
+	
+	timeLeftText = display.newText( game.scene, "0", 0, 0, FONT, 34 )
+	timeLeftText:setTextColor( 255 )	
+	timeLeftText.text = min .. ":" .. sec
+	timeLeftText:setReferencePoint( display.CenterReferencePoint )
+	timeLeftText.x = display.contentWidth/2
+	timeLeftText.y = 20
+	elements:insert(timeLeftText)
+
+	timer.performWithDelay(1000, function() time(seconds) end)
+end
+
+
+function time(seconds)
+	print("time", seconds)
+	if(game.state == game.IDLE) then	return end
+	
+	seconds = seconds-1
+	local min,sec = utils.getMinSec(seconds)
+	timeLeftText.text = min .. ":" .. sec
+	
+	if(seconds == 0) then
+		game.timerDone()
+	else	
+		timer.performWithDelay(100, function() time(seconds) end)
+	end
+	
+end
+
+-----------------------------------------------------------------------------------------
+
 function centerText(text, y, fontSize)
 
 	if(not text) then
@@ -485,9 +562,13 @@ function centerText(text, y, fontSize)
 	finalText:setReferencePoint( display.CenterReferencePoint )
 	elements:insert(finalText)
 	
-	transition.to( finalText, { time=1140, alpha=1, onComplete=function()
-   	timer.performWithDelay(700, function()
-   		transition.to( finalText, { time=640, alpha=0 })
-   	end)
-	end})
+	transition.to( finalText, { 
+		time=1140, 
+		alpha=1, 
+		xScale=1.8,
+		yScale=1.8,
+		onComplete=function()
+			transition.to( finalText, { time=1200, alpha=0 })
+		end
+	})
 end
