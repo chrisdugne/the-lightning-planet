@@ -118,7 +118,11 @@ end
 function scene:getLevel()
 
 	if(game.mode == game.COMBO) then 
-		return "Level " .. game.level
+		if(game.level == 1) then
+			return T "Tutorial" 
+		else
+			return "Level " .. game.level
+		end
 	
 	elseif(game.mode == game.KAMIKAZE) then 
 		if(game.level == 1) then
@@ -149,8 +153,12 @@ end
 function scene:getValue()
 
 	if(game.mode == game.COMBO) then 
-		local min,sec = utils.getMinSec(game.timeCombo)
-		return min .. ":" .. sec
+		if(game.level == 1) then
+			return "" 
+		else
+			local min,sec = utils.getMinSec(game.timeCombo)
+   		return min .. ":" .. sec
+		end
 	
 	elseif(game.mode == game.KAMIKAZE) then 
 		return game.points .." pts"

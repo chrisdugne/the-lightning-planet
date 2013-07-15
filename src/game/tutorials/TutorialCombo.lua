@@ -36,13 +36,13 @@ function start(view)
    	end
 	end)
 	
-	step1()
+--	step1()
 
 -- debug got to step
---	game.setPlanetColor(GREEN)
---	hud.setupPad()
---	currentStep = 7
---	step(8)
+	game.setPlanetColor(GREEN)
+	hud.setupPad()
+	currentStep = 17
+	step(18)
 end
 
 -----------------------------------------------------------------------------------------

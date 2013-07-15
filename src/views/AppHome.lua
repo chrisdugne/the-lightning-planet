@@ -26,7 +26,15 @@ function scene:createScene( event )
 	-- true on dev only
 	if(introComplete) then return end
 	
+   self:intro()
+end
+
+function scene:intro()
+
+	utils.emptyGroup(menu)
 	utils.emptyGroup(screen)
+	
+	viewManager.cleanupFires()
 
 	local back = display.newImage( screen, "assets/images/stars.jpg")  
 	back:scale(0.7,0.7)
@@ -34,6 +42,7 @@ function scene:createScene( event )
 	back.y = display.viewableContentHeight/2  
 	back.alpha = 0
 	transition.to( back, { time=18000, alpha=1 })  
+	screen.back = back
 
    light1()
    timer.performWithDelay(1500, function()
@@ -223,7 +232,7 @@ function scene:reset()
    utils.saveTable(savedData, "savedData.json")
    
    introComplete = false
-   self:refreshScene()
+   self:intro()
 end
 
 ------------------------------------------
