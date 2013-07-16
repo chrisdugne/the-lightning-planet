@@ -380,7 +380,7 @@ texts = {
 		delay = 1000,
 	},
 	{ --------------------------- STEP 8
-		text 	= T "Touch here to call Lightning  !",
+		text 	= T "Call Lightning  !",
 		x 		= 150,
 		y 		= display.contentHeight - 75,
 		delay = 100,

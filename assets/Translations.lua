@@ -17,11 +17,11 @@ local translations =
     },
     
     ["Here are counted caught asteroids"] = {
-        ["fr"] = "On compte les astéroides attrapées",
+        ["fr"] = "On compte les astéroïdes attrapés",
     },
   
     ["The more asteroids you gather..."] = {
-        ["fr"] = "Plus vous attrapez d'astéroides...",
+        ["fr"] = "Plus vous attrapez d'astéroïdes...",
     },
   
     ["...the more points the next one will give"] = {
@@ -44,8 +44,8 @@ local translations =
         ["fr"] = "Et baisse les points",
     },
   
-    ["Touch here to call Lightning  !"] = {
-        ["fr"] = "Touchez ici pour lancer l'Eclair !",
+    ["Call Lightning  !"] = {
+        ["fr"] = "Invoquez l'Eclair !",
     },
   
     ["Lightning squares the color count as points !"] = {
@@ -73,43 +73,47 @@ local translations =
     },
   
     ["And this is an asteroid"] = {
-        ["fr"] = "Et voilà une astéroide",
+        ["fr"] = "Et voilà un astéroïde",
     },
   
-    ["Touch here to turn your planet green"] = {
-        ["fr"] = "Touchez ici pour que la planète soit verte",
+    ["Use these buttons to change the planet's color"] = {
+        ["fr"] = "Utilisez ces boutons pour changer la couleur de la Planète",
+    },
+  
+    ["Turn your planet green"] = {
+        ["fr"] = "Changez la planète en vert",
     },
   
     ["You catch an asteroid when it's the same color"] = {
-        ["fr"] = "Les astéroides doivent toucher la planète avec la même couleur",
+        ["fr"] = "Les astéroïdes doivent toucher la planète en ayant la même couleur",
     },
   
     ["Lightning destroys the closest asteroid !"] = {
-        ["fr"] = "L'Eclair détruit l'astéroide la plus proche",
+        ["fr"] = "L'Eclair détruit l'astéroïde le plus proche",
     },
   
-    ["Time now for your first Combo"] = {
-        ["fr"] = "C'est parti pour la première Combo",
+    ["To achieve a Combo, you have to gather asteroids"] = {
+        ["fr"] = "Pour réussir une Combo, il faut collecter les astéroïdes",
     },
   
-    ["Here is the Combo requested"] = {
-        ["fr"] = "Voici la Combo à réaliser",
+    ["This is the order requested, from left to right"] = {
+        ["fr"] = "Voici l'ordre dans lequel il faut les récupérer, de gauche à droite",
     },
   
     ["First, you have to catch a blue asteroid"] = {
-        ["fr"] = "D'abord il faut une astéroide bleue",
+        ["fr"] = "D'abord il faut un astéroïde bleu",
     },
   
-    ["Touch here to turn your planet blue"] = {
-        ["fr"] = "Touchez ici pour que la planète soit bleue",
+    ["Turn your planet blue"] = {
+        ["fr"] = "Changez la planète en bleu",
     },
   
     ["Planet and asteroid have the same color : Well done !"] = {
-        ["fr"] = "Planète et astéroide ont bien la même couleur maintenant",
+        ["fr"] = "Planète et astéroïde ont bien la même couleur maintenant",
     },
   
     ["Now you have to catch a green asteroid"] = {
-        ["fr"] = "Ensuite il nous faut une astéroide verte",
+        ["fr"] = "Ensuite il nous faut un astéroïde vert",
     },
   
     ["Great !"] = {
@@ -117,7 +121,7 @@ local translations =
     },
   
     ["Finally you need a blue asteroid"] = {
-        ["fr"] = "Enfin,  il nous faut une astéroide bleue",
+        ["fr"] = "Enfin,  il nous faut un astéroïde bleu",
     },
   
     ["Wait ! This one is green !"] = {
@@ -141,11 +145,11 @@ local translations =
     },
   
     ["Now this green asteroid is no more"] = {
-        ["fr"] = "Maintenant l'astéroide verte ne gêne plus",
+        ["fr"] = "Maintenant l'astéroïde vert ne gêne plus",
     },
   
     ["Here is the final blue asteroid !"] = {
-        ["fr"] = "Voilà la dernière astéroide bleue !",
+        ["fr"] = "Voilà le dernier astéroïde bleu !",
     },
   
     ["Nice !"] = {

@@ -31,8 +31,11 @@ end
 
 function scene:intro()
 
-	utils.emptyGroup(menu)
 	utils.emptyGroup(screen)
+	utils.emptyGroup(menu)
+
+   local bottom = display.newRect(screen, 0, 0, display.contentWidth, display.contentHeight)
+   bottom:setFillColor(0)
 	
 	viewManager.cleanupFires()
 

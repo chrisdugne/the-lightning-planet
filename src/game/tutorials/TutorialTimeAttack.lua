@@ -345,7 +345,7 @@ texts = {
 		delay = 2000,
 	},
 	{ --------------------------- STEP 6
-		text 	= T "Touch here to call Lightning  !",
+		text 	= T "Call Lightning  !",
 		x 		= 150,
 		y 		= display.contentHeight - 75,
 		delay = 100,

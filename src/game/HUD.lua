@@ -182,14 +182,14 @@ function lightCombo(element)
    			return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
 			end,
 			onCreation=function()end,
-			perEmit=2,
+			perEmit=1,
 			emissionNum=2,
 			point1={element.x-4, element.y},
 			point2={element.x+4, element.y},
 			positionType="alongLine",
 			emitDelay=10,
-   		fadeInTime=1600,
-   		lifeSpan=450, -- Particles are removed sooner than the ice comet
+   		fadeInTime=100,
+   		lifeSpan=150, -- Particles are removed sooner than the ice comet
    		lifeStart=50,
    		endAlpha=0,
    		physics={
@@ -230,11 +230,9 @@ function drawCombo(level, numCompleted)
    	asteroid.y = 15 * j
 
 		if(c <= numCompleted) then
-   		asteroid:scale(0.58,0.58)
-   		asteroid.alpha = 1
+   		asteroid:scale(0.51,0.51)
    	else
-   		asteroid:scale(0.48,0.48)
-   		asteroid.alpha = 0.75
+   		asteroid:scale(0.34,0.34)
    	end
    	
 		if(c == numCompleted) then

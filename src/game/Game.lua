@@ -30,6 +30,8 @@ mode 		= 0
 state 	= IDLE
 
 kamikazePercent = 100
+timePlayed 		 = 0
+timeCombo 		 = 0
 
 -----------------------------------------------------------------------------------------
 --set up collision filters
@@ -69,9 +71,23 @@ function start(requireAsteroidBuilder)
 	kamikazePercent 	= 100
 	
 	if(requireAsteroidBuilder) then
+   	timePlayed = 0
    	hud.centerText("Start !", display.contentHeight/4, 45)
 		asteroidBuilder()
+
+   	timer.performWithDelay(1000, nextPlayedSecond)
 	end
+end
+
+
+function nextPlayedSecond()
+	if(game.state == game.IDLE) then	
+		timePlayed = 0 
+		return
+	end
+	
+	timePlayed = timePlayed+1
+	timer.performWithDelay(1000, nextPlayedSecond)
 end
 
 -----------------------------------------------------------------------------------------
@@ -87,7 +103,9 @@ function asteroidBuilder()
 		LEVELS = TIMEATTACK_LEVELS
 	end
 	
-	timer.performWithDelay( math.random(LEVELS[level].minDelay, LEVELS[level].maxDelay), function()
+	local timeDelay = math.floor(timePlayed/LEVELS[level].changeDelaySec) * LEVELS[level].changeDelayAmount
+	
+	timer.performWithDelay( math.random(LEVELS[level].minDelay - timeDelay, LEVELS[level].maxDelay - timeDelay), function()
 		if(state == RUNNING) then
 			createAsteroid()
 			asteroidBuilder()

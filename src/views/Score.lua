@@ -73,15 +73,16 @@ function scene:displayContent()
 	-----------------------------------------------------------------------------------------------
 	-- Planets
 	
-	viewManager.buildButton(scoreMenu, "",	 	COLORS[2], 22, scoreMenu.board.x - scoreMenu.board.contentWidth/3 + 30, 	display.contentHeight*0.58, function() router.openPlayground() end)
-	viewManager.buildButton(scoreMenu, "", 	COLORS[3], 22, scoreMenu.board.x + scoreMenu.board.contentWidth/3 - 30, 	display.contentHeight*0.58, function() router.openSelection() end)
+	viewManager.buildButton(scoreMenu, "",	 	COLORS[2], 22, scoreMenu.board.x - scoreMenu.board.contentWidth/2 + 50, 	display.contentHeight*0.58, function() router.openPlayground() end)
+	viewManager.buildButton(scoreMenu, "", 	COLORS[3], 22, scoreMenu.board.x, 														display.contentHeight*0.58, function() router.openSelection() end)
+	viewManager.buildButton(scoreMenu, "", 	COLORS[4], 22, scoreMenu.board.x + scoreMenu.board.contentWidth/2 - 50, 	display.contentHeight*0.58, self.nextLevel)
 	
 	-----------------------------------------------------------------------------------------------
 	-- Icons
 
 	local again = display.newImage("assets/images/hud/again.png")
 	again:scale(0.50,0.50)
-	again.x = scoreMenu.board.x - scoreMenu.board.contentWidth/3 + 30
+	again.x = scoreMenu.board.x - scoreMenu.board.contentWidth/2 + 50
 	again.y = display.contentHeight*0.58
 	again.alpha = 0
 	scoreMenu:insert(again)
@@ -90,13 +91,47 @@ function scene:displayContent()
 
 	local levels = display.newImage("assets/images/hud/squares.png")
 	levels:scale(0.50,0.50)
-	levels.x = scoreMenu.board.x + scoreMenu.board.contentWidth/3 - 30
+	levels.x = scoreMenu.board.x
 	levels.y = display.contentHeight*0.58
 	levels.alpha = 0
 	scoreMenu:insert(levels)
 	
 	transition.to( levels, { time=1200, alpha=1 })  
 	
+	local next = display.newImage("assets/images/hud/next.png")
+	next:scale(0.50,0.50)
+	next.x = scoreMenu.board.x + scoreMenu.board.contentWidth/2 - 50
+	next.y = display.contentHeight*0.58
+	next.alpha = 0
+	scoreMenu:insert(next)
+	
+	transition.to( next, { time=1200, alpha=1 })  
+	
+end
+
+------------------------------------------
+
+function scene:nextLevel()
+	game.level = game.level + 1
+	local wasLastLevel = false
+		
+	if(game.mode == game.COMBO) then 
+		if(game.level == 41) then
+			wasLastLevel = true
+		end
+	
+	elseif(game.mode == game.KAMIKAZE or game.mode == game.TIMEATTACK) then 
+		if(game.level == 4) then
+			wasLastLevel = true
+		end
+   end
+	
+	if(wasLastLevel) then
+		router.openSelection()
+	else
+		router.openPlayground()
+	end
+
 end
 
 ------------------------------------------
