@@ -7,7 +7,8 @@
 local scene = storyboard.newScene()
 local menu
 local screen
-local introComplete = system.getInfo("environment") == "simulator"
+--local introComplete = system.getInfo("environment") == "simulator"
+local introComplete = true -- dev
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -102,7 +103,25 @@ function scene:refreshScene()
 			end
 		)
 
+		viewManager.buildSmallButton(
+			menu, 
+			" ", 
+			COLORS[1], 
+			20,
+			display.contentWidth - 80, 
+			display.contentHeight - 30, 
+			function() 
+				self:buy() 
+			end
+		)
+
 	self.view:insert(menu)
+end
+
+------------------------------------------
+
+function scene:buy()
+	router.openBuy()	
 end
 
 ------------------------------------------
@@ -226,6 +245,7 @@ end
 
 function scene:reset()
 	savedData = {
+		fullGame = false,
 		levels = { 
 			{ available = true }, -- level 1 : tutorial combo 
 		},

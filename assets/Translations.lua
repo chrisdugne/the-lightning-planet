@@ -1,5 +1,9 @@
 local translations =
 {
+    ["Buy"] = {
+        ["fr"] = "Acheter",
+    },
+
     ["Tutorial"] = {
         ["fr"] = "Tutoriel",
     },
@@ -44,8 +48,40 @@ local translations =
         ["fr"] = "Et baisse les points",
     },
   
+    ["A blue asteroid is coming"] = {
+        ["fr"] = "Un astéroïde bleu arrive",
+    },
+  
+    ["A green asteroid is coming"] = {
+        ["fr"] = "Un astéroïde vert arrive",
+    },
+  
+    ["It's the same color, you have to destroy this asteroid"] = {
+        ["fr"] = "C'est la même couleur, il faut détruire cet astéroïde",
+    },
+    
     ["Call Lightning  !"] = {
         ["fr"] = "Invoquez l'Eclair !",
+    },
+  
+    ["Lightning destroys the closest asteroid"] = {
+        ["fr"] = "L'Eclair détruit l'astéroïde le plus proche",
+    },
+  
+    ["It's not green, you need to wait"] = {
+        ["fr"] = "Ce n'est pas vert, il faut attendre",
+    },
+  
+    ["But remember : you must have the same planet color"] = {
+        ["fr"] = "Mais n'oubliez pas : la planète doit être de la même couleur",
+    },
+  
+    ["when the asteroid crashes"] = {
+        ["fr"] = "lorsque l'astéroïde s'écrase",
+    },
+  
+    ["otherwise you start the combo from scratch again"] = {
+        ["fr"] = "sinon vous devrez recommencer la Combo à 0 !",
     },
   
     ["Lightning squares the color count as points !"] = {
@@ -92,16 +128,16 @@ local translations =
         ["fr"] = "L'Eclair détruit l'astéroïde le plus proche",
     },
   
-    ["To achieve a Combo, you have to gather asteroids"] = {
-        ["fr"] = "Pour réussir une Combo, il faut collecter les astéroïdes",
+    ["To achieve a Combo, you have to destroy asteroids"] = {
+        ["fr"] = "Pour réussir une Combo, il faut détruire les astéroïdes",
     },
   
-    ["This is the order requested, from left to right"] = {
-        ["fr"] = "Voici l'ordre dans lequel il faut les récupérer, de gauche à droite",
+    ["Here is the color to destroy"] = {
+        ["fr"] = "Voici la couleur à détruire",
     },
   
-    ["First, you have to catch a blue asteroid"] = {
-        ["fr"] = "D'abord il faut un astéroïde bleu",
+    ["Here are the next ones"] = {
+        ["fr"] = "Et voici les suivantes",
     },
   
     ["Turn your planet blue"] = {

@@ -5,7 +5,13 @@
 -----------------------------------------------------------------------------------------
 
 local scene = storyboard.newScene()
-local scoreMenu
+local buyMenu
+
+local statusText
+local mainText
+local lockImage
+
+local planetButton, textButton
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -17,96 +23,127 @@ local scoreMenu
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
-	scoreMenu = display.newGroup()
+
+   if ( store.availableStores.apple ) then
+       store.init( "apple", storeTransaction )
+   elseif ( store.availableStores.google ) then
+       store.init( "google", storeTransaction )
+   end
+	
+	buyMenu = display.newGroup()
+	game.scene = buyMenu
+end
+
+
+-----------------------------------------------------------------------------------------
+--- STORE
+
+function storeTransaction( event )
+   print( "storeTransaction" )
+   utils.tprint(event)
+
+	local transaction = event.transaction
+
+	if ( transaction.state == "purchased" ) then
+		savedData.fullGame = true
+	   utils.saveTable(savedData, "savedData.json")
+		refreshStatus("Thank you !")
+
+	elseif ( transaction.state == "cancelled" ) then
+		print( "cancelled")
+		refreshStatus("Maybe next time...")
+
+	elseif ( transaction.state == "failed" ) then
+		print( "failed")
+		refreshStatus("Transaction failed...")
+	end
+
+	--tell the store that the transaction is complete!
+	--if you're providing downloadable content, do not call this until the download has completed
+	store.finishTransaction( event.transaction )
+
 end
 
 -----------------------------------------------------------------------------------------
 
 function scene:refreshScene()
-	utils.emptyGroup(scoreMenu)
+
+	hud.setExit()
+
+	-----------------------------------------------------------
+	
+	utils.emptyGroup(buyMenu)
 	viewManager.initView(self.view);
    
-   local top = display.newRect(scoreMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
+   local top = display.newRect(buyMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)
    
-   local bottom = display.newRect(scoreMenu, 0, display.contentHeight, display.contentWidth, display.contentHeight/5)
+   local bottom = display.newRect(buyMenu, 0, display.contentHeight, display.contentWidth, display.contentHeight/5)
    bottom:setFillColor(0)
 
-   local board = display.newRoundedRect(scoreMenu, 0, 0, display.contentWidth/2, display.contentHeight/2, 20)
+   local board = display.newRoundedRect(buyMenu, 0, 0, display.contentWidth/2, display.contentHeight/2, 20)
    board.x = display.contentWidth/2
    board.y = display.contentHeight/2
    board.alpha = 0
    board:setFillColor(0)
-   scoreMenu.board = board
+   buyMenu.board = board
    
 	transition.to( top, { time=500, y = top.contentHeight/2 })
 	transition.to( bottom, { time=500, y = display.contentHeight - top.contentHeight/2 })  
 	transition.to( board, { time=800, alpha=0.9, onComplete= function() self:displayContent() end})  
 
-	self.view:insert(scoreMenu)
+	self.view:insert(buyMenu)
+	
 end
 
 function scene:displayContent()
 
-	local type = self:getGameType()
-	local level = self.getLevel()
-	local value = self.getValue()
-
 	-----------------------------------------------------------------------------------------------
 	-- Texts
 
-	local title = display.newText( scoreMenu, type, 0, 0, FONT, 25 )
-	title:setTextColor( 255 )	
-	title.x = scoreMenu.board.x + 10 - scoreMenu.board.contentWidth/2 + title.contentWidth/2
-	title.y = scoreMenu.board.y - scoreMenu.board.contentHeight/2 + title.contentHeight/2
+	display.remove(mainText)
+	mainText = display.newText( buyMenu,  "The game is locked\n Buy me a coffee to get access to the full game !", 0, 0, 170, 100, FONT, 14 )
+	mainText:setTextColor( 255 )	
+	mainText.x = buyMenu.board.x + 35
+	mainText.y = buyMenu.board.y/2 + 60
 
-	local level = display.newText( scoreMenu, level, 0, 0, FONT, 21 )
-	level:setTextColor( 255 )	
-	level.x = scoreMenu.board.x - 10 + scoreMenu.board.contentWidth/2 - level.contentWidth/2
-	level.y = scoreMenu.board.y + 5 - scoreMenu.board.contentHeight/2 + level.contentHeight/2
-
-	local time = display.newText( scoreMenu, value, 0, 0, FONT, 21 )
-	time:setTextColor( 255 )	
-	time.x = scoreMenu.board.x
-	time.y = scoreMenu.board.y - scoreMenu.board.contentHeight/3 + time.contentHeight/2
+	display.remove(statusText)
+	statusText = display.newText( buyMenu, "", 0, 0, FONT, 22 )
+	statusText:setTextColor( 255 )	
+	
+	lockImage = display.newImage("assets/images/hud/lock.png")
+	lockImage:scale(0.50,0.50)
+	lockImage.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + 30
+	lockImage.y = buyMenu.board.y/2 + 40
+	
+	planetButton, textButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x, 	display.contentHeight*0.58, function() buy() end)
 	
 	-----------------------------------------------------------------------------------------------
-	-- Planets
-	
-	viewManager.buildButton(scoreMenu, "",	 	COLORS[2], 22, scoreMenu.board.x - scoreMenu.board.contentWidth/2 + 50, 	display.contentHeight*0.58, function() router.openPlayground() end)
-	viewManager.buildButton(scoreMenu, "", 	COLORS[3], 22, scoreMenu.board.x, 														display.contentHeight*0.58, function() router.openSelection() end)
-	viewManager.buildButton(scoreMenu, "", 	COLORS[4], 22, scoreMenu.board.x + scoreMenu.board.contentWidth/2 - 50, 	display.contentHeight*0.58, self.nextLevel)
-	
-	-----------------------------------------------------------------------------------------------
-	-- Icons
 
-	local again = display.newImage("assets/images/hud/again.png")
-	again:scale(0.50,0.50)
-	again.x = scoreMenu.board.x - scoreMenu.board.contentWidth/2 + 50
-	again.y = display.contentHeight*0.58
-	again.alpha = 0
-	scoreMenu:insert(again)
-	
-	transition.to( again, { time=1200, alpha=1 })  
+end
 
-	local levels = display.newImage("assets/images/hud/squares.png")
-	levels:scale(0.50,0.50)
-	levels.x = scoreMenu.board.x
-	levels.y = display.contentHeight*0.58
-	levels.alpha = 0
-	scoreMenu:insert(levels)
+function buy()
+	display.remove(lockImage)
+	display.remove(mainText)
+	display.remove(planetButton)
+	display.remove(textButton)
+	viewManager.cleanupFires()
 	
-	transition.to( levels, { time=1200, alpha=1 })  
+	if ( store.availableStores.apple ) then
+		store.purchase( { "com.uralys.thelightningplanet.1.0" } )
+	elseif ( store.availableStores.google ) then
+		store.purchase( { "com.uralys.thelightningplanet.v1" } )
+	end
 	
-	local next = display.newImage("assets/images/hud/next.png")
-	next:scale(0.50,0.50)
-	next.x = scoreMenu.board.x + scoreMenu.board.contentWidth/2 - 50
-	next.y = display.contentHeight*0.58
-	next.alpha = 0
-	scoreMenu:insert(next)
-	
-	transition.to( next, { time=1200, alpha=1 })  
-	
+	refreshStatus("Waiting for store...")
+end
+
+function refreshStatus(message)
+	if(statusText) then
+   	statusText.text = message
+   	statusText.x = buyMenu.board.x
+   	statusText.y = buyMenu.board.y
+   end
 end
 
 ------------------------------------------
@@ -121,7 +158,7 @@ function scene:nextLevel()
 		end
 	
 	elseif(game.mode == game.KAMIKAZE or game.mode == game.TIMEATTACK) then 
-		if(game.level == 5) then
+		if(game.level == 4) then
 			wasLastLevel = true
 		end
    end

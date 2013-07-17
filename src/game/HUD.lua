@@ -178,14 +178,14 @@ function lightCombo(element)
    		preset="burn",
    		color={getRGB(element.color)},
    		build=function()
-   			local size=math.random(24, 30) -- Particles are a bit bigger than ice comet particles
+   			local size=math.random(8, 12) -- Particles are a bit bigger than ice comet particles
    			return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
 			end,
 			onCreation=function()end,
 			perEmit=1,
-			emissionNum=2,
-			point1={element.x-4, element.y},
-			point2={element.x+4, element.y},
+			emissionNum=1,
+			point1={element.x-2, element.y},
+			point2={element.x+2, element.y},
 			positionType="alongLine",
 			emitDelay=10,
    		fadeInTime=100,
@@ -205,44 +205,102 @@ end
 
 -----------------------------------------------------------------------------------------
 
+
 function drawCombo(level, numCompleted)
 	
    for i=elements.numChildren,1,-1 do
 		if(elements[i].isComboElement) then
    		
-   		if(numCompleted == 0) then
+   		if(numCompleted == 0 and not elements[i].dontLight) then
 				lightCombo(elements[i])
-      	end
+			end
 			
 			display.remove(elements[i])
    	end
 	end
 	
-	for c in pairs(COMBO_LEVELS[level].combo) do
-		local color = COMBO_LEVELS[level].combo[c]
-   	local asteroid = display.newImage(game.scene, "assets/images/game/asteroid." .. color .. ".png")
-   	asteroid.color = color
-   	
-   	local i = (c-1)%20
-   	local j = math.floor((c-1)/20) + 1
-   	
-   	asteroid.x = 10 + 20 * i
-   	asteroid.y = 15 * j
+	local square = display.newImage(game.scene, "assets/images/hud/square.png")
+	square:scale(0.35,0.35)
+	square.x = 20
+	square.y = 20
+	square.isComboElement = true
+	square.dontLight = true
+	
+	elements:insert(square)
+	
+	local combo = COMBO_LEVELS[level].combo[numCompleted+1]
+	
+	if(combo) then
+		drawCurrentCombo(combo, numCompleted+1)
+	end
 
-		if(c <= numCompleted) then
-   		asteroid:scale(0.51,0.51)
-   	else
-   		asteroid:scale(0.34,0.34)
-   	end
-   	
-		if(c == numCompleted) then
-			lightCombo(asteroid)
-   	end
-   	
-		asteroid.isComboElement = true
-   	elements:insert(asteroid)
+	for c = numCompleted+2, #COMBO_LEVELS[level].combo do
+		local color = COMBO_LEVELS[level].combo[c]
+   	drawComboTodo(color, c, numCompleted)
 	end
 	
+	for c = 1, numCompleted do
+		local color = COMBO_LEVELS[level].combo[c]
+   	drawComboDone(color, c)
+	end
+	
+	
+	
+end
+
+function drawCurrentCombo(color, num)
+
+	local asteroid = display.newImage(game.scene, "assets/images/game/asteroid." .. color .. ".png")
+	asteroid.color 			= color
+	asteroid.isComboElement = true
+	asteroid.comboNum 		= num
+	asteroid.dontLight 		= true
+
+	asteroid.x = 20
+	asteroid.y = 20
+	asteroid:scale(0.51,0.51)
+	asteroid.alpha = 0
+	
+	transition.to(asteroid, {alpha = 1, time=300})
+	elements:insert(asteroid)
+end
+
+function drawComboTodo(color, num, numCompleted)
+
+	local asteroid = display.newImage(game.scene, "assets/images/game/asteroid." .. color .. ".png")
+	asteroid.color 	= color
+	asteroid.comboNum = num
+
+	local i = math.floor((num-1-numCompleted)/20) + 1
+	local j = (num-1-numCompleted)%20
+
+	asteroid.x = 15 * i
+	asteroid.y = 50 + 10 * j
+	asteroid:scale(0.2,0.2)
+
+	lightCombo(asteroid)
+
+	asteroid.isComboElement = true
+	elements:insert(asteroid)
+end
+
+function drawComboDone(color, num)
+
+	local asteroid = display.newImage(game.scene, "assets/images/game/asteroid." .. color .. ".png")
+	asteroid.color 	= color
+	asteroid.comboNum = num
+
+	local i = (num-1)%20
+	local j = math.floor((num-1)/20) + 1
+
+	asteroid.x = 50 + 10 * i
+	asteroid.y = 15 * j
+	asteroid:scale(0.2,0.2)
+
+	lightCombo(asteroid)
+
+	asteroid.isComboElement = true
+	elements:insert(asteroid)
 end
 
 -----------------------------------------------------------------------------------------
@@ -295,20 +353,20 @@ function drawProgressBar(percent, loss)
    	{
    		title="fire",
    		preset="burn",
-   		color={{140-percent,155*percent/100,15 + percent/40}},
+   		color={{160-percent,155*percent/100,15 + percent/40}},
    		build=function()
-   			local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
+   			local size=math.random(34, 58) -- Particles are a bit bigger than ice comet particles
    			return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
 			end,
 			onCreation=function()end,
-			perEmit=10,
+			perEmit=3,
 			emissionNum=0,
 			point1={display.contentWidth/4, 20},
 			point2={display.contentWidth/4 + display.contentWidth/2 * percent/100, 20},
 			positionType="alongLine",
 			emitDelay=10,
-   		fadeInTime=600,
-   		lifeSpan=450, -- Particles are removed sooner than the ice comet
+   		fadeInTime=1200,
+   		lifeSpan=1250, -- Particles are removed sooner than the ice comet
    		lifeStart=50,
    		endAlpha=0,
    		physics={

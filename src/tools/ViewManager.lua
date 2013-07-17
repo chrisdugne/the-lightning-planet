@@ -40,7 +40,7 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
 	end
 
 	local planet = display.newImage( "assets/images/game/planet.".. color ..".png")
-	planet:scale(0.36,0.36)
+	planet:scale(display.contentWidth/1500,display.contentWidth/1500)
 	planet.x = x
 	planet.y = y
 	planet.alpha = 0
@@ -67,6 +67,8 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
    	view:insert(lock)
    	transition.to( lock, { time=2000, alpha=0.6 })
    	planet:setFillColor(30,30,30)
+   	
+   	return planet, text, lock
    else
 		planet:addEventListener	("touch", function(event) action() end)
 
@@ -76,7 +78,7 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
    			preset="burn",
    			color=colors,
    			build=function()
-   				local size=math.random(34, 38) -- Particles are a bit bigger than ice comet particles
+   				local size=math.random(24, 38)
    				return display.newImageRect("CBEffects/textures/generic_particle.png", size, size)
    			end,
    			onCreation=function()end,
@@ -85,10 +87,10 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
    			x=x,
    			y=y,
    			positionType="inRadius",
-   			posRadius=40,
+   			posRadius=38,
    			emitDelay=50,
    			fadeInTime=1500,
-   			lifeSpan=250, -- Particles are removed sooner than the ice comet
+   			lifeSpan=250,
    			lifeStart=250,
    			endAlpha=0,
    			physics={
@@ -102,6 +104,8 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
    	
    	table.insert(fires, fire)
 		fire:start("fire")
+		
+   	return planet, text
 	end
 end
 

@@ -51,3 +51,9 @@ end
 function openScore()
 	storyboard.gotoScene( "src.views.Score" )
 end
+
+---------------------------------------------
+
+function openBuy()
+	storyboard.gotoScene( "src.views.Buy" )
+end

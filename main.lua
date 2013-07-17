@@ -38,6 +38,7 @@ end
 --- Corona's libraries
 json 				= require "json"
 storyboard 		= require "storyboard"
+store	 			= require "store"
 
 ---- Additional libs
 xml 				= require "src.libs.Xml"
@@ -71,7 +72,7 @@ game				= require "src.game.Game"
 tutorialCombo			= require "src.game.tutorials.TutorialCombo"
 tutorialKamikaze		= require "src.game.tutorials.TutorialKamikaze"
 tutorialTimeAttack	= require "src.game.tutorials.TutorialTimeAttack"
- 
+
 -----------------------------------------------------------------------------------------
 ---- App globals
 
@@ -84,7 +85,7 @@ GLOBALS = {
 COMBO_LEVELS = {
 	{--------------------- LEVEL 1 : Tutorial
 		colors = 2,
-		combo = {BLUE,GREEN,BLUE},
+		combo = {BLUE,GREEN},
 		minDelay = 1500,
 		maxDelay = 2500,
 		minSpeed = 20,

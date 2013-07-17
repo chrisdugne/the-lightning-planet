@@ -143,24 +143,7 @@ function crashAsteroid( asteroid, event )
 
 	if(mode == COMBO) then
 		
-		local comboFailed = false
-		
-		if(goodCatch) then
-   		if(COMBO_LEVELS[level].combo[requestedAsteroid] == asteroid.color) then
-   			hud.drawCombo(level, requestedAsteroid)
-   			requestedAsteroid = requestedAsteroid + 1
-   			
-   			if(requestedAsteroid > #COMBO_LEVELS[level].combo) then
-   				completeLevel()
-      		end
-   		else
-	   		comboFailed = true
-   		end
-   	else
-   		comboFailed = true
-   	end
-
-		if(game.level > 1 and comboFailed) then
+		if(game.level > 1 and not goodCatch) then
 			requestedAsteroid = 1
 			hud.drawCombo(level, 0)
 		end
@@ -228,9 +211,25 @@ end
 
 ------------------------------------------------------------------------------------------
 
-function squarePointsWithLighting(asteroid)
-	
-	if(mode == KAMIKAZE or mode == TIMEATTACK) then
+function actionOnLightning(asteroid)
+
+	if(mode == COMBO) then
+		
+		local goodCatch = COMBO_LEVELS[level].combo[requestedAsteroid] == asteroid.color
+		
+		if(goodCatch) then
+			hud.drawCombo(level, requestedAsteroid)
+			requestedAsteroid = requestedAsteroid + 1
+			
+			if(requestedAsteroid > #COMBO_LEVELS[level].combo) then
+				completeLevel()
+   		end
+   	else
+   		requestedAsteroid = 1
+			hud.drawCombo(level, 0)
+   	end
+   	
+	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then
 		
 		local change 		= asteroidsCaught[asteroid.color] * asteroidsCaught[asteroid.color]
 		local changeText 	= asteroidsCaught[asteroid.color] .. " x "  ..  asteroidsCaught[asteroid.color]
@@ -297,7 +296,7 @@ function shootOnClosestAsteroid()
    	lightPlanet(asteroid) 
    	
    	local thunderDone = function() 
-   		squarePointsWithLighting(asteroid)
+   		actionOnLightning(asteroid)
    		explodeAsteroid(asteroid) 
    	end
 
