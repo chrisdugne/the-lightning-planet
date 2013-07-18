@@ -102,7 +102,7 @@ function scene:displayContent()
 	-- Texts
 
 	display.remove(mainText)
-	mainText = display.newText( buyMenu,  "The game is locked\n Buy me a coffee to get access to the full game !", 0, 0, 170, 100, FONT, 14 )
+	mainText = display.newText( buyMenu, T "The game is locked\n Buy me a coffee to get access to the full game !", 0, 0, 170, 100, FONT, 14 )
 	mainText:setTextColor( 255 )	
 	mainText.x = buyMenu.board.x + 35
 	mainText.y = buyMenu.board.y/2 + 60
@@ -111,7 +111,7 @@ function scene:displayContent()
 	statusText = display.newText( buyMenu, "", 0, 0, FONT, 22 )
 	statusText:setTextColor( 255 )	
 	
-	lockImage = display.newImage("assets/images/hud/lock.png")
+	lockImage = display.newImage(buyMenu, "assets/images/hud/lock.png")
 	lockImage:scale(0.50,0.50)
 	lockImage.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + 30
 	lockImage.y = buyMenu.board.y/2 + 40
@@ -143,101 +143,6 @@ function refreshStatus(message)
    	statusText.text = message
    	statusText.x = buyMenu.board.x
    	statusText.y = buyMenu.board.y
-   end
-end
-
-------------------------------------------
-
-function scene:nextLevel()
-	game.level = game.level + 1
-	local wasLastLevel = false
-		
-	if(game.mode == game.COMBO) then 
-		if(game.level == 41) then
-			wasLastLevel = true
-		end
-	
-	elseif(game.mode == game.KAMIKAZE or game.mode == game.TIMEATTACK) then 
-		if(game.level == 4) then
-			wasLastLevel = true
-		end
-   end
-	
-	if(wasLastLevel) then
-		router.openSelection()
-	else
-		router.openPlayground()
-	end
-
-end
-
-------------------------------------------
-
-function scene:getGameType()
-
-	if(game.mode == game.COMBO) then 
-		return "Combo"
-	
-	elseif(game.mode == game.KAMIKAZE) then 
-		return "Kamikaze"
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		return "Time Attack"
-
-   end
-end
-
-function scene:getLevel()
-
-	if(game.mode == game.COMBO) then 
-		if(game.level == 1) then
-			return T "Tutorial" 
-		else
-			return "Level " .. game.level
-		end
-	
-	elseif(game.mode == game.KAMIKAZE) then 
-		if(game.level == 1) then
-			return T "Tutorial" 
-		elseif(game.level == 2) then
-			return T "Easy" 
-		elseif(game.level == 3) then
-			return T "Hard" 
-		elseif(game.level == 4) then
-			return T "Extreme" 
-      end
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		if(game.level == 1) then
-			return T "Tutorial" 
-		elseif(game.level == 2) then
-			return "2 min" 
-		elseif(game.level == 3) then
-			return "5 min" 
-		elseif(game.level == 4) then
-			return "8 min" 
-      end
-	
-   end
-
-end
-
-function scene:getValue()
-
-	if(game.mode == game.COMBO) then 
-		if(game.level == 1) then
-			return "" 
-		else
-			local min,sec = utils.getMinSec(game.timeCombo)
-   		return min .. ":" .. sec
-		end
-	
-	elseif(game.mode == game.KAMIKAZE) then 
-		return game.points .." pts"
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		return game.points .." pts"
-
    end
 end
 

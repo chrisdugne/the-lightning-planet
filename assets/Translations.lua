@@ -1,7 +1,47 @@
 local translations =
 {
+    ["Full version"] = {
+        ["fr"] = "Version complète",
+    },
+
+    ["Cancel"] = {
+        ["fr"] = "Annuler",
+    },
+
+    ["Reset the game"] = {
+        ["fr"] = "Remise à 0 du jeu",
+    },
+
+    ["Confirm now to erase your level progression and start the game again"] = {
+        ["fr"] = "Confirmer maintenant effacera votre progression et recommencera le jeu à 0",
+    },
+
+    ["Fail !"] = {
+        ["fr"] = "Raté !",
+    },
+
+    ["Time Attack"] = {
+        ["fr"] = "Time Attack",
+    },
+
+    ["Classic"] = {
+        ["fr"] = "Classique",
+    },
+
+    ["Combo"] = {
+        ["fr"] = "Combo",
+    },
+
+    ["Kamikaze"] = {
+        ["fr"] = "Kamikaze",
+    },
+
     ["Buy"] = {
         ["fr"] = "Acheter",
+    },
+
+    ["The game is locked\n Buy me a coffee to get access to the full game !"] = {
+        ["fr"] = "Le jeu est en démo\n Achetez moi un café pour accéder à son intégralité !",
     },
 
     ["Tutorial"] = {
@@ -68,20 +108,20 @@ local translations =
         ["fr"] = "L'Eclair détruit l'astéroïde le plus proche",
     },
   
-    ["It's not green, you need to wait"] = {
-        ["fr"] = "Ce n'est pas vert, il faut attendre",
+    ["Here is the Combo : you have to destroy asteroids in that order before they crash on the planet"] = {
+        ["fr"] = "Voici la Combo à réaliser : il faut détruire les astéroides dans l'ordre avant qu'ils ne touchent la planète",
     },
-  
-    ["But remember : you must have the same planet color"] = {
-        ["fr"] = "Mais n'oubliez pas : la planète doit être de la même couleur",
+
+    ["Now we have to wait for a green asteroid to destroy"] = {
+        ["fr"] = "Maintenant il faut attendre un astéroide vert",
     },
-  
-    ["when the asteroid crashes"] = {
-        ["fr"] = "lorsque l'astéroïde s'écrase",
+
+    ["This one is not green, and if you use the Lightning on a wrong color, your start the combo from scratch"] = {
+        ["fr"] = "Celui ci n'est pas vert, et si vous utilisez l'Eclair sur une mauvaise couleur, vous recommencez la Combo à 0",
     },
-  
-    ["otherwise you start the combo from scratch again"] = {
-        ["fr"] = "sinon vous devrez recommencer la Combo à 0 !",
+
+    ["So you have to catch it with the Planet. But remember : you must have the same planet color when the asteroid crashes, or Game Over !"] = {
+        ["fr"] = "Mais n'oubliez pas : la planète doit être de la même couleur lorsque l'astéroïde s'écrase, sinon c'est perdu !",
     },
   
     ["Lightning squares the color count as points !"] = {
@@ -112,8 +152,8 @@ local translations =
         ["fr"] = "Et voilà un astéroïde",
     },
   
-    ["Use these buttons to change the planet's color"] = {
-        ["fr"] = "Utilisez ces boutons pour changer la couleur de la Planète",
+    ["These buttons change the planet's color"] = {
+        ["fr"] = "Ces boutons changent la couleur de la Planète",
     },
   
     ["Turn your planet green"] = {
@@ -136,8 +176,8 @@ local translations =
         ["fr"] = "Voici la couleur à détruire",
     },
   
-    ["Here are the next ones"] = {
-        ["fr"] = "Et voici les suivantes",
+    ["Here are the next colors to destroy to achieve the Combo"] = {
+        ["fr"] = "Et voici les couleurs suivantes qu'il faudra détruire pour réussir la Combo",
     },
   
     ["Turn your planet blue"] = {
@@ -193,7 +233,11 @@ local translations =
     },
   
     ["Well done ! Now you're ready to play !"] = {
-        ["fr"] = "Et voilà, vous êtes prêt à jouer",
+        ["fr"] = "Et voilà, vous êtes prêt à jouer !",
+    },
+
+    ["Reach 2 min to unlock Combo mode"] = {
+        ["fr"] = "Atteignez 2 min pour débloquer le mode Combo",
     },
   
 }

@@ -13,15 +13,16 @@ IDLE 			= 2
 
 -----------------------------------------------------------------------------------------
 
+CLASSIC 		= 0
 COMBO 		= 1
 KAMIKAZE 	= 2
 TIMEATTACK 	= 3
 
 -----------------------------------------------------------------------------------------
 
-planet = {}
-asteroids = {}
-asteroidsCaught = {}
+planet 				= {}
+asteroids 			= {}
+asteroidsCaught 	= {}
 
 -----------------------------------------------------------------------------------------
 
@@ -42,8 +43,24 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 -----------------------------------------------------------------------------------------
 
 function init(view)
-	scene = view
+
+	---------------------------------------
+
+	if(view) then
+		scene = view
+	end
 	
+	----------------------------------------
+
+   points 				= 0
+   state 				= IDLE
+   
+   kamikazePercent 	= 100
+   timePlayed 		 	= 0
+   timeCombo 		 	= 0
+   	
+	---------------------------------------
+
 	setPlanetColor(BLUE)
 	
 	if(mode == COMBO) then
@@ -54,11 +71,90 @@ function init(view)
    	end
    end
 
-	if(mode == KAMIKAZE) then
-		kamikazePercent = 100
-   end
-   
+	----------------------------------------
+
+	hud.initHUD()
+	hud.initTopRightText()
+
+	----------------------------------------
+	
+	local tutorial = false
+	
+	-- Tutorial Classic
+	if(mode == CLASSIC and savedData.requireTutorial) then
+		tutorial = true
+		hud.refreshTopRightText(T "Tutorial")
+		start(false)
+		tutorialClassic.start(view)
+	end
+	
+	-- Tutorial Combo
+	if(mode == COMBO and level == 1) then
+		tutorial = true
+		hud.refreshTopRightText(T "Tutorial")
+		start(false)
+		tutorialCombo.start(view)
+	end
+
+	-- Tutorial Kamikaze
+	if(mode == KAMIKAZE and level == 1) then
+		tutorial = true
+		hud.refreshTopRightText(T "Tutorial")
+		start(false)
+		tutorialKamikaze.start(view)
+	end
+
+	-- Tutorial Time Attack
+	if(mode == TIMEATTACK and level == 1) then
+		tutorial = true
+		hud.refreshTopRightText(T "Tutorial")
+		start(false)
+		tutorialTimeAttack.start(view)
+		hud.drawTimer(90)
+	end
+	
+	
+	if(not tutorial) then
+		
+		if(mode == CLASSIC) then
+			level = 1 
+   		hud.refreshTopRightText(T "Classic")
+			if(not savedData.levels[1]) then
+				timer.performWithDelay(1500, function() displayInfo(T "Reach 2 min to unlock Combo mode") end)
+			end
+      	
+      	hud.startComboTimer()
+      	
+		elseif(mode == COMBO) then 
+			hud.drawCombo(level, 0)
+      	hud.refreshTopRightText("Level " .. level)
+      	hud.startComboTimer()
+		
+		elseif(mode == KAMIKAZE) then 
+   		hud.drawProgressBar(100)
+      	hud.refreshTopRightText("0 pts")
+      	hud.drawBag()
+		
+		elseif(mode == TIMEATTACK) then 
+      	hud.refreshTopRightText("0 pts")
+      	hud.drawBag()
+      	if(level == 2) then
+				hud.drawTimer(120)
+      	elseif(level == 3) then
+				hud.drawTimer(300)
+      	elseif(level == 4) then
+				hud.drawTimer(480)
+         end
+      
+      end
+   	
+   	hud.setExit()
+   	hud.setupPad()
+   	start()
+   end   
 end
+
+-----------------------------------------------------------------------------------------
 
 function start(requireAsteroidBuilder)
 	
@@ -66,12 +162,9 @@ function start(requireAsteroidBuilder)
 		requireAsteroidBuilder = true
 	end
 
-	state					= RUNNING
-	points 			 	= 0
-	kamikazePercent 	= 100
+	state	= RUNNING
 	
 	if(requireAsteroidBuilder) then
-   	timePlayed = 0
    	hud.centerText("Start !", display.contentHeight/4, 45)
 		asteroidBuilder()
 
@@ -93,16 +186,8 @@ end
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
-	local LEVELS
 	
-	if(mode == COMBO) then
-		LEVELS = COMBO_LEVELS
-	elseif(mode == KAMIKAZE) then
-		LEVELS = KAMIKAZE_LEVELS
-	elseif(mode == TIMEATTACK) then
-		LEVELS = TIMEATTACK_LEVELS
-	end
-	
+	local LEVELS = getCurrentLEVELS()
 	local timeDelay = math.floor(timePlayed/LEVELS[level].changeDelaySec) * LEVELS[level].changeDelayAmount
 	
 	timer.performWithDelay( math.random(LEVELS[level].minDelay - timeDelay, LEVELS[level].maxDelay - timeDelay), function()
@@ -141,11 +226,18 @@ function crashAsteroid( asteroid, event )
 	
 	--------------------------
 
-	if(mode == COMBO) then
+	if(mode == CLASSIC) then
 		
-		if(game.level > 1 and not goodCatch) then
-			requestedAsteroid = 1
-			hud.drawCombo(level, 0)
+		if(not goodCatch) then
+			classicOver()
+		end
+	
+	--------------------------
+
+	elseif(mode == COMBO) then
+		
+		if(not goodCatch) then
+			comboOver()
 		end
 	
 	--------------------------
@@ -474,24 +566,8 @@ end
 
 function createAsteroid()
 
-	local LEVELS
-	
-	if(mode == COMBO) then
-		LEVELS = COMBO_LEVELS
-	elseif(mode == KAMIKAZE) then
-		LEVELS = KAMIKAZE_LEVELS
-	elseif(mode == TIMEATTACK) then
-		LEVELS = TIMEATTACK_LEVELS
-	end
-
-	local nbColors
-	if(mode == COMBO) then
-		nbColors = COMBO_LEVELS[level].colors
-	elseif(mode == KAMIKAZE) then
-		nbColors = KAMIKAZE_LEVELS[level].colors
-	elseif(mode == TIMEATTACK) then
-		nbColors = TIMEATTACK_LEVELS[level].colors
-	end
+	local LEVELS = getCurrentLEVELS()
+	local nbColors = LEVELS[level].colors
 	
 	local num = math.random(1,nbColors)
 	local color = COLORS[num]
@@ -510,9 +586,11 @@ function createAsteroid()
 	asteroid.x = asteroidPoint.x
 	asteroid.y = asteroidPoint.y
 
-
+	local speed = math.random(LEVELS[level].minSpeed, LEVELS[level].maxSpeed)/100
+	local speedOffset = math.floor(timePlayed/LEVELS[level].changeDelaySec)/100
+	
 	asteroidDirection = vector2D:Sub(planetCenterPoint, asteroidPoint)
-	asteroidDirection:mult(math.random(LEVELS[level].minSpeed,LEVELS[level].maxSpeed)/100) 
+	asteroidDirection:mult(speed + speedOffset) 
 	asteroid:setLinearVelocity( asteroidDirection.x, asteroidDirection.y )
 	
 	asteroid.collision = crashAsteroid ; 
@@ -525,16 +603,38 @@ end
 
 ------------------------------------------------------------------------------------------
 
+-- Combo Game Over
+function comboOver()
+	endGame("Game Over !")
+	timeCombo = T "Fail !"
+end
+
+------------------------------------------------------------------------------------------
+
 -- end of Time Attack Level
 function timerDone()
-	endGame(points .. " pts")
+	endGame("Game Over !")
 end
 
 ------------------------------------------------------------------------------------------
 
 -- end of Kamikaze Level
 function kamikazeOver()
-	endGame(points .. " pts")
+	endGame("Game Over !")
+end
+
+------------------------------------------------------------------------------------------
+
+-- end of Classic mode
+function classicOver()
+	local min,sec = utils.getMinSec(game.timeCombo)
+	endGame(min .. ":" .. sec)
+	
+	if(not savedData.levels[1] and timeCombo > 119) then
+		displayInfo("Combo mode unlocked !")
+   	savedData.levels[1] = { available = true }
+      utils.saveTable(savedData, "savedData.json")
+	end
 end
 
 ------------------------------------------------------------------------------------------
@@ -556,14 +656,19 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function endGame(message)
+function endGame(message, next)
    stop()
 	hud.explodeHUD()
 	hud.explode(planet, 7, 3500, planet.color)	
 
 	if(message) then		
 		hud.centerText(message)
-   	timer.performWithDelay(2000, exit)
+
+   	if(next) then		
+      	timer.performWithDelay(2000, next)
+      else
+      	timer.performWithDelay(2000, exit)
+      end
    else
    	-- button exit
 		router.openAppHome()
@@ -576,4 +681,43 @@ function completeLevel()
 	endGame("Level " .. level .. " Complete !")
 	savedData.levels[level+1] = { available = true }
    utils.saveTable(savedData, "savedData.json")
+end
+
+-----------------------------------------------------------------------------------------
+
+function displayInfo(message)
+
+	local text = display.newText( message, 0, 0, FONT, 15 )
+	text:setTextColor( 255 )	
+	text.alpha = 0
+	text.x = display.contentWidth/2
+	text.y = display.contentHeight/3
+	scene:insert(text)
+
+	transition.to( text, { 
+		time=300, 
+		alpha=1, 
+		onComplete = function()
+			timer.performWithDelay( 2000, function ()
+				transition.to( text, { time=300, alpha=0}) 
+			end) 
+		end
+	})
+end
+
+
+-----------------------------------------------------------------------------------------
+
+function getCurrentLEVELS()
+
+	if(mode == COMBO) then
+		return COMBO_LEVELS
+	elseif(mode == CLASSIC) then
+		return CLASSIC_LEVELS
+	elseif(mode == KAMIKAZE) then
+		return KAMIKAZE_LEVELS
+	elseif(mode == TIMEATTACK) then
+		return TIMEATTACK_LEVELS
+	end
+	
 end

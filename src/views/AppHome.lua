@@ -7,8 +7,7 @@
 local scene = storyboard.newScene()
 local menu
 local screen
---local introComplete = system.getInfo("environment") == "simulator"
-local introComplete = true -- dev
+local introComplete = system.getInfo("environment") == "simulator"
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -86,45 +85,43 @@ function scene:refreshScene()
    	introComplete = true
    end	
 	
-	viewManager.buildButton(menu, "Combo", 		"blue", 		22, display.contentWidth/5, 	display.contentHeight*0.6, 	combo)
-	viewManager.buildButton(menu, "Kamikaze", 	"red", 		20, display.contentWidth/2, 	display.contentHeight*0.73, 	kamikaze, 	true, (not savedData.levels[2]))
-	viewManager.buildButton(menu, "Time Attack", "yellow", 	16, 4*display.contentWidth/5, display.contentHeight*0.39, 	timeAttack, true, (not savedData.levels[2]))
+	viewManager.buildButton(menu, T "Classic", 		COLORS[1], 		21, display.contentWidth/6, 	display.contentHeight*0.35, 	classic)
+	viewManager.buildButton(menu, T "Combo", 			COLORS[2], 		22, 2*display.contentWidth/6, display.contentHeight*0.65, 	combo, 			true, (not savedData.levels[1]))
+	viewManager.buildButton(menu, T "Time Attack", 	COLORS[3], 		16, 5*display.contentWidth/8, display.contentHeight*0.76, 	timeAttack, 	true, (not savedData.levels[2]))
+	viewManager.buildButton(menu, T "Kamikaze", 		COLORS[4], 		20, 5*display.contentWidth/6, display.contentHeight*0.44, 	kamikaze, 		true, (not savedData.levels[2]))
 
+	viewManager.buildSmallButton(
+		menu, 
+		"", 
+		"white", 
+		20,
+		display.contentWidth - 30, 
+		display.contentHeight - 30, 
+		function() 
+			self:openOptions() 
+		end
+	)
 
-		viewManager.buildSmallButton(
-			menu, 
-			" ", 
-			COLORS[2], 
-			20,
-			display.contentWidth - 30, 
-			display.contentHeight - 30, 
-			function() 
-				self:reset() 
-			end
-		)
-
-		viewManager.buildSmallButton(
-			menu, 
-			" ", 
-			COLORS[1], 
-			20,
-			display.contentWidth - 80, 
-			display.contentHeight - 30, 
-			function() 
-				self:buy() 
-			end
-		)
-
+	local settingsIcon = display.newImage(menu, "assets/images/hud/settings.png")
+	settingsIcon:scale(0.50,0.50)
+	settingsIcon.x = display.contentWidth - 30 
+	settingsIcon.y = display.contentHeight - 30 
+	
 	self.view:insert(menu)
 end
 
 ------------------------------------------
 
-function scene:buy()
-	router.openBuy()	
+function scene:openOptions()
+	router.openOptions()	
 end
 
 ------------------------------------------
+
+function classic()	
+	game.mode = game.CLASSIC 
+	router.openPlayground()
+end
 
 function combo()	
 	game.mode = game.COMBO 
@@ -241,21 +238,6 @@ function displayIntroText(text, x, y, fade)
 			end)
 		end
 	end})
-end
-
-function scene:reset()
-	savedData = {
-		fullGame = false,
-		levels = { 
-			{ available = true }, -- level 1 : tutorial combo 
-		},
-		kamikazeAvailable = false, 	-- require tutorial complete
-		timeAttackAvailable = false, 	-- require tutorial complete
-	}
-   utils.saveTable(savedData, "savedData.json")
-   
-   introComplete = false
-   self:intro()
 end
 
 ------------------------------------------

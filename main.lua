@@ -50,6 +50,7 @@ vector2D			= require "src.libs.Vector2D"
 
 local translations = require("assets.Translations")
 local LANG =  userDefinedLanguage or system.getPreference("ui", "language")
+LANG = "fr"
 
 function T(enText)
 	return translations[enText][LANG] or enText
@@ -69,6 +70,7 @@ hud				= require "src.game.HUD"
 game				= require "src.game.Game"
 
 --- tutorials
+tutorialClassic		= require "src.game.tutorials.TutorialClassic"
 tutorialCombo			= require "src.game.tutorials.TutorialCombo"
 tutorialKamikaze		= require "src.game.tutorials.TutorialKamikaze"
 tutorialTimeAttack	= require "src.game.tutorials.TutorialTimeAttack"
@@ -82,14 +84,28 @@ GLOBALS = {
 
 ---- Combo
 
+CLASSIC_LEVELS = {
+	{--------------------- Classic
+		colors 				= 4,
+		minDelay 			= 2000,
+		maxDelay 			= 3000,
+		changeDelaySec	 	= 15,
+		changeDelayAmount = 200,
+		minSpeed 			= 15,
+		maxSpeed 			= 20
+	}
+}
+
+---- Combo
+
 COMBO_LEVELS = {
 	{--------------------- LEVEL 1 : Tutorial
 		colors = 2,
 		combo = {BLUE,GREEN},
 		minDelay = 1500,
 		maxDelay = 2500,
-		minSpeed = 20,
-		maxSpeed = 25,
+		minSpeed = 15,
+		maxSpeed = 20,
 	},
 	{--------------------- LEVEL 2
 		colors = 2,
@@ -98,54 +114,54 @@ COMBO_LEVELS = {
 		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 100,
-		minSpeed = 20,
-		maxSpeed = 25,
+		minSpeed = 15,
+		maxSpeed = 20,
 	},
 	{--------------------- LEVEL 3
 		colors = 2,
 		combo = {BLUE,BLUE,GREEN},
-		minDelay = 1500,
+		minDelay = 2000,
 		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 100,
-		minSpeed = 20,
-		maxSpeed = 25,
+		minSpeed = 15,
+		maxSpeed = 20,
 	},
 	{--------------------- LEVEL 4
 		colors = 2,
 		combo = {BLUE,GREEN,BLUE,GREEN,BLUE},
-		minDelay = 1500,
+		minDelay = 2000,
 		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 100,
-		minSpeed = 20,
-		maxSpeed = 25,
+		minSpeed = 15,
+		maxSpeed = 20,
 	},
 	{--------------------- LEVEL 5
 		colors = 2,
 		combo = {BLUE,BLUE,BLUE,BLUE,BLUE,GREEN},
-		minDelay = 1500,
+		minDelay = 2000,
 		maxDelay = 2000,
 		changeDelaySec = 20,
 		changeDelayAmount = 100,
-		minSpeed = 24,
-		maxSpeed = 28,
+		minSpeed = 15,
+		maxSpeed = 20,
 	},
 	{--------------------- LEVEL 6
 		colors = 3,
 		combo = {BLUE,GREEN,YELLOW,BLUE},
-		minDelay = 1500,
-		maxDelay = 2000,
+		minDelay = 2000,
+		maxDelay = 2500,
 		changeDelaySec = 20,
-		changeDelayAmount = 100,
-		minSpeed = 24,
-		maxSpeed = 28,
+		changeDelayAmount = 150,
+		minSpeed = 17,
+		maxSpeed = 22,
 	},
 	{--------------------- LEVEL 7
 		colors = 3,
 		combo = {GREEN,GREEN,YELLOW,BLUE,YELLOW},
-		minDelay = 1500,
-		maxDelay = 2000,
+		minDelay = 2000,
+		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 150,
 		minSpeed = 24,
@@ -154,32 +170,32 @@ COMBO_LEVELS = {
 	{--------------------- LEVEL 8
 		colors = 3,
 		combo = {YELLOW,GREEN,YELLOW,BLUE,YELLOW, YELLOW, GREEN},
-		minDelay = 1200,
-		maxDelay = 1800,
+		minDelay = 1800,
+		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 150,
-		minSpeed = 24,
-		maxSpeed = 31,
+		minSpeed = 17,
+		maxSpeed = 22,
 	},
 	{--------------------- LEVEL 9
 		colors = 3,
 		combo = {GREEN,GREEN,BLUE,YELLOW, YELLOW, GREEN, BLUE, BLUE, YELLOW},
-		minDelay = 1200,
-		maxDelay = 1800,
+		minDelay = 1800,
+		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 150,
-		minSpeed = 26,
-		maxSpeed = 32,
+		minSpeed = 17,
+		maxSpeed = 22,
 	},
 	{--------------------- LEVEL 10
 		colors = 3,
 		combo = {BLUE,GREEN,BLUE,YELLOW, YELLOW, GREEN, GREEN, YELLOW, BLUE, GREEN, YELLOW},
-		minDelay = 1000,
-		maxDelay = 1700,
+		minDelay = 1800,
+		maxDelay = 2500,
 		changeDelaySec = 20,
 		changeDelayAmount = 150,
-		minSpeed = 26,
-		maxSpeed = 32,
+		minSpeed = 19,
+		maxSpeed = 23,
 	},
 }
 
@@ -197,30 +213,30 @@ KAMIKAZE_LEVELS = {
 	},
 	{--------------------- LEVEL 2 : Easy
 		colors = 2,
-		minDelay = 1500,
-		maxDelay = 2500,
-		changeDelaySec = 20,
+		minDelay = 3000,
+		maxDelay = 4000,
+		changeDelaySec = 15,
 		changeDelayAmount = 200,
-		minSpeed = 20,
-		maxSpeed = 25,
+		minSpeed = 15,
+		maxSpeed = 18,
 	},
 	{--------------------- LEVEL 3 : Hard
 		colors = 3,
-		minDelay = 600,
-		maxDelay = 1300,
-		changeDelaySec = 10,
+		minDelay = 2500,
+		maxDelay = 3500,
+		changeDelaySec = 15,
 		changeDelayAmount = 200,
-		minSpeed = 25,
-		maxSpeed = 35,
+		minSpeed = 18,
+		maxSpeed = 22,
 	},
 	{--------------------- LEVEL 4 : Extreme
 		colors = 4,
-		minDelay = 300,
-		maxDelay = 1000,
-		changeDelaySec = 10,
-		changeDelayAmount = 150,
-		minSpeed = 30,
-		maxSpeed = 45,
+		minDelay = 2000,
+		maxDelay = 2500,
+		changeDelaySec = 15,
+		changeDelayAmount = 200,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 }
 
@@ -232,36 +248,36 @@ TIMEATTACK_LEVELS = {
 		minDelay = 1500,
 		maxDelay = 2500,
 		changeDelaySec = 20,
-		changeDelayAmount = 200,
+		changeDelayAmount = 100,
 		minSpeed = 20,
 		maxSpeed = 25,
 	},
 	{--------------------- LEVEL 2 : Easy
 		colors = 2,
-		minDelay = 1500,
-		maxDelay = 2500,
-		changeDelaySec = 20,
+		minDelay = 3000,
+		maxDelay = 4000,
+		changeDelaySec = 15,
 		changeDelayAmount = 200,
-		minSpeed = 20,
-		maxSpeed = 25,
+		minSpeed = 15,
+		maxSpeed = 18,
 	},
 	{--------------------- LEVEL 3 : Hard
 		colors = 3,
-		minDelay = 600,
-		maxDelay = 1300,
-		changeDelaySec = 10,
+		minDelay = 2500,
+		maxDelay = 3500,
+		changeDelaySec = 15,
 		changeDelayAmount = 200,
-		minSpeed = 25,
-		maxSpeed = 35,
+		minSpeed = 18,
+		maxSpeed = 22,
 	},
 	{--------------------- LEVEL 4 : Extreme
 		colors = 4,
-		minDelay = 300,
-		maxDelay = 1000,
-		changeDelaySec = 10,
-		changeDelayAmount = 150,
-		minSpeed = 30,
-		maxSpeed = 45,
+		minDelay = 2000,
+		maxDelay = 2500,
+		changeDelaySec = 15,
+		changeDelayAmount = 200,
+		minSpeed = 20,
+		maxSpeed = 25,
 	},
 }
 
@@ -279,10 +295,14 @@ CBE	=	require("CBEffects.Library")
 savedData = utils.loadTable("savedData.json")
 	
 if(not savedData) then
+	initGameData()
+end
+
+function initGameData()
 	savedData = {
-		levels = { 
-			{ available = true }, -- level 1 : tutorial combo 
-		},
+		fullGame = false,
+		requireTutorial = true,
+		levels = {}, 
 		kamikazeAvailable = false, 	-- require tutorial complete
 		timeAttackAvailable = false, 	-- require tutorial complete
 	}

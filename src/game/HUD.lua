@@ -59,7 +59,10 @@ end
 
 function setupPad()
 	setupButtons()
-	setupLightningButton()
+	
+	if(game.mode ~= game.CLASSIC) then
+		setupLightningButton()
+   end
 end
 
 -----------------------------------------------------------------------------------------
@@ -82,6 +85,7 @@ function setupButtons()
 	elements:insert(greenButton)
 
 	if((game.mode == game.COMBO 		and COMBO_LEVELS[game.level].colors > 2)
+	or (game.mode == game.CLASSIC)
 	or (game.mode == game.KAMIKAZE 	and KAMIKAZE_LEVELS[game.level].colors > 2)
 	or (game.mode == game.TIMEATTACK and TIMEATTACK_LEVELS[game.level].colors > 2)) 
 	then	
@@ -94,6 +98,7 @@ function setupButtons()
    end
 
 	if((game.mode == game.COMBO 		and COMBO_LEVELS[game.level].colors > 3)
+	or (game.mode == game.CLASSIC)
 	or (game.mode == game.KAMIKAZE 	and KAMIKAZE_LEVELS[game.level].colors > 3)
 	or (game.mode == game.TIMEATTACK and TIMEATTACK_LEVELS[game.level].colors > 3)) 
 	then
@@ -220,9 +225,9 @@ function drawCombo(level, numCompleted)
 	end
 	
 	local square = display.newImage(game.scene, "assets/images/hud/square.png")
-	square:scale(0.35,0.35)
-	square.x = 20
-	square.y = 20
+	square:scale(0.5,0.5)
+	square.x = 35
+	square.y = 35
 	square.isComboElement = true
 	square.dontLight = true
 	
@@ -256,9 +261,9 @@ function drawCurrentCombo(color, num)
 	asteroid.comboNum 		= num
 	asteroid.dontLight 		= true
 
-	asteroid.x = 20
-	asteroid.y = 20
-	asteroid:scale(0.51,0.51)
+	asteroid.x = 35
+	asteroid.y = 35
+	asteroid:scale(0.8,0.8)
 	asteroid.alpha = 0
 	
 	transition.to(asteroid, {alpha = 1, time=300})
@@ -271,12 +276,12 @@ function drawComboTodo(color, num, numCompleted)
 	asteroid.color 	= color
 	asteroid.comboNum = num
 
-	local i = math.floor((num-1-numCompleted)/20) + 1
-	local j = (num-1-numCompleted)%20
+	local i = math.floor((num-2-numCompleted)/12) + 1
+	local j = (num-2-numCompleted)%12
 
-	asteroid.x = 15 * i
-	asteroid.y = 50 + 10 * j
-	asteroid:scale(0.2,0.2)
+	asteroid.x = 5 + 13 * i
+	asteroid.y = 90 + 15 * (j-1)
+	asteroid:scale(0.24,0.24)
 
 	lightCombo(asteroid)
 
@@ -293,9 +298,9 @@ function drawComboDone(color, num)
 	local i = (num-1)%20
 	local j = math.floor((num-1)/20) + 1
 
-	asteroid.x = 50 + 10 * i
-	asteroid.y = 15 * j
-	asteroid:scale(0.2,0.2)
+	asteroid.x = 70 + 13 * i
+	asteroid.y = 5 + 13 * j
+	asteroid:scale(0.24,0.24)
 
 	lightCombo(asteroid)
 
@@ -593,7 +598,7 @@ function time(seconds)
 	if(seconds == 0) then
 		game.timerDone()
 	else	
-		timer.performWithDelay(200, function() time(seconds) end)
+		timer.performWithDelay(1000, function() time(seconds) end)
 	end
 	
 end
@@ -606,7 +611,13 @@ function startComboTimer()
 	timeLeftText:setTextColor( 255 )	
 	timeLeftText.text = "0:00"
 	timeLeftText:setReferencePoint( display.CenterReferencePoint )
-	timeLeftText.x = display.contentWidth/2
+	
+	if(game.mode == game.COMBO) then
+		timeLeftText.x = display.contentWidth * 0.7
+	else
+		timeLeftText.x = display.contentWidth * 0.1
+	end
+	
 	timeLeftText.y = 20
 	elements:insert(timeLeftText)
 

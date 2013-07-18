@@ -115,9 +115,17 @@ function scene:nextLevel()
 	game.level = game.level + 1
 	local wasLastLevel = false
 		
-	if(game.mode == game.COMBO) then 
+	if(game.mode == game.CLASSIC) then 
+		wasLastLevel = true
+
+	elseif(game.mode == game.COMBO) then 
 		if(game.level == 41) then
 			wasLastLevel = true
+		end
+
+		-- next level not available
+		if(type(game.timeCombo) ~= "number") then
+			game.level = game.level - 1
 		end
 	
 	elseif(game.mode == game.KAMIKAZE or game.mode == game.TIMEATTACK) then 
@@ -139,13 +147,16 @@ end
 function scene:getGameType()
 
 	if(game.mode == game.COMBO) then 
-		return "Combo"
+		return T "Combo"
 	
+	elseif(game.mode == game.CLASSIC) then 
+		return T "Classic"
+
 	elseif(game.mode == game.KAMIKAZE) then 
-		return "Kamikaze"
+		return T "Kamikaze"
 	
 	elseif(game.mode == game.TIMEATTACK) then 
-		return "Time Attack"
+		return T "Time Attack"
 
    end
 end
@@ -158,6 +169,9 @@ function scene:getLevel()
 		else
 			return "Level " .. game.level
 		end
+	
+	elseif(game.mode == game.CLASSIC) then 
+		return "" 
 	
 	elseif(game.mode == game.KAMIKAZE) then 
 		if(game.level == 1) then
@@ -191,9 +205,17 @@ function scene:getValue()
 		if(game.level == 1) then
 			return "" 
 		else
-			local min,sec = utils.getMinSec(game.timeCombo)
-   		return min .. ":" .. sec
+			if(type(game.timeCombo) == "number") then
+				local min,sec = utils.getMinSec(game.timeCombo)
+   			return min .. ":" .. sec
+   		else
+   			return game.timeCombo -- Fail !
+   		end
 		end
+
+	elseif(game.mode == game.CLASSIC) then 
+		local min,sec = utils.getMinSec(game.timeCombo)
+		return min .. ":" .. sec
 	
 	elseif(game.mode == game.KAMIKAZE) then 
 		return game.points .." pts"

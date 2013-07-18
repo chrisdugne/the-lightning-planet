@@ -21,6 +21,11 @@ end
 ---------------------------------------------
 
 function openSelection()
+
+	if(game.mode == game.CLASSIC) then
+		openAppHome()
+	end
+
 	if(game.mode == game.COMBO) then
 		openLevelSelection()
 	end
@@ -44,6 +49,12 @@ end
 
 function openTimeAttackSelection()
 	storyboard.gotoScene( "src.views.TimeAttackSelection" )
+end
+
+---------------------------------------------
+
+function openOptions()
+	storyboard.gotoScene( "src.views.Options" )
 end
 
 ---------------------------------------------

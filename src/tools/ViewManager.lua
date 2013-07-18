@@ -35,6 +35,8 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
 		colors={{255, 131, 111}, {255, 211, 70}}
 	elseif(color == RED) then
 		colors={{255, 111, 0}, {255, 70, 0}}
+	elseif(color == "white") then
+		colors={{255, 255, 255}, {255, 70, 70}}
 	else
 		colors={{255, 111, 0}, {255, 70, 0}}
 	end
@@ -121,6 +123,8 @@ function buildSmallButton(view, title, color, titleSize, x, y, action, lock )
 	elseif(color == YELLOW) then
 		colors={{255, 131, 111}, {255, 211, 70}}
 	elseif(color == RED) then
+		colors={{255, 111, 0}, {255, 70, 0}}
+	elseif(color == "white") then
 		colors={{255, 111, 0}, {255, 70, 0}}
 	else
 		colors={{255, 111, 0}, {255, 70, 0}}
