@@ -58,7 +58,7 @@ function scene:displayContent()
 	-----------------------------------------------------------------------------------------------
 
 	viewManager.buildButton(optionsMenu, T "Full version",  COLORS[1], 12, display.contentWidth*0.77, 	display.contentHeight*0.38, 	router.openBuy)
-	viewManager.buildButton(optionsMenu, "Reset", 	COLORS[2], 		21, display.contentWidth*0.77, 	display.contentHeight*0.61, 	self.reset)
+	viewManager.buildButton(optionsMenu, "Reset", 	COLORS[2], 		21, display.contentWidth*0.77, 	display.contentHeight*0.61, function()	self:reset() end)
 	
 	-----------------------------------------------------------------------------------------------
 
@@ -100,10 +100,10 @@ end
 ------------------------------------------
 
 function scene:reset()
-   native.showAlert( T "Reset the game", T "Confirm now to erase your level progression and start the game again", { "OK", T "Cancel" }, onComplete )
+   native.showAlert( T "Reset the game", T "Confirm now to erase your level progression and start the game again", { "OK", T "Cancel" }, function(event) self:confirmReset(event) end )
 end
 
-local function onComplete( event )
+function scene:confirmReset( event )
     if "clicked" == event.action then
         local i = event.index
         if 1 == i then
