@@ -221,13 +221,12 @@ stepContent = {
 	end,
 	------ Step 15
 	function() 
-		display.remove(square)
 		displayText(15)
+		display.remove(square)
 	end,
 	------ Exit
 	function() 
 		game.completeLevel()
-		hud.explode(texts[15].item)
 	end,
 }
 
@@ -307,9 +306,9 @@ end
 texts = {
 	{ --------------------------- STEP 1
 		text 	= T "Here is the Combo : you have to destroy asteroids in that order before they crash on the planet",
-		x 		= display.contentWidth/2,
+		x 		= display.contentWidth/2 + 10,
 		y 		= 70,
-		delay = 4500,
+		delay = 6000,
 	},
 	{ --------------------------- STEP 2
 		text 	= T "Here are the next colors to destroy to achieve the Combo",
@@ -343,7 +342,7 @@ texts = {
 	},
 	{ --------------------------- STEP 7
 		text 	= T "Now we have to wait for a green asteroid to destroy",
-		x 		= display.contentWidth/2,
+		x 		= display.contentWidth/2 + 20,
 		y 		= 50,
 		delay = 3000,
 	},
@@ -380,7 +379,7 @@ texts = {
 	{ --------------------------- STEP 13
 		text 	= T "It's the same color, you have to destroy this asteroid",
 		x 		= 230,
-		y 		= 40,
+		y 		= 70,
 		delay = 2000,
 	},
 	{ --------------------------- STEP 14
@@ -404,15 +403,15 @@ arrows = {
 		way 			= "left",
 		xFrom 		= display.contentWidth/2,
 		yFrom 		= 20,
-		xTo 			= 50,
+		xTo 			= 80,
 		yTo 			= 20
 	},
 	{ --------------------------- STEP 2
 		way 			= "left",
 		xFrom 		= display.contentWidth/2,
-		yFrom 		= 60,
-		xTo 			= 40,
-		yTo 			= 60
+		yFrom 		= 75,
+		xTo 			= 35,
+		yTo 			= 75
 	},
 	{ --------------------------- STEP 3
 		way 			= "right",
@@ -425,7 +424,7 @@ arrows = {
 		way 			= "left",
 		xFrom 		= display.contentWidth/2,
 		yFrom 		= 20,
-		xTo 			= 50,
+		xTo 			= 80,
 		yTo 			= 20
 	},
 	{ --------------------------- STEP 5
@@ -440,9 +439,9 @@ arrows = {
 	{ --------------------------- STEP 7
 		way 			= "left",
 		xFrom 		= display.contentWidth/2,
-		yFrom 		= 20,
-		xTo 			= 50,
-		yTo 			= 20
+		yFrom 		= 35,
+		xTo 			= 80,
+		yTo 			= 35
 	},
 	{ --------------------------- STEP 8
 		way 			= "right",
@@ -478,7 +477,7 @@ arrows = {
 		way 			= "left",
 		xFrom 		= display.contentWidth/2,
 		yFrom 		= 20,
-		xTo 			= 50,
+		xTo 			= 80,
 		yTo 			= 20
 	},
 	{ --------------------------- STEP 14
