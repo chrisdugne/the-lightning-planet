@@ -109,12 +109,12 @@ musicManager.playMusic()
 
 ------------------------------------------
 
-router.openAppHome()
+--router.openAppHome()
 
---game.mode = game.COMBO
---game.level = 40
---game.timeCombo = 12
---router.openScore()
+game.mode = game.COMBO
+game.level = 40
+game.timeCombo = 12
+router.openNewRecord()
 
 
 -----------------------------------------------------------------------------------------

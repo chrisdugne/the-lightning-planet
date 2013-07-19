@@ -107,6 +107,29 @@ function scene:refreshScene()
 	settingsIcon.x = display.contentWidth - 30 
 	settingsIcon.y = display.contentHeight - 30 
 	
+
+	viewManager.buildSmallButton(
+		menu, 
+		"", 
+		"white", 
+		20,
+		display.contentWidth - 80, 
+		display.contentHeight - 30, 
+		function() 
+			self:openPodiums() 
+		end
+	)
+
+	local podiumIcon = display.newImage(menu, "assets/images/hud/podium.png")
+	podiumIcon:scale(0.3,0.3)
+	podiumIcon.x = display.contentWidth - 80 
+	podiumIcon.y = display.contentHeight - 30 
+
+	local borderSettings = display.newImage(menu, "assets/images/hud/borderSettings.png")
+	borderSettings:scale(0.50,0.50)
+	borderSettings.x = display.contentWidth - 80 
+	borderSettings.y = display.contentHeight - 30 
+	
 	self.view:insert(menu)
 end
 
@@ -114,6 +137,10 @@ end
 
 function scene:openOptions()
 	router.openOptions()	
+end
+
+function scene:openPodiums()
+	router.openPodiums()	
 end
 
 ------------------------------------------

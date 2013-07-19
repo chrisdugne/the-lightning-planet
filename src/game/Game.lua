@@ -45,15 +45,44 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 function initGameData()
 
 	GLOBALS.savedData = {
+		user = "New player",
 		fullGame = GLOBALS.savedData ~= nil and GLOBALS.savedData.fullGame,
 		requireTutorial = true,
 		levels = {}, 
 		kamikazeAvailable = false, 	-- require tutorial complete
 		timeAttackAvailable = false, 	-- require tutorial complete
+		scores = {
+			classic={},
+			timeattackeasy={},
+			timeattackhard={},
+			timeattackextreme={},
+			kamikazeeasy={},
+			kamikazehard={},
+			kamikazeextreme={}
+		}
 	}
 	
    utils.saveTable(GLOBALS.savedData, "savedData.json")
 end
+
+-----------------------------------------------------------------------------------------
+
+function storeRecord()
+	print("store record")
+end
+
+function checkNewRecord()
+	newRecord = true
+end
+
+---TODO
+-- mettre les gettypes/title/values ici
+-- mettre le savedData.scores.data dans une var
+-- check des values
+-- set de newRecord : true/false
+-- go to view NewRecord
+-- -> view Score appelera storeRecord (savedData.user sera OK)
+-- set du record
 
 -----------------------------------------------------------------------------------------
 
@@ -76,6 +105,7 @@ function init(view)
    timeCombo 		 	= 0
    	
 	lock 					= false
+	newRecord 			= false
 	
 	---------------------------------------
 
@@ -696,6 +726,7 @@ end
 
 function exit()
 	stop()
+	checkNewRecord()
 	router.openScore()
 end
 

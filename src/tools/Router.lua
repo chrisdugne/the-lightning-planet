@@ -60,8 +60,18 @@ end
 
 ---------------------------------------------
 
+function openPodiums()
+	storyboard.gotoScene( "src.views.Podiums" )
+end
+
+---------------------------------------------
+
 function openScore()
 	storyboard.gotoScene( "src.views.Score" )
+end
+
+function openNewRecord()
+	storyboard.gotoScene( "src.views.NewRecord" )
 end
 
 ---------------------------------------------

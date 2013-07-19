@@ -26,7 +26,7 @@ function scene:refreshScene()
 	utils.emptyGroup(scoreMenu)
 	viewManager.initView(self.view);
 	
-	hud.setExit()
+--	hud.setExit()
    
    local top = display.newRect(scoreMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)
@@ -46,6 +46,8 @@ function scene:refreshScene()
 	transition.to( board, { time=800, alpha=0.9, onComplete= function() self:displayContent() end})  
 
 	self.view:insert(scoreMenu)
+	
+	game.storeRecord()
 end
 
 function scene:displayContent()
@@ -109,6 +111,8 @@ function scene:displayContent()
 	
 	transition.to( next, { time=1200, alpha=1 })  
 	
+   ------------------------------------------
+   
 end
 
 ------------------------------------------
