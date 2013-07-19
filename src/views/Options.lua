@@ -69,7 +69,7 @@ function scene:displayContent()
 	
 	-----------------------------------------------------------------------------------------------
 
-	uralysText = display.newText(optionsMenu, "Created by ", 0, 0, FONT, titleSize )
+	uralysText = display.newText(optionsMenu, "Created by ", 0, 0, FONT, 13 )
 	uralysText.x = optionsMenu.board.x - optionsMenu.board.contentWidth/2 + uralysText.contentWidth/2 + 30
 	uralysText.y = optionsMenu.board.y/2 + 25
 
@@ -92,7 +92,7 @@ function scene:displayContent()
 	cbeffectsImage.y = optionsMenu.board.y/2 + 100
 	cbeffectsImage:addEventListener	("touch", function(event) system.openURL( "http://gymbyl.com" ) end)
 
-	velvetText = display.newText(optionsMenu, "Music by Velvet Coffee", 0, 0, FONT, titleSize )
+	velvetText = display.newText(optionsMenu, "Music by Velvet Coffee", 0, 0, FONT, 13 )
 	velvetText.x = optionsMenu.board.x - optionsMenu.board.contentWidth/2 + velvetText.contentWidth/2 + 100
 	velvetText.y = cbeffectsImage.y + 45
 	velvetText:addEventListener	("touch", function(event) system.openURL( "https://soundcloud.com/velvetcoffee" ) end)

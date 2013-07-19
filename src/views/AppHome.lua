@@ -7,7 +7,7 @@
 local scene = storyboard.newScene()
 local menu
 local screen
-local introComplete --= system.getInfo("environment") == "simulator"
+local introComplete = system.getInfo("environment") == "simulator"
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION

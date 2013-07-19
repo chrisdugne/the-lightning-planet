@@ -100,7 +100,7 @@ function scene:displayContent()
 	-- Texts
 
 	display.remove(mainText)
-	mainText = display.newText( buyMenu, T "The game is locked\n Buy me a coffee to get access to the full game !", 0, 0, 170, 100, FONT, 14 )
+	mainText = display.newText( buyMenu, T "The game is locked\n Get access to the full game for a coffee's price !", 0, 0, 170, 100, FONT, 14 )
 	mainText:setTextColor( 255 )	
 	mainText.x = buyMenu.board.x + 35
 	mainText.y = buyMenu.board.y/2 + 60
@@ -146,11 +146,7 @@ function buy()
 	display.remove(secondText)
 	viewManager.cleanupFires()
 	
-	if ( store.availableStores.apple ) then
-		store.purchase( { "com.uralys.thelightningplanet.1.0" } )
-	elseif ( store.availableStores.google ) then
-		store.purchase( { "com.uralys.thelightningplanet.v1" } )
-	end
+	store.purchase( { "com.uralys.thelightningplanet.1.0" } )
 	
 	refreshStatus("Waiting for store...")
 

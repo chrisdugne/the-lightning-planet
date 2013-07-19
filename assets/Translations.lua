@@ -48,8 +48,8 @@ local translations =
         ["fr"] = "Acheter",
     },
 
-    ["The game is locked\n Buy me a coffee to get access to the full game !"] = {
-        ["fr"] = "Le jeu est en démo\n Achetez moi un café pour accéder à son intégralité !",
+    ["The game is locked\n Get access to the full game for a coffee's price !"] = {
+        ["fr"] = "Le jeu est en démo\n Accéder à son intégralité pour le prix d'un café !",
     },
 
     ["Tutorial"] = {
