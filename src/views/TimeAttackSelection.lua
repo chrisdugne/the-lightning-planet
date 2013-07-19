@@ -33,9 +33,9 @@ function scene:refreshScene()
 	hud.setExit(self.exitSelection)
 	
 	viewManager.buildButton(timeAttackLevels, T "Tutorial", 	COLORS[1], 22, display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(1)	end			)
-	viewManager.buildButton(timeAttackLevels, "2 min",	 		COLORS[2], 22, 2*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(2)	end, 	true,	(not savedData.timeAttackAvailable))
-	viewManager.buildButton(timeAttackLevels, "5 min", 		COLORS[3], 22, 3*display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(3)	end, 	true,	(not savedData.timeAttackAvailable))
-	viewManager.buildButton(timeAttackLevels, "8 min", 		COLORS[4], 22, 4*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(4)	end, 	true,	(not savedData.timeAttackAvailable))
+	viewManager.buildButton(timeAttackLevels, "2 min",	 		COLORS[2], 22, 2*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(2)	end, 	true,	(not GLOBALS.savedData.timeAttackAvailable))
+	viewManager.buildButton(timeAttackLevels, "5 min", 		COLORS[3], 22, 3*display.contentWidth/5, 	display.contentHeight*0.4, function() self:openLevel(3)	end, 	true,	(not GLOBALS.savedData.timeAttackAvailable))
+	viewManager.buildButton(timeAttackLevels, "8 min", 		COLORS[4], 22, 4*display.contentWidth/5, 	display.contentHeight*0.6, function() self:openLevel(4)	end, 	true,	(not GLOBALS.savedData.timeAttackAvailable))
 
 	self.view:insert(timeAttackLevels)
 end

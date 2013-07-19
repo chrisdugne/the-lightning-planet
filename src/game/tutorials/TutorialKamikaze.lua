@@ -256,8 +256,8 @@ function step13Content()
 		hud.explode(texts[12].item)
 		game.endGame(T "Tutorial Complete !")
 	
-		savedData.kamikazeAvailable = true 
-   	utils.saveTable(savedData, "savedData.json")
+		GLOBALS.savedData.kamikazeAvailable = true 
+   	utils.saveTable(GLOBALS.savedData, "savedData.json")
 	end
 end
 

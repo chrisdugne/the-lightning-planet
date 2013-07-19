@@ -25,6 +25,8 @@ end
 function scene:refreshScene()
 	utils.emptyGroup(scoreMenu)
 	viewManager.initView(self.view);
+	
+	hud.setExit()
    
    local top = display.newRect(scoreMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)

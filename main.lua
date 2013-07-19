@@ -79,7 +79,7 @@ tutorialTimeAttack	= require "src.game.tutorials.TutorialTimeAttack"
 ---- App globals
 
 GLOBALS = {
-
+	savedData = utils.loadTable("savedData.json")
 }
 
 ---- Combo
@@ -89,10 +89,10 @@ CLASSIC_LEVELS = {
 		colors 				= 4,
 		minDelay 			= 2000,
 		maxDelay 			= 3000,
-		changeDelaySec	 	= 15,
-		changeDelayAmount = 200,
+		changeDelaySec	 	= 20,
+		changeDelayAmount = 150,
 		minSpeed 			= 15,
-		maxSpeed 			= 20
+		maxSpeed 			= 18
 	}
 }
 
@@ -197,6 +197,16 @@ COMBO_LEVELS = {
 		minSpeed = 19,
 		maxSpeed = 23,
 	},
+	{--------------------- LEVEL 11
+		colors = 3,
+		combo = {GREEN,GREEN, BLUE, YELLOW, YELLOW, BLUE, GREEN, YELLOW, BLUE, GREEN, YELLOW, BLUE, YELLOW},
+		minDelay = 1800,
+		maxDelay = 2500,
+		changeDelaySec = 20,
+		changeDelayAmount = 150,
+		minSpeed = 19,
+		maxSpeed = 23,
+	},
 }
 
 ---- Kamikaze 
@@ -291,22 +301,9 @@ math.randomseed( os.time() )
 CBE	=	require("CBEffects.Library")
 
 ------------------------------------------
-
-savedData = utils.loadTable("savedData.json")
 	
-if(not savedData) then
-	initGameData()
-end
-
-function initGameData()
-	savedData = {
-		fullGame = false,
-		requireTutorial = true,
-		levels = {}, 
-		kamikazeAvailable = false, 	-- require tutorial complete
-		timeAttackAvailable = false, 	-- require tutorial complete
-	}
-   utils.saveTable(savedData, "savedData.json")
+if(not GLOBALS.savedData) then
+	game.initGameData()
 end
 
 ------------------------------------------

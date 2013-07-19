@@ -233,8 +233,8 @@ function step10Content()
 		hud.explode(texts[9].item)
 		game.endGame("Tutorial Complete !")
 	
-		savedData.timeAttackAvailable = true 
-   	utils.saveTable(savedData, "savedData.json")
+		GLOBALS.savedData.timeAttackAvailable = true 
+   	utils.saveTable(GLOBALS.savedData, "savedData.json")
 	end
 end
 

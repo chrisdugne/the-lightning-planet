@@ -4,6 +4,10 @@ local translations =
         ["fr"] = "Version complète",
     },
 
+    ["- Play all Levels\n- No more time limit"] = {
+        ["fr"] = "- Tous les niveaux\n- Aucune limite de temps ",
+    },
+
     ["Cancel"] = {
         ["fr"] = "Annuler",
     },

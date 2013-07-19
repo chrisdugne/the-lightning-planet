@@ -9,6 +9,7 @@ module(..., package.seeall)
 -----------------------------------------------------------------------------------------
 
 function openAppHome()
+	hud.explodeHUD()
 	storyboard.gotoScene( "src.views.AppHome" )
 end
 

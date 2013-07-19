@@ -39,8 +39,8 @@ function start(view)
 	stepContent[1]()
 
 	-- level 2 immediately available for eager players leaving tuto
-	savedData.levels[2] = { available = true }
-   utils.saveTable(savedData, "savedData.json")
+	GLOBALS.savedData.levels[2] = { available = true }
+   utils.saveTable(GLOBALS.savedData, "savedData.json")
 
 -- debug got to step
 --	game.setPlanetColor(GREEN)

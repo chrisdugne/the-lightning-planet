@@ -42,6 +42,21 @@ local planetFilter 	= { categoryBits=8, maskBits=1 }
 
 -----------------------------------------------------------------------------------------
 
+function initGameData()
+
+	GLOBALS.savedData = {
+		fullGame = GLOBALS.savedData ~= nil and GLOBALS.savedData.fullGame,
+		requireTutorial = true,
+		levels = {}, 
+		kamikazeAvailable = false, 	-- require tutorial complete
+		timeAttackAvailable = false, 	-- require tutorial complete
+	}
+	
+   utils.saveTable(GLOBALS.savedData, "savedData.json")
+end
+
+-----------------------------------------------------------------------------------------
+
 function init(view)
 
 	---------------------------------------
@@ -81,7 +96,7 @@ function init(view)
 	local tutorial = false
 	
 	-- Tutorial Classic
-	if(mode == CLASSIC and savedData.requireTutorial) then
+	if(mode == CLASSIC and GLOBALS.savedData.requireTutorial) then
 		tutorial = true
 		hud.refreshTopRightText(T "Tutorial")
 		start(false)
@@ -119,7 +134,7 @@ function init(view)
 		if(mode == CLASSIC) then
 			level = 1 
    		hud.refreshTopRightText(T "Classic")
-			if(not savedData.levels[1]) then
+			if(not GLOBALS.savedData.levels[1]) then
 				timer.performWithDelay(1500, function() displayInfo(T "Reach 2 min to unlock Combo mode") end)
 			end
       	
@@ -630,10 +645,10 @@ function classicOver()
 	local min,sec = utils.getMinSec(game.timeCombo)
 	endGame(min .. ":" .. sec)
 	
-	if(not savedData.levels[1] and timeCombo > 119) then
+	if(not GLOBALS.savedData.levels[1] and timeCombo > 119) then
 		displayInfo("Combo mode unlocked !")
-   	savedData.levels[1] = { available = true }
-      utils.saveTable(savedData, "savedData.json")
+   	GLOBALS.savedData.levels[1] = { available = true }
+      utils.saveTable(GLOBALS.savedData, "savedData.json")
 	end
 end
 
@@ -679,8 +694,8 @@ end
 
 function completeLevel()	
 	endGame("Level " .. level .. " Complete !")
-	savedData.levels[level+1] = { available = true }
-   utils.saveTable(savedData, "savedData.json")
+	GLOBALS.savedData.levels[level+1] = { available = true }
+   utils.saveTable(GLOBALS.savedData, "savedData.json")
 end
 
 -----------------------------------------------------------------------------------------

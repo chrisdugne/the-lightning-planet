@@ -86,9 +86,9 @@ function scene:refreshScene()
    end	
 	
 	viewManager.buildButton(menu, T "Classic", 		COLORS[1], 		21, display.contentWidth/6, 	display.contentHeight*0.35, 	classic)
-	viewManager.buildButton(menu, T "Combo", 			COLORS[2], 		22, 2*display.contentWidth/6, display.contentHeight*0.65, 	combo, 			true, (not savedData.levels[1]))
-	viewManager.buildButton(menu, T "Time Attack", 	COLORS[3], 		16, 5*display.contentWidth/8, display.contentHeight*0.76, 	timeAttack, 	true, (not savedData.levels[2]))
-	viewManager.buildButton(menu, T "Kamikaze", 		COLORS[4], 		20, 5*display.contentWidth/6, display.contentHeight*0.44, 	kamikaze, 		true, (not savedData.levels[2]))
+	viewManager.buildButton(menu, T "Combo", 			COLORS[2], 		22, 2*display.contentWidth/6, display.contentHeight*0.65, 	combo, 			true, (not GLOBALS.savedData.levels[1]))
+	viewManager.buildButton(menu, T "Time Attack", 	COLORS[3], 		16, 5*display.contentWidth/8, display.contentHeight*0.76, 	timeAttack, 	true, (not GLOBALS.savedData.levels[2]))
+	viewManager.buildButton(menu, T "Kamikaze", 		COLORS[4], 		20, 5*display.contentWidth/6, display.contentHeight*0.44, 	kamikaze, 		true, (not GLOBALS.savedData.levels[2]))
 
 	viewManager.buildSmallButton(
 		menu, 

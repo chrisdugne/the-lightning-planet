@@ -9,7 +9,9 @@ local buyMenu
 
 local statusText
 local mainText
+local secondText
 local lockImage
+local coffeeImage
 
 local planetButton, textButton
 
@@ -45,9 +47,7 @@ function storeTransaction( event )
 	local transaction = event.transaction
 
 	if ( transaction.state == "purchased" ) then
-		savedData.fullGame = true
-	   utils.saveTable(savedData, "savedData.json")
-		refreshStatus("Thank you !")
+		gameBought()
 
 	elseif ( transaction.state == "cancelled" ) then
 		print( "cancelled")
@@ -68,12 +68,10 @@ end
 
 function scene:refreshScene()
 
-	hud.setExit()
-
-	-----------------------------------------------------------
-	
 	utils.emptyGroup(buyMenu)
 	viewManager.initView(self.view);
+
+	hud.setExit()
    
    local top = display.newRect(buyMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)
@@ -107,26 +105,45 @@ function scene:displayContent()
 	mainText.x = buyMenu.board.x + 35
 	mainText.y = buyMenu.board.y/2 + 60
 
-	display.remove(statusText)
-	statusText = display.newText( buyMenu, "", 0, 0, FONT, 22 )
-	statusText:setTextColor( 255 )	
-	
+	display.remove(lockImage)
 	lockImage = display.newImage(buyMenu, "assets/images/hud/lock.png")
 	lockImage:scale(0.50,0.50)
 	lockImage.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + 30
 	lockImage.y = buyMenu.board.y/2 + 40
+	lockImage:addEventListener	("touch", function(event) buy() end)
+
+	display.remove(statusText)
+	statusText = display.newText( buyMenu, "", 0, 0, FONT, 22 )
+	statusText:setTextColor( 255 )	
 	
-	planetButton, textButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x, 	display.contentHeight*0.58, function() buy() end)
+	display.remove(coffeeImage)
+	coffeeImage = display.newImage(buyMenu, "assets/images/hud/coffee.png")
+	coffeeImage:scale(0.50,0.50)
+	coffeeImage.x = buyMenu.board.x + 35
+	coffeeImage.y = buyMenu.board.y + 10
+	coffeeImage:addEventListener	("touch", function(event) buy() end)
 	
-	-----------------------------------------------------------------------------------------------
+	display.remove(secondText)
+	secondText = display.newText( buyMenu, T "- Play all Levels\n- No more time limit", 0, 0, 170, 100, FONT, 14 )
+	secondText:setTextColor( 255 )	
+	secondText.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + secondText.contentWidth
+	secondText.y = buyMenu.board.y + 90
+
+	display.remove(planetButton)
+	display.remove(textButton)
+	planetButton, textButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x - buyMenu.board.contentWidth/2 + 45, 	display.contentHeight*0.58, function() buy() end)
 
 end
+
+------------------------------------------
 
 function buy()
 	display.remove(lockImage)
 	display.remove(mainText)
 	display.remove(planetButton)
 	display.remove(textButton)
+	display.remove(coffeeImage)
+	display.remove(secondText)
 	viewManager.cleanupFires()
 	
 	if ( store.availableStores.apple ) then
@@ -136,7 +153,25 @@ function buy()
 	end
 	
 	refreshStatus("Waiting for store...")
+
+	-----------------------------
+	-- DEV only : simulator
+	
+	if(system.getInfo("environment") == "simulator") then
+		gameBought()
+	end
 end
+
+------------------------------------------
+
+function gameBought()
+	GLOBALS.savedData.fullGame = true
+   utils.saveTable(GLOBALS.savedData, "savedData.json")
+	refreshStatus("Thank you !")
+	timer.performWithDelay(1500, router.openAppHome)
+end
+
+------------------------------------------
 
 function refreshStatus(message)
 	if(statusText) then

@@ -19,18 +19,19 @@ local optionsMenu
 function scene:createScene( event )
 	optionsMenu = display.newGroup()
 	game.scene = optionsMenu
+	
+	print("created")
 end
 
 -----------------------------------------------------------------------------------------
 
 function scene:refreshScene()
+	print("ref")
 
-	hud.setExit()
-
-	-----------------------------------------------------------
-	
 	utils.emptyGroup(optionsMenu)
 	viewManager.initView(self.view);
+
+	hud.setExit()
    
    local top = display.newRect(optionsMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)
@@ -57,7 +58,13 @@ function scene:displayContent()
 
 	-----------------------------------------------------------------------------------------------
 
-	viewManager.buildButton(optionsMenu, T "Full version",  COLORS[1], 12, display.contentWidth*0.77, 	display.contentHeight*0.38, 	router.openBuy)
+	if(not GLOBALS.savedData.fullGame) then
+		viewManager.buildButton(optionsMenu, T "Full version",  COLORS[1], 12, display.contentWidth*0.77, 	display.contentHeight*0.38, 	router.openBuy)
+	else
+		thanksText = display.newText(optionsMenu, "Thank you for purchasing the full version !", 0, 0, 70, 100, FONT, 12 )
+		thanksText.x = display.contentWidth*0.75
+		thanksText.y = display.contentHeight*0.4
+	end
 	viewManager.buildButton(optionsMenu, "Reset", 	COLORS[2], 		21, display.contentWidth*0.77, 	display.contentHeight*0.61, function()	self:reset() end)
 	
 	-----------------------------------------------------------------------------------------------
@@ -107,7 +114,7 @@ function scene:confirmReset( event )
     if "clicked" == event.action then
         local i = event.index
         if 1 == i then
-         	initGameData()
+         	game.initGameData()
             router.openAppHome()
         end
     end

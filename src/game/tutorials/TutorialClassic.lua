@@ -147,8 +147,8 @@ stepContent = {
 	------ Step 22
 	function()
 		game.endGame("Tutorial Complete !", router.openAppHome)
-		savedData.requireTutorial = false
-   	utils.saveTable(savedData, "savedData.json")
+		GLOBALS.savedData.requireTutorial = false
+   	utils.saveTable(GLOBALS.savedData, "savedData.json")
 		displayText(6)
 	end,
 	------ Exit
