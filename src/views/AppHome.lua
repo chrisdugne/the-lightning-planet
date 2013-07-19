@@ -7,7 +7,7 @@
 local scene = storyboard.newScene()
 local menu
 local screen
-local introComplete = system.getInfo("environment") == "simulator"
+local introComplete --= system.getInfo("environment") == "simulator"
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -44,18 +44,18 @@ function scene:intro()
 	back.x = display.viewableContentWidth/2  
 	back.y = display.viewableContentHeight/2  
 	back.alpha = 0
-	transition.to( back, { time=18000, alpha=1 })  
+	transition.to( back, { time=10000, alpha=1 })  
 	screen.back = back
 
    light1()
    timer.performWithDelay(1500, function()
       displayIntroText("Uralys presents", display.contentWidth/2, display.contentHeight/2, true)
    
-      timer.performWithDelay(7500, function()
+      timer.performWithDelay(6500, function()
       	light2()
          displayIntroText("The Lightning Planet", display.contentWidth/2, 45, false)
 
-         timer.performWithDelay(7500, function()
+         timer.performWithDelay(4000, function()
          	utils.emptyGroup(screen)
          	self:refreshScene()
          end)
@@ -174,25 +174,25 @@ function light2()
 	explode(	
    		display.contentWidth * 0.5,
    		display.contentHeight * 0.6,
-   		7000
+   		5000
    	)
 
    explode(
    		display.contentWidth * 0.2,
    		display.contentHeight * 0.7,
-   		6000
+   		4000
    	)
 
    explode(
    		display.contentWidth * 0.2,
    		display.contentHeight * 0.7,
-   		6200
+   		4200
    	)
 
    explode(
    		display.contentWidth * 0.8,
    		display.contentHeight * 0.9,
-   		5300
+   		3300
    	)
 end
 
@@ -233,8 +233,8 @@ function displayIntroText(text, x, y, fade)
 	
 	transition.to( introText, { time=3000, alpha=1, onComplete=function()
 		if(fade) then
-      	timer.performWithDelay(1000, function()
-      			transition.to( introText, { time=3000, alpha=0 })
+      	timer.performWithDelay(500, function()
+      			transition.to( introText, { time=2000, alpha=0 })
 			end)
 		end
 	end})
