@@ -72,8 +72,11 @@ function init(view)
    
    kamikazePercent 	= 100
    timePlayed 		 	= 0
+   lockTime 		 	= 3*60
    timeCombo 		 	= 0
    	
+	lock 					= false
+	
 	---------------------------------------
 
 	setPlanetColor(BLUE)
@@ -138,6 +141,8 @@ function init(view)
 				timer.performWithDelay(1500, function() displayInfo(T "Reach 2 min to unlock Combo mode") end)
 			end
       	
+      	lock = not GLOBALS.savedData.fullGame
+      	
       	hud.startComboTimer()
       	
 		elseif(mode == COMBO) then 
@@ -149,6 +154,8 @@ function init(view)
    		hud.drawProgressBar(100)
       	hud.refreshTopRightText("0 pts")
       	hud.drawBag()
+      	
+      	lock = level > 1 and not GLOBALS.savedData.fullGame
 		
 		elseif(mode == TIMEATTACK) then 
       	hud.refreshTopRightText("0 pts")
@@ -161,6 +168,7 @@ function init(view)
 				hud.drawTimer(480)
          end
       
+      	lock = level > 1 and not GLOBALS.savedData.fullGame
       end
    	
    	hud.setExit()
@@ -185,6 +193,11 @@ function start(requireAsteroidBuilder)
 
    	timer.performWithDelay(1000, nextPlayedSecond)
 	end
+	
+	if(lock) then
+		hud.initLockElements()
+   	timer.performWithDelay(1000, lockTimer)
+	end
 end
 
 
@@ -196,6 +209,23 @@ function nextPlayedSecond()
 	
 	timePlayed = timePlayed+1
 	timer.performWithDelay(1000, nextPlayedSecond)
+end
+
+
+function lockTimer()
+	if(game.state == game.IDLE) then	
+		return
+	end
+
+	lockTime = lockTime-1
+
+	if(lockTime < 0) then
+		game.endGame(T "Game Locked", router.openBuy)	
+		return
+	end
+	
+	hud.refreshLockElements(lockTime)
+	timer.performWithDelay(1000, lockTimer)
 end
 
 -----------------------------------------------------------------------------------------

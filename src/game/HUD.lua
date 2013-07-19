@@ -16,12 +16,12 @@ powerBarFire 	= nil
 
 function initHUD()
 	utils.emptyGroup(elements)
+	lockElements = display.newGroup()
 end
 
 -----------------------------------------------------------------------------------------
 
 function setExit(toApply)
-	display.remove(exitButton)
 	exitButton = display.newImage( game.scene, "assets/images/hud/exit.png")
 	exitButton.x = display.contentWidth - 20
 	exitButton.y = 45
@@ -53,6 +53,50 @@ function refreshTopRightText(text)
 		topRightText.text = text
 		topRightText.x 	= display.contentWidth - topRightText.contentWidth/2 - 10
 	end
+end
+
+-----------------------------------------------------------------------------------------
+--- The bottom part asking to unlock the game
+
+function initLockElements()
+	display.remove(lockElements)
+	
+	local text = display.newText( lockElements, "", 0, 0, FONT, 10 )
+	text:setTextColor( 255 )	
+	text:addEventListener	("touch", goToBuy)
+
+	lockElements.text = text
+
+	local lockImage = display.newImage(lockElements, "assets/images/hud/lock.png")
+	lockImage.x = 40
+	lockImage.y = display.contentHeight-12
+	lockImage:scale(0.15,0.15)
+	lockImage:addEventListener	("touch", goToBuy)
+
+	local arrowImage = display.newImage(lockElements, "assets/images/tutorial/arrow.left.png")
+	arrowImage.x = 55
+	arrowImage.y = display.contentHeight-10
+	arrowImage:scale(0.07,0.07)
+	arrowImage:addEventListener	("touch", goToBuy)
+
+	elements:insert(lockElements)
+	lockElements.alpha = 0
+end
+
+function refreshLockElements(time)
+	lockElements.alpha = 1
+	local min,sec = utils.getMinSec(time)
+	local text = "Get the full version to remove time limit   "
+	if(lockElements) then
+		lockElements.text.text =  text .. min .. ":" .. sec 
+  		lockElements.text:setReferencePoint(display.TopLeftReferencePoint)
+		lockElements.text.x = 65
+		lockElements.text.y = display.contentHeight-18
+	end
+end
+
+function goToBuy() 
+	game.endGame("", router.openBuy)
 end
 
 -----------------------------------------------------------------------------------------

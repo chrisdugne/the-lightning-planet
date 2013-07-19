@@ -4,6 +4,10 @@ local translations =
         ["fr"] = "Version complète",
     },
 
+    ["Game Locked"] = {
+        ["fr"] = "Jeu en démo",
+    },
+
     ["- Play all Levels\n- No more time limit"] = {
         ["fr"] = "- Tous les niveaux\n- Aucune limite de temps ",
     },
