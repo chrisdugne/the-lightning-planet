@@ -642,7 +642,7 @@ function time(seconds)
 	if(seconds == 0) then
 		game.timerDone()
 	else	
-		timer.performWithDelay(100, function() time(seconds) end)
+		timer.performWithDelay(1000, function() time(seconds) end)
 	end
 	
 end
