@@ -26,7 +26,7 @@ function scene:refreshScene()
 	utils.emptyGroup(scoreMenu)
 	viewManager.initView(self.view);
 	
---	hud.setExit()
+	hud.setExit()
    
    local top = display.newRect(scoreMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)
@@ -47,14 +47,16 @@ function scene:refreshScene()
 
 	self.view:insert(scoreMenu)
 	
-	game.storeRecord()
+	if(game.position) then
+		game.storeRecord()
+   end
 end
 
 function scene:displayContent()
 
-	local type = self:getGameType()
-	local level = self.getLevel()
-	local value = self.getValue()
+	local type = game:getGameType()
+	local level = game.getLevel()
+	local value = game.getTextValue()
 
 	-----------------------------------------------------------------------------------------------
 	-- Texts
@@ -79,7 +81,7 @@ function scene:displayContent()
 	
 	viewManager.buildButton(scoreMenu, "",	 	COLORS[2], 22, scoreMenu.board.x - scoreMenu.board.contentWidth/2 + 50, 	display.contentHeight*0.58, function() router.openPlayground() end)
 	viewManager.buildButton(scoreMenu, "", 	COLORS[3], 22, scoreMenu.board.x, 														display.contentHeight*0.58, function() router.openSelection() end)
-	viewManager.buildButton(scoreMenu, "", 	COLORS[4], 22, scoreMenu.board.x + scoreMenu.board.contentWidth/2 - 50, 	display.contentHeight*0.58, self.nextLevel)
+	viewManager.buildButton(scoreMenu, "", 	COLORS[4], 22, scoreMenu.board.x + scoreMenu.board.contentWidth/2 - 50, 	display.contentHeight*0.58, game.nextLevel)
 	
 	-----------------------------------------------------------------------------------------------
 	-- Icons
@@ -117,126 +119,9 @@ end
 
 ------------------------------------------
 
-function scene:nextLevel()
-	game.level = game.level + 1
-	local wasLastLevel = false
-		
-	if(game.mode == game.CLASSIC) then 
-		wasLastLevel = true
-
-	elseif(game.mode == game.COMBO) then 
-		if(game.level == 41) then
-			wasLastLevel = true
-		end
-
-		-- next level not available
-		if(type(game.timeCombo) ~= "number") then
-			game.level = game.level - 1
-		end
-	
-	elseif(game.mode == game.KAMIKAZE or game.mode == game.TIMEATTACK) then 
-		if(game.level == 5) then
-			wasLastLevel = true
-		end
-   end
-	
-	if(wasLastLevel) then
-		router.openSelection()
-	else
-		router.openPlayground()
-	end
-
-end
-
-------------------------------------------
-
-function scene:getGameType()
-
-	if(game.mode == game.COMBO) then 
-		return T "Combo"
-	
-	elseif(game.mode == game.CLASSIC) then 
-		return T "Classic"
-
-	elseif(game.mode == game.KAMIKAZE) then 
-		return T "Kamikaze"
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		return T "Time Attack"
-
-   end
-end
-
-function scene:getLevel()
-
-	if(game.mode == game.COMBO) then 
-		if(game.level == 1) then
-			return T "Tutorial" 
-		else
-			return "Level " .. game.level
-		end
-	
-	elseif(game.mode == game.CLASSIC) then 
-		return "" 
-	
-	elseif(game.mode == game.KAMIKAZE) then 
-		if(game.level == 1) then
-			return T "Tutorial" 
-		elseif(game.level == 2) then
-			return T "Easy" 
-		elseif(game.level == 3) then
-			return T "Hard" 
-		elseif(game.level == 4) then
-			return T "Extreme" 
-      end
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		if(game.level == 1) then
-			return T "Tutorial" 
-		elseif(game.level == 2) then
-			return "2 min" 
-		elseif(game.level == 3) then
-			return "5 min" 
-		elseif(game.level == 4) then
-			return "8 min" 
-      end
-	
-   end
-
-end
-
-function scene:getValue()
-
-	if(game.mode == game.COMBO) then 
-		if(game.level == 1) then
-			return "" 
-		else
-			if(type(game.timeCombo) == "number") then
-				local min,sec = utils.getMinSec(game.timeCombo)
-   			return min .. ":" .. sec
-   		else
-   			return game.timeCombo -- Fail !
-   		end
-		end
-
-	elseif(game.mode == game.CLASSIC) then 
-		local min,sec = utils.getMinSec(game.timeCombo)
-		return min .. ":" .. sec
-	
-	elseif(game.mode == game.KAMIKAZE) then 
-		return game.points .." pts"
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		return game.points .." pts"
-
-   end
-end
-
-------------------------------------------
-
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
-	self:refreshScene();
+	self:refreshScene()
 end
 
 -- Called when scene is about to move offscreen:

@@ -81,9 +81,9 @@ function scene:displayContent()
 	-----------------------------------------------------------------------------------------------
 
 	coronaImage = display.newImage(optionsMenu, "assets/images/others/corona.png")
-	coronaImage:scale(0.4,0.4)
+	coronaImage:scale(0.3,0.3)
 	coronaImage.x = optionsMenu.board.x - optionsMenu.board.contentWidth/2 + coronaImage.contentWidth/2 + 20
-	coronaImage.y = optionsMenu.board.y/2 + 120
+	coronaImage.y = optionsMenu.board.y/2 + 110
 	coronaImage:addEventListener	("touch", function(event) system.openURL( "http://www.coronalabs.com" ) end)
 
 	cbeffectsImage = display.newImage(optionsMenu, "assets/images/others/cbeffects.png")

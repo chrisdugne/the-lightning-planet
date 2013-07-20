@@ -25,16 +25,6 @@ asteroids 			= {}
 asteroidsCaught 	= {}
 
 -----------------------------------------------------------------------------------------
-
-points 	= 0
-mode 		= 0
-state 	= IDLE
-
-kamikazePercent = 100
-timePlayed 		 = 0
-timeCombo 		 = 0
-
------------------------------------------------------------------------------------------
 --set up collision filters
 
 local asteroidFilter = { categoryBits=1, maskBits=14 }
@@ -61,28 +51,9 @@ function initGameData()
 			kamikazeextreme={}
 		}
 	}
-	
-   utils.saveTable(GLOBALS.savedData, "savedData.json")
+
+	utils.saveTable(GLOBALS.savedData, "savedData.json")
 end
-
------------------------------------------------------------------------------------------
-
-function storeRecord()
-	print("store record")
-end
-
-function checkNewRecord()
-	newRecord = true
-end
-
----TODO
--- mettre les gettypes/title/values ici
--- mettre le savedData.scores.data dans une var
--- check des values
--- set de newRecord : true/false
--- go to view NewRecord
--- -> view Score appelera storeRecord (savedData.user sera OK)
--- set du record
 
 -----------------------------------------------------------------------------------------
 
@@ -93,31 +64,31 @@ function init(view)
 	if(view) then
 		scene = view
 	end
-	
+
 	----------------------------------------
 
-   points 				= 0
-   state 				= IDLE
-   
-   kamikazePercent 	= 100
-   timePlayed 		 	= 0
-   lockTime 		 	= 3*60
-   timeCombo 		 	= 0
-   	
+	points 				= 0
+	position 			= nil
+	state 				= IDLE
+
+	kamikazePercent 	= 100
+	timePlayed 		 	= 0
+	lockTime 		 	= 3*60
+	timeCombo 		 	= 0
+
 	lock 					= false
-	newRecord 			= false
-	
+
 	---------------------------------------
 
 	setPlanetColor(BLUE)
-	
+
 	if(mode == COMBO) then
-   	requestedAsteroid = 1
-   else
-	   for i = 1, #COLORS do
-   	   asteroidsCaught[COLORS[i]] = 0
-   	end
-   end
+		requestedAsteroid = 1
+	else
+		for i = 1, #COLORS do
+			asteroidsCaught[COLORS[i]] = 0
+		end
+	end
 
 	----------------------------------------
 
@@ -125,9 +96,9 @@ function init(view)
 	hud.initTopRightText()
 
 	----------------------------------------
-	
+
 	local tutorial = false
-	
+
 	-- Tutorial Classic
 	if(mode == CLASSIC and GLOBALS.savedData.requireTutorial) then
 		tutorial = true
@@ -135,7 +106,7 @@ function init(view)
 		start(false)
 		tutorialClassic.start(view)
 	end
-	
+
 	-- Tutorial Combo
 	if(mode == COMBO and level == 1) then
 		tutorial = true
@@ -160,100 +131,103 @@ function init(view)
 		tutorialTimeAttack.start(view)
 		hud.drawTimer(90)
 	end
-	
-	
+
+
 	if(not tutorial) then
-		
+
 		if(mode == CLASSIC) then
 			level = 1 
-   		hud.refreshTopRightText(T "Classic")
+			hud.refreshTopRightText(T "Classic")
 			if(not GLOBALS.savedData.levels[1]) then
 				timer.performWithDelay(1500, function() displayInfo(T "Reach 2 min to unlock Combo mode") end)
 			end
-      	
-      	lock = not GLOBALS.savedData.fullGame
-      	
-      	hud.startComboTimer()
-      	
+
+			lock = not GLOBALS.savedData.fullGame
+
+			hud.startComboTimer()
+
 		elseif(mode == COMBO) then 
 			hud.drawCombo(level, 0)
-      	hud.refreshTopRightText("Level " .. level)
-      	hud.startComboTimer()
-		
+			hud.refreshTopRightText("Level " .. level)
+			hud.startComboTimer()
+
 		elseif(mode == KAMIKAZE) then 
-   		hud.drawProgressBar(100)
-      	hud.refreshTopRightText("0 pts")
-      	hud.drawBag()
-      	
-      	lock = level > 1 and not GLOBALS.savedData.fullGame
-		
+			hud.drawProgressBar(100)
+			hud.refreshTopRightText("0 pts")
+			hud.drawBag()
+
+			lock = level > 1 and not GLOBALS.savedData.fullGame
+
 		elseif(mode == TIMEATTACK) then 
-      	hud.refreshTopRightText("0 pts")
-      	hud.drawBag()
-      	if(level == 2) then
+			hud.refreshTopRightText("0 pts")
+			hud.drawBag()
+			if(level == 2) then
 				hud.drawTimer(120)
-      	elseif(level == 3) then
+			elseif(level == 3) then
 				hud.drawTimer(300)
-      	elseif(level == 4) then
+			elseif(level == 4) then
 				hud.drawTimer(480)
-         end
-      
-      	lock = level > 1 and not GLOBALS.savedData.fullGame
-      end
-   	
-   	hud.setExit()
-   	hud.setupPad()
-   	start()
-   end   
+			end
+
+			lock = level > 1 and not GLOBALS.savedData.fullGame
+		end
+
+		hud.setExit()
+		hud.setupPad()
+		start()
+	end   
 end
 
 -----------------------------------------------------------------------------------------
 
 function start(requireAsteroidBuilder)
-	
+
 	if(requireAsteroidBuilder == nil) then
 		requireAsteroidBuilder = true
 	end
 
 	state	= RUNNING
-	
+
 	if(requireAsteroidBuilder) then
-   	hud.centerText("Start !", display.contentHeight/4, 45)
+		hud.centerText("Start !", display.contentHeight/4, 45)
 		asteroidBuilder()
 
-   	timer.performWithDelay(1000, nextPlayedSecond)
+		timer.performWithDelay(1000, nextPlayedSecond)
 	end
-	
+
 	if(lock) then
 		hud.initLockElements()
-   	timer.performWithDelay(1000, lockTimer)
+		timer.performWithDelay(1000, lockTimer)
 	end
 end
 
 
 function nextPlayedSecond()
-	if(game.state == game.IDLE) then	
+	if(state == IDLE) then	
 		timePlayed = 0 
 		return
 	end
-	
+
 	timePlayed = timePlayed+1
 	timer.performWithDelay(1000, nextPlayedSecond)
 end
 
 
 function lockTimer()
-	if(game.state == game.IDLE) then	
+	if(state == IDLE) then	
 		return
 	end
 
 	lockTime = lockTime-1
 
 	if(lockTime < 0) then
-		game.endGame(T "Game Locked", router.openBuy)	
+		endGame(T "Game Locked", router.openBuy)
+		if(mode == CLASSIC) then
+			checkUnlockedStuffs()
+		end
 		return
 	end
-	
+
 	hud.refreshLockElements(lockTime)
 	timer.performWithDelay(1000, lockTimer)
 end
@@ -261,10 +235,10 @@ end
 -----------------------------------------------------------------------------------------
 
 function asteroidBuilder()
-	
+
 	local LEVELS = getCurrentLEVELS()
 	local timeDelay = math.floor(timePlayed/LEVELS[level].changeDelaySec) * LEVELS[level].changeDelayAmount
-	
+
 	timer.performWithDelay( math.random(LEVELS[level].minDelay - timeDelay, LEVELS[level].maxDelay - timeDelay), function()
 		if(state == RUNNING) then
 			createAsteroid()
@@ -274,9 +248,9 @@ function asteroidBuilder()
 end
 
 function setPlanetColor(color)
-	
+
 	display.remove(planet)
-	
+
 	planet = display.newImage(scene, "assets/images/game/planet.".. color ..".png")
 	planet:scale(0.17,0.17)
 	planet.x = display.contentWidth/2
@@ -294,35 +268,35 @@ function crashAsteroid( asteroid, event )
 	if(asteroid.beingDestroyed) then
 		return
 	end
-	
+
 	--------------------------
 
 	local goodCatch = asteroid.color == planet.color
-	
+
 	--------------------------
 
 	if(mode == CLASSIC) then
-		
+
 		if(not goodCatch) then
 			classicOver()
 		end
-	
-	--------------------------
+
+		--------------------------
 
 	elseif(mode == COMBO) then
-		
+
 		if(not goodCatch) then
 			comboOver()
 		end
-	
-	--------------------------
-	
+
+		--------------------------
+
 	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then
-		
+
 		local change 	= 0 
 		local catch 	= 0 
 		local total 	= points
-		
+
 		if(goodCatch) then
 			catch = 1
 			asteroidsCaught[planet.color] = asteroidsCaught[planet.color] + 1
@@ -331,12 +305,12 @@ function crashAsteroid( asteroid, event )
 			catch = -1
 			asteroidsCaught[planet.color] = asteroidsCaught[planet.color] - 1
 			change = -3
-			
+
 			if(mode == KAMIKAZE) then
 				kamikazePercent = kamikazePercent - ASTEROID_CRASH_KAMIKAZE_PERCENT
 			end
 		end
-		
+
 		total = points + change
 
 		if(asteroidsCaught[planet.color] < 0) then
@@ -346,34 +320,34 @@ function crashAsteroid( asteroid, event )
 		if(total < 0) then
 			total = 0
 		end
-		
+
 		hud.drawCatch(asteroid.x, asteroid.y, planet.color, catch)
 		hud.drawBag()
 		hud.drawPoints(change, total, asteroid)
-		
+
 		if(not goodCatch and mode == KAMIKAZE) then
 			if(kamikazePercent > 0) then 
 				hud.drawProgressBar(kamikazePercent, ASTEROID_CRASH_KAMIKAZE_PERCENT)
 			else 
-      		hud.drawProgressBar(1, ASTEROID_CRASH_KAMIKAZE_PERCENT)
+				hud.drawProgressBar(1, ASTEROID_CRASH_KAMIKAZE_PERCENT)
 				kamikazeOver()
-   		end
+			end
 		end
-		
+
 		points = total
 
 	end
 
 	--------------------------
 	-- destroy
-	
+
 	asteroid.beingDestroyed = true
-	
+
 	if(goodCatch) then
 		catchAsteroid(asteroid)
 	else
 		explodeAsteroid(asteroid)
-   end
+	end
 end
 
 ------------------------------------------------------------------------------------------
@@ -381,23 +355,23 @@ end
 function actionOnLightning(asteroid)
 
 	if(mode == COMBO) then
-		
+
 		local goodCatch = COMBO_LEVELS[level].combo[requestedAsteroid] == asteroid.color
-		
+
 		if(goodCatch) then
 			hud.drawCombo(level, requestedAsteroid)
 			requestedAsteroid = requestedAsteroid + 1
-			
+
 			if(requestedAsteroid > #COMBO_LEVELS[level].combo) then
 				completeLevel()
-   		end
-   	else
-   		requestedAsteroid = 1
+			end
+		else
+			requestedAsteroid = 1
 			hud.drawCombo(level, 0)
-   	end
-   	
+		end
+
 	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then
-		
+
 		local change 		= asteroidsCaught[asteroid.color] * asteroidsCaught[asteroid.color]
 		local changeText 	= asteroidsCaught[asteroid.color] .. " x "  ..  asteroidsCaught[asteroid.color]
 		local total = points + change
@@ -408,19 +382,19 @@ function actionOnLightning(asteroid)
 		hud.drawPoints(changeText, total, asteroid, true)
 		hud.drawCatch(asteroid.x, asteroid.y, asteroid.color, "/2")
 		hud.drawBag()
-		
+
 		if(mode == KAMIKAZE) then
-   		if(kamikazePercent > 0) then 
-      		hud.drawProgressBar(kamikazePercent, LIGHTNING_KAMIKAZE_PERCENT)
+			if(kamikazePercent > 0) then 
+				hud.drawProgressBar(kamikazePercent, LIGHTNING_KAMIKAZE_PERCENT)
 			else 
-      		hud.drawProgressBar(1, LIGHTNING_KAMIKAZE_PERCENT)
+				hud.drawProgressBar(1, LIGHTNING_KAMIKAZE_PERCENT)
 				kamikazeOver()
-   		end 
+			end 
 		end 
-		
+
 		points = total
 	end
-	
+
 end
 
 ------------------------------------------------------------------------------------------
@@ -433,44 +407,44 @@ function destroyAsteroid(asteroid)
 			break
 		end
 	end
-	
+
 	table.remove(asteroids, indexToRemove)
 
 	--------------------------
 	-- destroy
-	
+
 	transition.to( asteroid, { time=150, alpha=0, onComplete=function() display.remove(asteroid) end } )
 end
 
 ------------------------------------------------------------------------------------------
 
 function shootOnClosestAsteroid() 
-	
+
 	local asteroid = findClosestAsteroid()
 	if(asteroid and not asteroid.beingDestroyed) then
-	
+
 		asteroid.beingDestroyed = true
-		
+
 		local asteroidPosition 	= vector2D:new(asteroid.x, asteroid.y)
-   	local center 				= vector2D:new(display.contentWidth/2, display.contentHeight/2)
-   	local direction 			= vector2D:Sub(asteroidPosition, center)
+		local center 				= vector2D:new(display.contentWidth/2, display.contentHeight/2)
+		local direction 			= vector2D:Sub(asteroidPosition, center)
 
-   	direction:normalize()
-   	direction:mult(20)
-   	
-   	local planetPosition = vector2D:Add(center, direction)
+		direction:normalize()
+		direction:mult(20)
 
-   	lightPlanet(asteroid) 
-   	
-   	local thunderDone = function() 
-   		actionOnLightning(asteroid)
-   		explodeAsteroid(asteroid) 
-   	end
+		local planetPosition = vector2D:Add(center, direction)
 
-   	lightning.thunder(planetPosition, asteroidPosition, thunderDone)
-   	musicManager.playLight()
-   end
-	
+		lightPlanet(asteroid) 
+
+		local thunderDone = function() 
+			actionOnLightning(asteroid)
+			explodeAsteroid(asteroid) 
+		end
+
+		lightning.thunder(planetPosition, asteroidPosition, thunderDone)
+		musicManager.playLight()
+	end
+
 end
 
 ------------------------------------------------------------------------------------------
@@ -478,25 +452,25 @@ end
 function findClosestAsteroid()
 	local closestDistance = 10000
 	local closestAsteroid
-	
+
 	for i in pairs(asteroids) do
 		local asteroid = asteroids[i]
 		local asteroidPosition 	= vector2D:new(asteroid.x, asteroid.y)
 		local planetPosition 	= vector2D:new(display.contentWidth/2, display.contentHeight/2)
-		
+
 		local distance = vector2D:Dist(asteroidPosition, planetPosition)
-		
+
 		if(distance < closestDistance) then
 			closestDistance = distance
 			closestAsteroid = asteroid
 		end
 	end
-	
+
 	if(closestAsteroid == nil) then
 		return nil
 	else
-   	return closestAsteroid
-   end
+		return closestAsteroid
+	end
 
 end
 
@@ -519,15 +493,15 @@ function lightPlanet(asteroidDestoyed)
 
 	local light=CBE.VentGroup{
 		{
-   		title="explosionPlanet",
-   		preset="wisps",
-   		color=planetColors,
-   		x = planet.x,
-   		y = planet.y,
-   		emissionNum = 3,
-   		physics={
-   			gravityX=0,
-   			gravityY=4.5,
+			title="explosionPlanet",
+			preset="wisps",
+			color=planetColors,
+			x = planet.x,
+			y = planet.y,
+			emissionNum = 3,
+			physics={
+				gravityX=0,
+				gravityY=4.5,
 			}
 		}
 	}
@@ -551,22 +525,22 @@ function catchAsteroid(asteroid)
 
 	local light=CBE.VentGroup{
 		{
-   		title="explosion",
-   		preset="wisps",
-   		color=asteroidColors,
-   		x = asteroid.x,
-   		y = asteroid.y,
-   		emissionNum = 3,
-   		physics={
-   			gravityX=-16.2,
-   			gravityY=-11.2,
+			title="explosion",
+			preset="wisps",
+			color=asteroidColors,
+			x = asteroid.x,
+			y = asteroid.y,
+			emissionNum = 3,
+			physics={
+				gravityX=-16.2,
+				gravityY=-11.2,
 			}
 		}
 	}
 
 	light:start("explosion")
-   lightPlanet(asteroid)
-   musicManager.playPlanet()
+	lightPlanet(asteroid)
+	musicManager.playPlanet()
 
 	destroyAsteroid(asteroid)
 end
@@ -624,7 +598,7 @@ function explodeAsteroid(asteroid)
 	light:start("explosion")
 
 	destroyAsteroid(asteroid)
-   musicManager.playAsteroid()
+	musicManager.playAsteroid()
 end
 
 ------------------------------------------------------------------------------------------
@@ -643,19 +617,19 @@ function createAsteroid()
 
 	local LEVELS = getCurrentLEVELS()
 	local nbColors = LEVELS[level].colors
-	
+
 	local num = math.random(1,nbColors)
 	local color = COLORS[num]
-	
+
 	local asteroid = display.newImageRect( "assets/images/game/asteroid." .. color .. ".png", 24, 24 )
 	asteroid.color = color
 	physics.addBody( asteroid, { bounce=0, radius=12, filter=asteroidFilter } )
-	
+
 	local planetCenterPoint = vector2D:new(display.contentWidth/2, display.contentHeight/2)
-	
+
 	local alpha = math.rad(math.random(360))
 	local distance = 300
-	
+
 	local asteroidPoint = vector2D:new(distance*math.cos(alpha), distance*math.sin(alpha))
 	asteroidPoint = vector2D:Add(planetCenterPoint, asteroidPoint)
 	asteroid.x = asteroidPoint.x
@@ -663,15 +637,15 @@ function createAsteroid()
 
 	local speed = math.random(LEVELS[level].minSpeed, LEVELS[level].maxSpeed)/100
 	local speedOffset = math.floor(timePlayed/LEVELS[level].changeDelaySec)/100
-	
+
 	asteroidDirection = vector2D:Sub(planetCenterPoint, asteroidPoint)
 	asteroidDirection:mult(speed + speedOffset) 
 	asteroid:setLinearVelocity( asteroidDirection.x, asteroidDirection.y )
-	
+
 	asteroid.collision = crashAsteroid ; 
 	asteroid:addEventListener( "collision", asteroid )
 	asteroid.name = "asteroid"..math.random(1000)
-	
+
 	table.insert(asteroids, asteroid)
 end
 
@@ -702,53 +676,61 @@ end
 
 -- end of Classic mode
 function classicOver()
-	local min,sec = utils.getMinSec(game.timeCombo)
+	local min,sec = utils.getMinSec(timeCombo)
 	endGame(min .. ":" .. sec)
-	
+	checkUnlockedStuffs()
+end
+
+function checkUnlockedStuffs()
 	if(not GLOBALS.savedData.levels[1] and timeCombo > 119) then
 		displayInfo("Combo mode unlocked !")
-   	GLOBALS.savedData.levels[1] = { available = true }
-      utils.saveTable(GLOBALS.savedData, "savedData.json")
+		GLOBALS.savedData.levels[1] = { available = true }
+		utils.saveTable(GLOBALS.savedData, "savedData.json")
 	end
 end
 
 ------------------------------------------------------------------------------------------
 
 function stop()
-	
+
 	while (#asteroids > 0) do
 		hud.explode(asteroids[1], 4, 4400, asteroids[1].color)
 		table.remove(asteroids, 1)
 	end
-	
+
 	state	= IDLE
 end
 
 function exit()
 	stop()
 	checkNewRecord()
-	router.openScore()
+	
+	if(game.position) then
+		router.openNewRecord()
+	else
+		router.openScore()
+	end
 end
 
 -----------------------------------------------------------------------------------------
 
 function endGame(message, next)
-   stop()
+	stop()
 	hud.explodeHUD()
 	hud.explode(planet, 7, 3500, planet.color)	
 
 	if(message) then		
 		hud.centerText(message)
 
-   	if(next) then		
-      	timer.performWithDelay(2000, next)
-      else
-      	timer.performWithDelay(2000, exit)
-      end
-   else
-   	-- button exit
+		if(next) then		
+			timer.performWithDelay(2000, next)
+		else
+			timer.performWithDelay(2000, exit)
+		end
+	else
+		-- button exit
 		router.openAppHome()
-   end
+	end
 end
 
 -----------------------------------------------------------------------------------------
@@ -756,7 +738,7 @@ end
 function completeLevel()	
 	endGame("Level " .. level .. " Complete !")
 	GLOBALS.savedData.levels[level+1] = { available = true }
-   utils.saveTable(GLOBALS.savedData, "savedData.json")
+	utils.saveTable(GLOBALS.savedData, "savedData.json")
 end
 
 -----------------------------------------------------------------------------------------
@@ -795,5 +777,216 @@ function getCurrentLEVELS()
 	elseif(mode == TIMEATTACK) then
 		return TIMEATTACK_LEVELS
 	end
+
+end
+
+-----------------------------------------------------------------------------------------
+-- End Game
+-- 
+
+function nextLevel()
+	level = level + 1
+	local wasLastLevel = false
+
+	if(mode == CLASSIC) then 
+		wasLastLevel = true
+
+	elseif(mode == COMBO) then 
+		if(level == 41) then
+			wasLastLevel = true
+		end
+
+		-- next level not available
+		if(type(timeCombo) ~= "number") then
+			level = level - 1
+		end
+
+	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then 
+		if(level == 5) then
+			wasLastLevel = true
+		end
+	end
+
+	if(wasLastLevel) then
+		router.openSelection()
+	else
+		router.openPlayground()
+	end
+
+end
+
+
+function getGameType()
+
+	if(mode == COMBO) then 
+		return T "Combo"
+
+	elseif(mode == CLASSIC) then 
+		return T "Classic"
+
+	elseif(mode == KAMIKAZE) then 
+		return T "Kamikaze"
+
+	elseif(mode == TIMEATTACK) then 
+		return T "Time Attack"
+
+	end
+end
+
+function getBoard()
+
+	if(mode == CLASSIC) then 
+		return GLOBALS.savedData.scores.classic
+
+	elseif(mode == KAMIKAZE) then 
+		if(level == 2) then 
+   		return GLOBALS.savedData.scores.kamikazeeasy
+		elseif(level == 3) then 
+   		return GLOBALS.savedData.scores.kamikazehard
+		elseif(level == 4) then 
+   		return GLOBALS.savedData.scores.kamikazeextreme
+   	end
+
+	elseif(mode == TIMEATTACK) then 
+		if(level == 2) then 
+   		return GLOBALS.savedData.scores.timeattackeasy
+		elseif(level == 3) then 
+   		return GLOBALS.savedData.scores.timeattackhard
+		elseif(level == 4) then 
+   		return GLOBALS.savedData.scores.timeattackextreme
+   	end
+	end
 	
+	return nil
+end
+
+function getLevel()
+
+	if(mode == COMBO) then 
+		if(level == 1) then
+			return T "Tutorial" 
+		else
+			return "Level " .. level
+		end
+
+	elseif(mode == CLASSIC) then 
+		return "" 
+
+	elseif(mode == KAMIKAZE) then 
+		if(level == 1) then
+			return T "Tutorial" 
+		elseif(level == 2) then
+			return T "Easy" 
+		elseif(level == 3) then
+			return T "Hard" 
+		elseif(level == 4) then
+			return T "Extreme" 
+		end
+
+	elseif(mode == TIMEATTACK) then 
+		if(level == 1) then
+			return T "Tutorial" 
+		elseif(level == 2) then
+			return "2 min" 
+		elseif(level == 3) then
+			return "5 min" 
+		elseif(level == 4) then
+			return "8 min" 
+		end
+
+	end
+
+end
+
+function getValue()
+
+	if(mode == COMBO) then 
+		if(type(timeCombo) == "number") then
+			return timeCombo
+		else
+			return -1
+		end
+
+	elseif(mode == CLASSIC) then
+		return timeCombo 
+
+	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then 
+		return points
+
+	end
+end
+
+function getTextValue()
+
+	if(mode == COMBO) then 
+		if(level == 1) then
+			return "" 
+		else
+			if(type(timeCombo) == "number") then
+				local min,sec = utils.getMinSec(timeCombo)
+				return min .. ":" .. sec
+			else
+				return timeCombo -- Fail !
+			end
+		end
+
+	elseif(mode == CLASSIC) then 
+		local min,sec = utils.getMinSec(timeCombo)
+		return min .. ":" .. sec
+
+	elseif(mode == KAMIKAZE) then 
+		return points .." pts"
+
+	elseif(mode == TIMEATTACK) then 
+		return points .." pts"
+
+	end
+end
+
+
+function storeRecord()
+	local board	= getBoard()
+	local value 
+	if(mode == CLASSIC) then 
+		local min,sec = utils.getMinSec(timeCombo)
+		value =  min .. ":" .. sec
+	elseif(mode == KAMIKAZE or mode == TIMEATTACK) then 
+		value = points
+	end
+		
+	table.remove(board, 10)
+	table.insert(board, position, {
+		name 	= GLOBALS.savedData.user, 
+		value = value 
+	})
+	
+	utils.saveTable(GLOBALS.savedData, "savedData.json")
+end
+
+function checkNewRecord()
+
+	if(mode ~= CLASSIC and level == 1) then return end
+	
+	local newRecord 	= false
+	local board 		= getBoard()
+	local newValue 	= getValue()
+	
+	for position=1,10 do
+		if(board[position]) then
+      	local value = board[position].value
+      	if(type(value) ~= "number") then
+      		value = utils.split(value)
+      		value = value[1] * 60 + value[2]
+      	end
+   		
+   		if(newValue > value) then
+   			game.position = position
+   			break
+   		end
+   		
+		else
+			game.position = position
+			break
+		end
+	end
 end

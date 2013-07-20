@@ -69,6 +69,15 @@ end
 
 -----------------------------------------------------------------------------------------
 
+function split(value, sep)
+	local sep, fields = sep or ":", {}
+	local pattern = string.format("([^%s]+)", sep)
+	value:gsub(pattern, function(c) fields[#fields+1] = c end)
+	return fields
+end
+
+-----------------------------------------------------------------------------------------
+
 function emptyGroup( group )
 	if(group ~= nil) then
 		for i=group.numChildren,1,-1 do

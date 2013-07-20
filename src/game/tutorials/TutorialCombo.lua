@@ -5,7 +5,7 @@ module(..., package.seeall)
 -----------------------------------------------------------------------------------------
 
 scene = {}
-currentStep = 0
+local currentStep = 0
 
 -----------------------------------------------------------------------------------------
 --set up collision filters
@@ -57,6 +57,11 @@ function step(num)
 
 	-------------------------------------------------
 	-- Checking tutorial status
+	
+	if(game.mode ~= game.COMBO) then
+		-- going from a tuto to another : both continue ??
+		return
+	end
 	
 	if(currentStep < num-1) then
 		-- Classic tutorial exit + come back

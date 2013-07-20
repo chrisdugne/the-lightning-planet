@@ -26,6 +26,8 @@ function scene:refreshScene()
 	utils.emptyGroup(newRecordMenu)
 	viewManager.initView(self.view);
 	
+	print("newRecord position " .. game.position)
+	
    local top = display.newRect(newRecordMenu, 0, -display.contentHeight/5, display.contentWidth, display.contentHeight/5)
    top:setFillColor(0)
    
@@ -48,7 +50,7 @@ end
 
 function scene:displayContent()
 
-	local value = self.getValue()
+	local value = game.getTextValue()
 
 	-----------------------------------------------------------------------------------------------
 	-- Texts
@@ -118,38 +120,9 @@ end
 
 ------------------------------------------
 
-function scene:getValue()
-
-	if(game.mode == game.COMBO) then 
-		if(game.level == 1) then
-			return "" 
-		else
-			if(type(game.timeCombo) == "number") then
-				local min,sec = utils.getMinSec(game.timeCombo)
-   			return min .. ":" .. sec
-   		else
-   			return game.timeCombo -- Fail !
-   		end
-		end
-
-	elseif(game.mode == game.CLASSIC) then 
-		local min,sec = utils.getMinSec(game.timeCombo)
-		return min .. ":" .. sec
-	
-	elseif(game.mode == game.KAMIKAZE) then 
-		return game.points .." pts"
-	
-	elseif(game.mode == game.TIMEATTACK) then 
-		return game.points .." pts"
-
-   end
-end
-
-------------------------------------------
-
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
-	self:refreshScene();
+	self:refreshScene()
 end
 
 -- Called when scene is about to move offscreen:

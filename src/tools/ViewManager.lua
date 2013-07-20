@@ -42,7 +42,7 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
 	end
 
 	local planet = display.newImage( "assets/images/game/planet.".. color ..".png")
-	planet:scale(display.contentWidth/1500,display.contentWidth/1500)
+	planet:scale(display.contentHeight/1000,display.contentHeight/1000)
 	planet.x = x
 	planet.y = y
 	planet.alpha = 0
@@ -141,7 +141,7 @@ function buildSmallButton(view, title, color, titleSize, x, y, action, lock )
 	local text = display.newText( title, 0, 0, FONT, titleSize )
 	text:setTextColor( 0 )	
 	text.x = x
-	text.y = y
+	text.y = y-2
 	text.alpha = 0
 	view:insert(text)
 	

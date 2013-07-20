@@ -107,9 +107,9 @@ function scene:displayContent()
 
 	display.remove(lockImage)
 	lockImage = display.newImage(buyMenu, "assets/images/hud/lock.png")
-	lockImage:scale(0.50,0.50)
+	lockImage:scale(0.40,0.40)
 	lockImage.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + 30
-	lockImage.y = buyMenu.board.y/2 + 40
+	lockImage.y = buyMenu.board.y/2 + 30
 	lockImage:addEventListener	("touch", function(event) buy() end)
 
 	display.remove(statusText)
@@ -118,20 +118,20 @@ function scene:displayContent()
 	
 	display.remove(coffeeImage)
 	coffeeImage = display.newImage(buyMenu, "assets/images/hud/coffee.png")
-	coffeeImage:scale(0.50,0.50)
+	coffeeImage:scale(0.40,0.40)
 	coffeeImage.x = buyMenu.board.x + 35
-	coffeeImage.y = buyMenu.board.y + 10
+	coffeeImage.y = buyMenu.board.y + 15
 	coffeeImage:addEventListener	("touch", function(event) buy() end)
 	
 	display.remove(secondText)
 	secondText = display.newText( buyMenu, T "- Play all Levels\n- No more time limit", 0, 0, 170, 100, FONT, 14 )
 	secondText:setTextColor( 255 )	
-	secondText.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + secondText.contentWidth
-	secondText.y = buyMenu.board.y + 90
+	secondText.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + secondText.contentWidth + 13
+	secondText.y = buyMenu.board.y + 85
 
 	display.remove(planetButton)
 	display.remove(textButton)
-	planetButton, textButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x - buyMenu.board.contentWidth/2 + 45, 	display.contentHeight*0.58, function() buy() end)
+	planetButton, textButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x - buyMenu.board.contentWidth/2 + 45, 	display.contentHeight*0.61, function() buy() end)
 
 end
 

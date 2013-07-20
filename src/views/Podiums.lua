@@ -27,6 +27,7 @@ end
 
 function scene:refreshScene()
 
+	utils.emptyGroup(content)
 	utils.emptyGroup(podiums)
 	viewManager.initView(self.view);
 	
@@ -53,7 +54,7 @@ function scene:refreshScene()
 	transition.to( board, { time=800, alpha=0.9, onComplete= function() self:buildContent() end})  
 
 	self.view:insert(podiums)
-	
+	self.view:insert(content)
 end
 
 function scene:buildContent()
@@ -93,6 +94,8 @@ function scene:buildContent()
 			self:right() 
 		end
 	)
+	
+	self:move()
 end
 
 ------------------------------------------
@@ -103,6 +106,8 @@ function scene:buildTable(title, position, data)
 	titleText.x = podiums.contentWidth/2 + (position-1)*podiums.contentWidth
 	titleText.y = 100
 	
+	local marginTop = 2*display.contentHeight/5
+	
 	for entry=1,10 do
 		
 		local i = math.floor((entry-1) /5)
@@ -110,16 +115,27 @@ function scene:buildTable(title, position, data)
 		
 		local entryText = entry.."."
 		if(data[entry]) then
-			entryText = entryText .. "   " .. data[entry].value .. "   " .. data[entry].name 
+			entryText = entryText .. "   " .. data[entry].value
 		else
-			entryText = entryText .. "   -------------"
+			entryText = entryText .. "    -------------"
+		end
+		
+		local nameText = ""
+		if(data[entry]) then
+			nameText = data[entry].name 
 		end
 		
    	local entry = display.newText( content, entryText, 0, 0, FONT, 12 )
    	entry:setTextColor( 255 )
    	entry:setReferencePoint( display.CenterLeftReferencePoint )
    	entry.x = podiums.contentWidth/4 + i*podiums.contentWidth/4 + (position-1)*podiums.contentWidth + 15
-   	entry.y = 130 + j*20
+   	entry.y = marginTop + j*20
+
+   	local name = display.newText( content, nameText, 0, 0, FONT, 12 )
+   	name:setTextColor( 255 )
+   	name:setReferencePoint( display.CenterLeftReferencePoint )
+   	name.x = podiums.contentWidth/4 + i*podiums.contentWidth/4 + (position-1)*podiums.contentWidth + 85
+   	name.y = marginTop + j*20
 	end
 end
 
