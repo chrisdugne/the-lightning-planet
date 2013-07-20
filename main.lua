@@ -9,6 +9,11 @@ APP_VERSION = "1.0"
 
 -----------------------------------------------------------------------------------------
 
+IOS 		= system.getInfo( "platformName" )  == "iPhone OS"
+ANDROID 	= system.getInfo( "platformName" )  == "Android"
+
+-----------------------------------------------------------------------------------------
+
 IMAGE_CENTER		= "IMAGE_CENTER";
 IMAGE_TOP_LEFT 	= "IMAGE_TOP_LEFT";
 
@@ -28,7 +33,7 @@ LIGHTNING_KAMIKAZE_PERCENT 		= 20
 
 -----------------------------------------------------------------------------------------
 
-if "Android" == system.getInfo( "platformName" ) then
+if ANDROID then
    FONT = "Macondo-Regular"
 else
 	FONT = "Macondo"
@@ -44,6 +49,7 @@ store	 			= require "store"
 xml 				= require "src.libs.Xml"
 utils 			= require "src.libs.Utils"
 vector2D			= require "src.libs.Vector2D"
+gameCenter		= require "src.libs.GameCenter"
 
 -----------------------------------------------------------------------------------------
 -- Translations

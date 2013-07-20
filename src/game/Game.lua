@@ -686,6 +686,10 @@ function checkUnlockedStuffs()
 		displayInfo("Combo mode unlocked !")
 		GLOBALS.savedData.levels[1] = { available = true }
 		utils.saveTable(GLOBALS.savedData, "savedData.json")
+		
+		if(IOS) then
+			gameCenter.postAchievement("classic.2min")
+   	end
 	end
 end
 
@@ -947,6 +951,8 @@ end
 function storeRecord()
 	local board	= getBoard()
 	local value 
+
+
 	if(mode == CLASSIC) then 
 		local min,sec = utils.getMinSec(timeCombo)
 		value =  min .. ":" .. sec
@@ -961,6 +967,33 @@ function storeRecord()
 	})
 	
 	utils.saveTable(GLOBALS.savedData, "savedData.json")
+	
+	
+	if(IOS) then
+		if(mode == CLASSIC) then 
+			gameCenter.postScore("classic", timeCombo)
+   	end
+
+		if(mode == KAMIKAZE) then 
+   		if(level == 2) then 
+   			gameCenter.postScore("kamikaze.easy", points)
+   		elseif(level == 3) then 
+   			gameCenter.postScore("kamikaze.hard", points)
+   		elseif(level == 4) then 
+   			gameCenter.postScore("kamikaze.extreme", points)
+      	end
+   	end
+
+		if(mode == TIMEATTACK) then 
+   		if(level == 2) then 
+   			gameCenter.postScore("timeattack.easy", points)
+   		elseif(level == 3) then 
+   			gameCenter.postScore("timeattack.hard", points)
+   		elseif(level == 4) then 
+   			gameCenter.postScore("timeattack.extreme", points)
+      	end
+   	end
+	end
 end
 
 function checkNewRecord()

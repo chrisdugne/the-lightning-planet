@@ -131,6 +131,10 @@ function scene:refreshScene()
 	borderSettings.y = display.contentHeight - 30 
 	
 	self.view:insert(menu)
+	
+   if(IOS) then
+   	timer.performWithDelay(1000, gameCenter.init)
+   end
 end
 
 ------------------------------------------

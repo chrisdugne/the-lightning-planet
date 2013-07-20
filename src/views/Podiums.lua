@@ -53,6 +53,14 @@ function scene:refreshScene()
 	transition.to( bottom, { time=500, y = display.contentHeight - top.contentHeight/2 })  
 	transition.to( board, { time=800, alpha=0.9, onComplete= function() self:buildContent() end})  
 
+	if(IOS) then
+   	local gamecenter = display.newImage(podiums, "assets/images/hud/gamecenter.png")
+   	gamecenter:scale(0.25,0.25)
+   	gamecenter.x = display.contentWidth - 110 
+   	gamecenter.y = 110 
+   	gamecenter:addEventListener ("touch", function(event) gameCenter.showLeaderBoards() end)
+	end
+	
 	self.view:insert(podiums)
 	self.view:insert(content)
 end

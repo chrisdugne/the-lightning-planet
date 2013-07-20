@@ -45,6 +45,7 @@ settings = {
 		}
 	},
 	
+    --[[
 	android =
     {
         googlePlayGamesAppId = "123456789012",
@@ -59,6 +60,7 @@ settings = {
             publisherId = "com.coronalabs",
         },
     },
+    --]]
 	
 	-- Android permissions
 
