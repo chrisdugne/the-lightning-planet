@@ -86,7 +86,7 @@ function scene:displayContent()
    
    nameInput = native.newTextField( 
    	display.contentWidth/4 + 20, 
-   	display.contentHeight/2, 
+   	120, 
    	140
    	, 30 
 	)
