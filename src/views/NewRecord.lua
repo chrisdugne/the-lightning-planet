@@ -98,8 +98,6 @@ function scene:displayContent()
 	nameInput:setReferencePoint( display.CenterReferencePoint )
 	nameInput:addEventListener( "userInput", nameHandler )
 	newRecordMenu:insert( nameInput )
-	
-	native.setKeyboardFocus( nameInput )
 end
 
 ------------------------------------------

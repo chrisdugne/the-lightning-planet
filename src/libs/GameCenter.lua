@@ -11,7 +11,9 @@ local gameCenterOpened = false
 ---------------------------------------------------------------------
 
 function init()
-	gameNetwork.init( "gamecenter", initCallback )
+	if(not loggedIntoGC) then
+		gameNetwork.init( "gamecenter", initCallback )
+	end
 end
 
 -- called after the "init" request has completed

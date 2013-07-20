@@ -127,6 +127,7 @@ function buildSmallButton(view, title, color, titleSize, x, y, action, lock )
 	elseif(color == "white") then
 		colors={{255, 111, 0}, {255, 70, 0}}
 	else
+		color = "white"
 		colors={{255, 111, 0}, {255, 70, 0}}
 	end
 

@@ -320,8 +320,8 @@ function drawComboTodo(color, num, numCompleted)
 	asteroid.color 	= color
 	asteroid.comboNum = num
 
-	local i = math.floor((num-2-numCompleted)/12) + 1
-	local j = (num-2-numCompleted)%12
+	local i = math.floor((num-2-numCompleted)/10) + 1
+	local j = (num-2-numCompleted)%10
 
 	asteroid.x = 5 + 13 * i
 	asteroid.y = 90 + 15 * (j-1)
@@ -339,8 +339,8 @@ function drawComboDone(color, num)
 	asteroid.color 	= color
 	asteroid.comboNum = num
 
-	local i = (num-1)%20
-	local j = math.floor((num-1)/20) + 1
+	local i = (num-1)%16
+	local j = math.floor((num-1)/16) + 1
 
 	asteroid.x = 70 + 13 * i
 	asteroid.y = 5 + 13 * j

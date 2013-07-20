@@ -998,6 +998,7 @@ end
 
 function checkNewRecord()
 
+	if(mode == COMBO) then return end
 	if(mode ~= CLASSIC and level == 1) then return end
 	
 	local newRecord 	= false
