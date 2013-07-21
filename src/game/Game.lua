@@ -413,7 +413,11 @@ function destroyAsteroid(asteroid)
 	--------------------------
 	-- destroy
 
-	transition.to( asteroid, { time=150, alpha=0, onComplete=function() display.remove(asteroid) end } )
+	transition.to( asteroid, { time=150, alpha=0, onComplete=function()
+		display.remove(asteroid) 
+		asteroid = nil 
+	end})
+	
 end
 
 ------------------------------------------------------------------------------------------
@@ -506,6 +510,11 @@ function lightPlanet(asteroidDestoyed)
 		}
 	}
 	light:start("explosionPlanet")
+	
+	timer.performWithDelay(5000, function()
+		light:destroy("explosionPlanet")
+		light = nil
+	end)
 end
 
 function catchAsteroid(asteroid)
@@ -543,6 +552,11 @@ function catchAsteroid(asteroid)
 	musicManager.playPlanet()
 
 	destroyAsteroid(asteroid)
+	
+	timer.performWithDelay(3000, function()
+		light:destroy("explosion")
+		light = nil
+	end)
 end
 
 ------------------------------------------------------------------------------------------
@@ -598,7 +612,12 @@ function explodeAsteroid(asteroid)
 	light:start("explosion")
 
 	destroyAsteroid(asteroid)
-	musicManager.playAsteroid()
+	musicManager.playAsteroid(
+	
+	timer.performWithDelay(3000, function()
+		light:destroy("explosion")
+		light = nil
+	end))
 end
 
 ------------------------------------------------------------------------------------------
@@ -647,6 +666,7 @@ function createAsteroid()
 	asteroid.name = "asteroid"..math.random(1000)
 
 	table.insert(asteroids, asteroid)
+
 end
 
 
@@ -709,7 +729,8 @@ function exit()
 	stop()
 	checkNewRecord()
 	
-	if(game.position) then
+	print("game exit", position, "mode : ", mode)
+	if(position) then
 		router.openNewRecord()
 	else
 		router.openScore()
@@ -814,7 +835,12 @@ function nextLevel()
 	if(wasLastLevel) then
 		router.openSelection()
 	else
-		router.openPlayground()
+	
+   	if(mode == COMBO and not GLOBALS.savedData.fullGame and level > 10) then
+   		router.openBuy()
+   	else
+			router.openPlayground()
+		end
 	end
 
 end
@@ -999,27 +1025,27 @@ end
 function checkNewRecord()
 
 	if(mode == COMBO) then return end
-	if(mode ~= CLASSIC and level == 1) then return end
+	if((mode ~= CLASSIC) and (level == 1)) then return end
 	
 	local newRecord 	= false
 	local board 		= getBoard()
 	local newValue 	= getValue()
 	
-	for position=1,10 do
-		if(board[position]) then
-      	local value = board[position].value
+	for p=1,10 do
+		if(board[p]) then
+      	local value = board[p].value
       	if(type(value) ~= "number") then
       		value = utils.split(value)
       		value = value[1] * 60 + value[2]
       	end
    		
    		if(newValue > value) then
-   			game.position = position
+   			position = p
    			break
    		end
    		
 		else
-			game.position = position
+			position = p
 			break
 		end
 	end

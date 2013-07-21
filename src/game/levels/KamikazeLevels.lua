@@ -31,7 +31,7 @@ return {
 		colors = 4,
 		minDelay = 2000,
 		maxDelay = 2500,
-		changeDelaySec = 30,
+		changeDelaySec = 20,
 		changeDelayAmount = 150,
 		minSpeed = 18,
 		maxSpeed = 22,

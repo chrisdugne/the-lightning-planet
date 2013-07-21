@@ -60,7 +60,8 @@ end
 
 function exitSelection()
 	for i = levels.numChildren,1,-1  do
-		hud.explode(levels[i], 1, 1000, levels[i].color)
+		hud.explode(levels[i], 1, 200, levels[i].color)
+		table.remove(levels, i)
 	end
 	
 	hud.explodeHUD()

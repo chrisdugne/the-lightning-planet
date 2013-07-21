@@ -5,6 +5,7 @@ module(..., package.seeall)
 -----------------------------------------------------------------------------------------
 
 local fires = {}
+local elements = {}
 
 -----------------------------------------------------------------------------------------
 
@@ -109,6 +110,7 @@ function buildButton(view, title, color, titleSize, x, y, action, lock, conditio
 		
    	return planet, text
 	end
+
 end
 
 ------------------------------------------------------------------------------------------
@@ -158,6 +160,7 @@ function buildSmallButton(view, title, color, titleSize, x, y, action, lock )
    	view:insert(lock)
    	transition.to( lock, { time=2000, alpha=0.6 })
    	planet:setFillColor(30,30,30)
+   	
    else
 		planet:addEventListener	("touch", function(event) action() end)
 
@@ -198,6 +201,7 @@ end
 ------------------------------------------
 
 function cleanupFires()	
+
 	for fire = 1, #fires do 
 		fires[fire]:destroy("fire")
 	end
@@ -205,4 +209,6 @@ function cleanupFires()
 	while #fires > 0 do
    	table.remove(fires, 1)
 	end
+	
+	collectgarbage("collect")
 end

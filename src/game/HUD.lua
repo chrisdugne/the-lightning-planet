@@ -17,6 +17,11 @@ powerBarFire 	= nil
 function initHUD()
 	utils.emptyGroup(elements)
 	lockElements = display.newGroup()
+	
+	if(powerBarFire) then
+		powerBarFire:destroy("fire")
+		powerBarFire = nil
+	end
 end
 
 -----------------------------------------------------------------------------------------
@@ -250,6 +255,11 @@ function lightCombo(element)
 	}
    	
 	light:start("fire")
+	
+	timer.performWithDelay(3000, function()
+		light:destroy("fire")
+		light = nil
+	end)
 end
 
 -----------------------------------------------------------------------------------------
@@ -395,10 +405,9 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function drawProgressBar(percent, loss)         
-	if(powerBarFire) then powerBarFire:stop("fire") end
-	
-	powerBarFire=CBE.VentGroup{
+function buildPowerbar(percent)
+
+	return CBE.VentGroup{
    	{
    		title="fire",
    		preset="burn",
@@ -425,7 +434,18 @@ function drawProgressBar(percent, loss)
    	}
 	}
    	
-	powerBarFire:start("fire")
+end         
+
+function drawProgressBar(percent, loss)         
+	
+	if(powerBarFire) then 
+		powerBarFire:get("fire").point1={display.contentWidth/4, 20}
+		powerBarFire:get("fire").point2={display.contentWidth/4 + display.contentWidth/2 * percent/100, 20}
+		powerBarFire:get("fire").resetPoints()
+	else
+		powerBarFire = buildPowerbar(percent)
+		powerBarFire:start("fire")
+   end
 
 	if(loss) then	
    	local lossFire=CBE.VentGroup{
@@ -457,6 +477,11 @@ function drawProgressBar(percent, loss)
    	}
       	
    	lossFire:start("fire")
+   	
+   	timer.performWithDelay(4000, function()
+   		lossFire:destroy("fire")
+   		lossFire = nil
+   	end)
    end
 end
 
@@ -609,8 +634,15 @@ function explode(element, emissionNum, fadeInTime, color)
    		}
    	}
    }
+   
    explosion:start("fire")
    display.remove(element)
+   element = nil
+   
+	timer.performWithDelay(fadeInTime + 2000, function()
+		explosion:destroy("fire")
+		explosion = nil
+	end)
 end
 			
 -----------------------------------------------------------------------------------------

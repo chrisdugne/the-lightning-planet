@@ -8,8 +8,8 @@ function light(part, alphaTo, oncomplete)
 	transition.to( part, { time=4/alphaTo, alpha=alphaTo, transition=easing.inQuad, onComplete=oncomplete } )
 end
 
-function hide(part, brightness, oncomplete)
-	transition.to( part, { time=400*brightness, alpha=0, transition=easing.inQuad, onComplete=oncomplete } )
+function hide(part, brightness)
+	transition.to( part, { time=400*brightness, alpha=0, transition=easing.inQuad, onComplete= function() display.remove(part) part = nil end } )
 end
 
 ------------------------------------------------------------------------------------------
@@ -31,13 +31,13 @@ function lightBolt(segments, onComplete)
 	
 		local next
 		if(i == #segments) then
-			next = function() lightning.hide(line, brightness) onComplete() end
+			next = function() hide(line, brightness) onComplete() end
 		else
-			next = function() lightning.hide(line, brightness) end
+			next = function() hide(line, brightness) end
 		end
 		
 		timer.performWithDelay( 90/brightness, function ()
-			lightning.light(line, brightness, next)
+			light(line, brightness, next)
 		end)
    end
 end

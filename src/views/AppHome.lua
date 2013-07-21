@@ -245,6 +245,11 @@ function explode(x, y, time)
    	}
    }
    fire:start("fire")
+   
+	timer.performWithDelay(time + 1000, function()
+		fire:destroy("fire")
+		fire = nil
+	end)
 end
 
 ------------------------------------------
