@@ -13,7 +13,8 @@ local secondText
 local lockImage
 local coffeeImage
 
-local planetButton, textButton
+local buyButton, textBuyButton
+local restoreButton, textRestoreButton
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -49,13 +50,16 @@ function storeTransaction( event )
 	if ( transaction.state == "purchased" ) then
 		gameBought()
 
+	elseif ( transaction.state == "restored" ) then
+		gameBought()
+
 	elseif ( transaction.state == "cancelled" ) then
 		print( "cancelled")
 		refreshStatus("Maybe next time...")
 
 	elseif ( transaction.state == "failed" ) then
 		print( "failed")
-		refreshStatus("Transaction failed...")
+		refreshStatus("Transaction cancelled...")
 	end
 
 	--tell the store that the transaction is complete!
@@ -79,7 +83,7 @@ function scene:refreshScene()
    local bottom = display.newRect(buyMenu, 0, display.contentHeight, display.contentWidth, display.contentHeight/5)
    bottom:setFillColor(0)
 
-   local board = display.newRoundedRect(buyMenu, 0, 0, display.contentWidth/2, display.contentHeight/2, 20)
+   local board = display.newRoundedRect(buyMenu, 0, 0, 3*display.contentWidth/4, display.contentHeight/2, 20)
    board.x = display.contentWidth/2
    board.y = display.contentHeight/2
    board.alpha = 0
@@ -102,7 +106,7 @@ function scene:displayContent()
 	display.remove(mainText)
 	mainText = display.newText( buyMenu, T "The game is locked\n Get access to the full game for a coffee's price !", 0, 0, 170, 100, FONT, 14 )
 	mainText:setTextColor( 255 )	
-	mainText.x = buyMenu.board.x + 35
+	mainText.x = buyMenu.board.x - 40
 	mainText.y = buyMenu.board.y/2 + 60
 
 	display.remove(lockImage)
@@ -129,9 +133,13 @@ function scene:displayContent()
 	secondText.x = buyMenu.board.x - buyMenu.board.contentWidth/2 + secondText.contentWidth + 13
 	secondText.y = buyMenu.board.y + 85
 
-	display.remove(planetButton)
-	display.remove(textButton)
-	planetButton, textButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x - buyMenu.board.contentWidth/2 + 45, 	display.contentHeight*0.61, function() buy() end)
+	display.remove(buyButton)
+	display.remove(textBuyButton)
+	buyButton, textBuyButton = viewManager.buildButton(buyMenu, T "Buy",	COLORS[2], 26, buyMenu.board.x - buyMenu.board.contentWidth/2 + 45, 	display.contentHeight*0.61, function() buy() end)
+
+	display.remove(restoreButton)
+	display.remove(textRestoreButton)
+	restoreButton, textRestoreButton = viewManager.buildButton(buyMenu, T "Restore",	COLORS[3], 20, buyMenu.board.x + buyMenu.board.contentWidth/2 - 45, 	display.contentHeight*0.61, function() restore() end)
 
 end
 
@@ -140,8 +148,10 @@ end
 function buy()
 	display.remove(lockImage)
 	display.remove(mainText)
-	display.remove(planetButton)
-	display.remove(textButton)
+	display.remove(buyButton)
+	display.remove(textBuyButton)
+	display.remove(restoreButton)
+	display.remove(textRestoreButton)
 	display.remove(coffeeImage)
 	display.remove(secondText)
 	viewManager.cleanupFires()
@@ -149,6 +159,31 @@ function buy()
 	store.purchase( { "com.uralys.thelightningplanet.1.0" } )
 	
 	refreshStatus("Waiting for store...")
+
+	-----------------------------
+	-- DEV only : simulator
+	
+	if(system.getInfo("environment") == "simulator") then
+		gameBought()
+	end
+end
+
+------------------------------------------
+
+function restore()
+	display.remove(lockImage)
+	display.remove(mainText)
+	display.remove(buyButton)
+	display.remove(textBuyButton)
+	display.remove(restoreButton)
+	display.remove(textRestoreButton)
+	display.remove(coffeeImage)
+	display.remove(secondText)
+	viewManager.cleanupFires()
+	
+	store.restore(  )
+	
+	refreshStatus("Trying to restore...")
 
 	-----------------------------
 	-- DEV only : simulator

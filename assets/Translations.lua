@@ -4,6 +4,10 @@ local translations =
         ["fr"] = "Version complète",
     },
 
+    ["Restore"] = {
+        ["fr"] = "Récupérer",
+    },
+
     ["Game Locked"] = {
         ["fr"] = "Jeu en démo",
     },
