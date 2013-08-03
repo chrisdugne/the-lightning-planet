@@ -68,6 +68,7 @@ function init(view)
 	----------------------------------------
 
 	points 				= 0
+	nbAsteroidsCaught = 0
 	position 			= nil
 	state 				= IDLE
 
@@ -138,8 +139,9 @@ function init(view)
 		if(mode == CLASSIC) then
 			level = 1 
 			hud.refreshTopRightText(T "Classic")
+			hud.initAsteroidsCount()
 			if(not GLOBALS.savedData.levels[1]) then
-				timer.performWithDelay(1500, function() displayInfo(T "Reach 2 min to unlock Combo mode") end)
+				timer.performWithDelay(1500, function() displayInfo(T "Reach 1'30 to unlock Combo mode") end)
 			end
 
 			lock = not GLOBALS.savedData.fullGame
@@ -279,6 +281,9 @@ function crashAsteroid( asteroid, event )
 
 		if(not goodCatch) then
 			classicOver()
+		else
+			nbAsteroidsCaught = nbAsteroidsCaught + 1
+			hud.refreshAsteroidsCount()
 		end
 
 		--------------------------
@@ -702,7 +707,7 @@ function classicOver()
 end
 
 function checkUnlockedStuffs()
-	if(not GLOBALS.savedData.levels[1] and timeCombo > 119) then
+	if(not GLOBALS.savedData.levels[1] and timeCombo > 89) then
 		displayInfo("Combo mode unlocked !")
 		GLOBALS.savedData.levels[1] = { available = true }
 		utils.saveTable(GLOBALS.savedData, "savedData.json")
@@ -727,9 +732,9 @@ end
 
 function exit()
 	stop()
-	checkNewRecord()
-	
 	print("game exit", position, "mode : ", mode)
+	checkNewRecord()	
+	print("checked record", position, "mode : ", mode)
 	if(position) then
 		router.openNewRecord()
 	else
@@ -742,7 +747,11 @@ end
 function endGame(message, next)
 	stop()
 	hud.explodeHUD()
-	hud.explode(planet, 7, 3500, planet.color)	
+	hud.explode(planet, 7, 3500, planet.color)
+	
+	tutorialTimeAttack.stop()	
+	tutorialCombo.stop()	
+	tutorialKamikaze.stop()	
 
 	if(message) then		
 		hud.centerText(message)

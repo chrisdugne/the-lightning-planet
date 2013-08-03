@@ -61,6 +61,25 @@ function refreshTopRightText(text)
 end
 
 -----------------------------------------------------------------------------------------
+
+function initAsteroidsCount()
+	display.remove(asteroidsCountText)
+	asteroidsCountText = display.newText( game.scene, "0", 0, 0, FONT, 21 )
+	asteroidsCountText:setTextColor( 255 )	
+	asteroidsCountText:setReferencePoint( display.CenterReferencePoint )
+	asteroidsCountText.x = display.contentWidth/2 - asteroidsCountText.contentWidth/2 - 10
+	asteroidsCountText.y = 20
+	elements:insert(asteroidsCountText)
+end
+
+function refreshAsteroidsCount()
+	if(asteroidsCountText) then
+		asteroidsCountText.text = game.nbAsteroidsCaught
+		asteroidsCountText.x 	= display.contentWidth/2 - asteroidsCountText.contentWidth/2 - 10
+	end
+end
+
+-----------------------------------------------------------------------------------------
 --- The bottom part asking to unlock the game
 
 function initLockElements()

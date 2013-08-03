@@ -47,6 +47,10 @@ function start(view)
 --	step(8)
 end
 
+function stop()
+	currentStep = 0
+end
+
 -----------------------------------------------------------------------------------------
 
 function step(num)

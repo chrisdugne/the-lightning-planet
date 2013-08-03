@@ -51,18 +51,23 @@ function start(view)
 --	step(14)
 end
 
+function stop()
+	currentStep = 0
+end
+
 -----------------------------------------------------------------------------------------
 
 function step(num)
 
 	-------------------------------------------------
 	-- Checking tutorial status
-	
+	print("--------------------- step" .. num )
 	if(game.mode ~= game.COMBO) then
 		-- going from a tuto to another : both continue ??
 		return
 	end
 	
+	print("--------------------- currentStep" .. currentStep )
 	if(currentStep < num-1) then
 		-- Classic tutorial exit + come back
 		return
@@ -353,7 +358,7 @@ texts = {
 	},
 	{ --------------------------- STEP 8
 		text 	= T "This one is not green, and if you use the Lightning on a wrong color, your start the combo from scratch",
-		x 		= 200,
+		x 		= 230,
 		y 		= 70,
 		delay = 4500,
 	},

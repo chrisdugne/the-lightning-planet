@@ -248,8 +248,8 @@ local translations =
         ["fr"] = "Et voilà, vous êtes prêt à jouer !",
     },
 
-    ["Reach 2 min to unlock Combo mode"] = {
-        ["fr"] = "Atteignez 2 min pour débloquer le mode Combo",
+    ["Reach 1'30 to unlock Combo mode"] = {
+        ["fr"] = "Atteignez 1'30 pour débloquer le mode Combo",
     },
   
 }
