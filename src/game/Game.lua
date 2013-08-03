@@ -95,6 +95,7 @@ function init(view)
 
 	hud.initHUD()
 	hud.initTopRightText()
+	hud.initSpeedCount()
 
 	----------------------------------------
 
@@ -212,6 +213,7 @@ function nextPlayedSecond()
 
 	timePlayed = timePlayed+1
 	timer.performWithDelay(1000, nextPlayedSecond)
+	hud.refreshSpeedCount()
 end
 
 
@@ -236,10 +238,30 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function asteroidBuilder()
+function getSpeed()
+	local LEVELS = getCurrentLEVELS()
+	local speed = math.floor(timePlayed/LEVELS[level].changeDelaySec) 
+	
+	return "Speed " .. speed
+end
+
+
+function getSpeedDelay()
 
 	local LEVELS = getCurrentLEVELS()
 	local timeDelay = math.floor(timePlayed/LEVELS[level].changeDelaySec) * LEVELS[level].changeDelayAmount
+	
+	if(LEVELS[level].minDelay - timeDelay) < 149 then
+		timeDelay = LEVELS[level].minDelay - 149
+	end
+
+	return timeDelay
+end
+
+function asteroidBuilder()
+
+	local LEVELS = getCurrentLEVELS()
+	local timeDelay = getSpeedDelay()
 
 	timer.performWithDelay( math.random(LEVELS[level].minDelay - timeDelay, LEVELS[level].maxDelay - timeDelay), function()
 		if(state == RUNNING) then

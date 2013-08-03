@@ -64,18 +64,45 @@ end
 
 function initAsteroidsCount()
 	display.remove(asteroidsCountText)
-	asteroidsCountText = display.newText( game.scene, "0", 0, 0, FONT, 21 )
+	asteroidsCountText = display.newText( game.scene, "", 0, 0, FONT, 21 )
 	asteroidsCountText:setTextColor( 255 )	
 	asteroidsCountText:setReferencePoint( display.CenterReferencePoint )
-	asteroidsCountText.x = display.contentWidth/2 - asteroidsCountText.contentWidth/2 - 10
-	asteroidsCountText.y = 20
+	asteroidsCountText.x = 20
+	asteroidsCountText.y = 45
 	elements:insert(asteroidsCountText)
 end
 
 function refreshAsteroidsCount()
 	if(asteroidsCountText) then
 		asteroidsCountText.text = game.nbAsteroidsCaught
-		asteroidsCountText.x 	= display.contentWidth/2 - asteroidsCountText.contentWidth/2 - 10
+	end
+end
+
+-----------------------------------------------------------------------------------------
+
+function initSpeedCount()
+	display.remove(speedCountText)
+	speedCountText = display.newText( game.scene, "", 0, 0, FONT, 18 )
+	speedCountText:setTextColor( 255 )	
+	speedCountText:setReferencePoint( display.CenterReferencePoint )
+	
+	if(game.mode == game.CLASSIC) then
+   	speedCountText.x = display.contentWidth*0.1
+   	speedCountText.y = 20
+	elseif(game.mode == game.COMBO) then
+   	speedCountText.x = display.contentWidth*0.7
+   	speedCountText.y = 45
+	else
+   	speedCountText.x = display.contentWidth*0.2
+   	speedCountText.y = 20
+	end
+	
+	elements:insert(speedCountText)
+end
+
+function refreshSpeedCount()
+	if(speedCountText) then
+		speedCountText.text = game.getSpeed()
 	end
 end
 
@@ -710,7 +737,7 @@ function startComboTimer()
 	if(game.mode == game.COMBO) then
 		timeLeftText.x = display.contentWidth * 0.7
 	else
-		timeLeftText.x = display.contentWidth * 0.1
+		timeLeftText.x = display.contentWidth * 0.5
 	end
 	
 	timeLeftText.y = 20
