@@ -56,7 +56,6 @@ gameCenter		= require "src.libs.GameCenter"
 
 local translations = require("assets.Translations")
 local LANG =  userDefinedLanguage or system.getPreference("ui", "language")
-LANG = "fr"
 
 function T(enText)
 	return translations[enText][LANG] or enText
