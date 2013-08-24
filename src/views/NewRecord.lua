@@ -94,7 +94,7 @@ function scene:displayContent()
 	nameInput:setTextColor( 0 )	
 	nameInput.align = "center"
 	nameInput.text = GLOBALS.savedData.user
-	nameInput.font = native.newFont( FONT, 20 )
+	nameInput.font = native.newFont( FONT, 17 )
 	nameInput:setReferencePoint( display.CenterReferencePoint )
 	nameInput:addEventListener( "userInput", nameHandler )
 	newRecordMenu:insert( nameInput )
@@ -113,6 +113,9 @@ function nameHandler( event )
 			GLOBALS.savedData.user = nameInput.text
    		utils.saveTable(GLOBALS.savedData, "savedData.json")
    	end 
+   	
+	elseif ( "submitted" == event.phase ) then
+		native.setKeyboardFocus( nil )
 	end 
 end 
 
