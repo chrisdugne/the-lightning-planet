@@ -7,6 +7,10 @@
 - [Google Play](https://play.google.com/store/apps/details?id=com.uralys.thelightningplanet)
 - [iOS](https://itunes.apple.com/us/app/id670243309)
 
+## CBEffects
+
+I used [CBEffects](https://github.com/GymbylCoding/CBEffects) created by Caleb Place.
+
 ## About
 
 Colored asteroids are rushing to your Planet.
